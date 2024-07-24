@@ -40,7 +40,8 @@ Route::get('sign-in', [HomeController::class, 'sign-in'])->name('sign-in');
 // web.php
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+    // Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
 
     Route::middleware('isCommercial')->group(function () {
         Route::prefix('commercial')->name('commercial.')->group(function () {
@@ -55,6 +56,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('RendezVous/ConsultationPayee/{id}/{statut}', [CommercialController::class, 'changeStatutConsultationPayee'])->name('change_statut_consultation');
             Route::get('RendezVous/RendezVousEffectue/{id}/{statut}', [CommercialController::class, 'changeStatutRendezVous'])->name('change_statut_rendez_vous');
 
+            //A revoir
+            Route::get('Consultation', [AdministratifController::class, 'Consultation'])->name('consultation');
         });
     });
 
@@ -123,7 +126,7 @@ Route::middleware(['auth'])->group(function () {
 Route::post('ajoutDepense', [DepenseController::class, 'ajoutDepense'])->name('ajoutDepense');
 Route::post('Banque', [EntreeController::class, 'ajoutEntree'])->name('ajoutEntree');
 Route::get('Banque', [HomeController::class, 'Banque'])->name('Banque');
-Route::get('DossierClients', [HomeController::class, 'allClient'])->name('DossierClients');
+Route::get('DossierClients', [HomeController::class, 'allClient'])->name('dossier_clients');
 Route::get('DossierContacts', [HomeController::class, 'allCandidat'])->name('DossierContacts');
 Route::get('Consultation', [consultationController::class, 'listeConsultantes'])->name('Consultation');
 Route::get('dashBoardConsultante', [HomeController::class, 'dashBoardConsultante'])->name('dashBoardConsultante');

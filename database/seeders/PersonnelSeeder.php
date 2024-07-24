@@ -25,11 +25,12 @@ class PersonnelSeeder extends Seeder
     
             $direction = User::create([
                 'id' => 1,
-                'name' => 'Admin',
+                'name' => 'Direction',
                 'last_name' => 'Omonde Canada',
-                'email' => 'admin@gmail.com',
+                'email' => 'direction@gmail.com',
                 'password' => bcrypt('123456789'),
                 'id_poste_occupe' => $poste->id,
+                'role_as' => 'direction',
                 'id_role_utilisateur' => $role->id,
                 'id_succursale' => $succursale->id,
             ]);
@@ -46,6 +47,7 @@ class PersonnelSeeder extends Seeder
                 'email' => 'consultant@gmail.com',
                 'password' => bcrypt('123456789'),
                 'id_poste_occupe' => $poste->id,
+                'role_as' => 'consultante',
                 'id_role_utilisateur' => $role->id,
                 'id_succursale' => $succursale->id,
             ]);
@@ -62,6 +64,7 @@ class PersonnelSeeder extends Seeder
                 'email' => 'commercial@gmail.com',
                 'password' => bcrypt('123456789'),
                 'id_poste_occupe' => $poste->id,
+                'role_as' => 'commercial',
                 'id_role_utilisateur' => $role->id,
                 'id_succursale' => $succursale->id,
             ]);
@@ -78,12 +81,13 @@ class PersonnelSeeder extends Seeder
                 'email' => 'administratif@gmail.com',
                 'password' => bcrypt('123456789'),
                 'id_poste_occupe' => $poste->id,
+                'role_as' => 'administratif',
                 'id_role_utilisateur' => $role->id,
                 'id_succursale' => $succursale->id,
             ]);
 
             //IT
-            $role = RoleUtilisateur::where('role', 'IT')->first();
+            $role = RoleUtilisateur::where('role', 'Informaticien')->first();
             $poste = PosteOccupe::where('label', 'Informaticien(e)')->first();
             $succursale = Succursale::where('label', 'Cote d\'Ivoire')->first();
     
@@ -94,6 +98,7 @@ class PersonnelSeeder extends Seeder
                 'email' => 'informaticien@gmail.com',
                 'password' => bcrypt('123456789'),
                 'id_poste_occupe' => $poste->id,
+                'role_as' => 'informaticien',
                 'id_role_utilisateur' => $role->id,
                 'id_succursale' => $succursale->id,
             ]);

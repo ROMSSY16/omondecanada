@@ -20,7 +20,7 @@ class RoleUtilisateurSeeder extends Seeder
                 'Consultante',
                 'Commercial',
                 'Administratif',
-                'IT',
+                'Informaticien',
                 'Direction',
             ];
             foreach($roles as $role){

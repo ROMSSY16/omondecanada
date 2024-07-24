@@ -11,44 +11,72 @@ use App\Models\Entree;
 
 class HomeController extends Controller
 {
+    public  function userAuth()
+    {
+        return ['user' => auth()->user()];
+    }
 
+    public function dashboard(){
+
+        if ($this->userAuth()['user']['role_as'] == 'direction') {
+
+            return view('dashboard');
+        }
+
+        if ($this->userAuth()['user']['role_as'] == 'consultante') {
+
+            return view('dashboard');
+        }
+        if ($this->userAuth()['user']['role_as'] == 'commercial') {
+
+            return view('dashboard');
+        }
+        if ($this->userAuth()['user']['role_as'] == 'administratif') {
+
+            return view('dashboard');
+        }
+        if ($this->userAuth()['user']['role_as'] == 'informaticien') {
+
+            return view('dashboard');
+        }
+    }
 
     //Fonction qui ramene les dashbords en fonctions des roles
-    public function index()
-    {
-        // Vérifiez si l'utilisateur est connecté
-        if (Auth::check()) {
-            // Obtenez le rôle de l'utilisateur
-            $userRole = Auth::user()->id_role_utilisateur;
+    // public function index()
+    // {
+    //     // Vérifiez si l'utilisateur est connecté
+    //     if (Auth::check()) {
+    //         // Obtenez le rôle de l'utilisateur
+    //         $userRole = Auth::user()->id_role_utilisateur;
     
-            // Redirigez l'utilisateur en fonction de son rôle
-            switch ($userRole) {
-                case 0:
-                    // Consultante, redirigez-la vers la page "Dashboard Consultante"
-                    return redirect()->route('consultante.dashboard');
-                    case 1:
-                    // Commercial, redirigez-le vers le dashboard Commercial
-                    return redirect()->route('commercial.dashboard');
+    //         // Redirigez l'utilisateur en fonction de son rôle
+    //         switch ($userRole) {
+    //             case 0:
+    //                 // Consultante, redirigez-la vers la page "Dashboard Consultante"
+    //                 return redirect()->route('consultante.dashboard');
+    //                 case 1:
+    //                 // Commercial, redirigez-le vers le dashboard Commercial
+    //                 return redirect()->route('commercial.dashboard');
                     
-                case 2:
-                    // Administratif, redirigez-le vers le dashboard Administratif
-                    return redirect()->route('administratif.dashboard');
+    //             case 2:
+    //                 // Administratif, redirigez-le vers le dashboard Administratif
+    //                 return redirect()->route('administratif.dashboard');
                   
-                case 3:
-                    // Informatique, redirigez-le vers le dashboard Informatique
-                    return redirect()->route('informatique.dashboard');
-                    case 4:
-                    // Direction, redirigez-le vers le dashboard Direction
-                    return redirect()->route('direction.dashboard');
-                default:
-                    // Si le rôle n'est pas reconnu, redirigez-le vers la page de connexion
-                    return redirect()->route('login');
-            }
-        }
+    //             case 3:
+    //                 // Informatique, redirigez-le vers le dashboard Informatique
+    //                 return redirect()->route('informatique.dashboard');
+    //                 case 4:
+    //                 // Direction, redirigez-le vers le dashboard Direction
+    //                 return redirect()->route('direction.dashboard');
+    //             default:
+    //                 // Si le rôle n'est pas reconnu, redirigez-le vers la page de connexion
+    //                 return redirect()->route('login');
+    //         }
+    //     }
     
-        // Si l'utilisateur n'est pas connecté, redirigez-le vers la page de connexion
-        return redirect()->route('login');
-    }
+    //     // Si l'utilisateur n'est pas connecté, redirigez-le vers la page de connexion
+    //     return redirect()->route('login');
+    // }
     
 
 
