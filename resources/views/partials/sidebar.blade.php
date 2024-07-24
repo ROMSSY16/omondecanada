@@ -98,7 +98,7 @@
 
         @if (auth()->user()->role_as == 'administratif')
             <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'administratif.dossier_clients' ? 'active bg-gradient-primary' : '' }}" href="{{route('administratif.dossier_clients')}}">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'administratif.clients' ? 'active bg-gradient-primary' : '' }}" href="{{route('administratif.clients')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">person</i>
                 </div>

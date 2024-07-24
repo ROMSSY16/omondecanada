@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Entree;
+use App\Models\Depense;
 use App\Models\Candidat;
 use App\Models\RendezVous;
 use Illuminate\Http\Request;
+use App\Models\InfoConsultation;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -64,7 +66,50 @@ class HomeController extends Controller
         }
         if ($this->userAuth()['user']['role_as'] == 'administratif') {
 
-            return view('dashboard');
+            $entreeMensuelData = Entree::where('id_utilisateur', auth()->user()->id)
+            ->whereMonth('date', now()->month)
+            ->whereYear('date', now()->year)
+            ->sum('montant');
+
+            $depenseMensuel = Depense::where('id_utilisateur', auth()->user()->id)
+                ->whereMonth('date', now()->month)
+                ->whereYear('date', now()->year)
+                ->sum('montant');
+            $caisseMensuel = $entreeMensuelData - $depenseMensuel;
+
+            $nombreConsultationData = Entree::where('id_utilisateur', auth()->user()->id)
+            ->where('id_type_paiement', 2)
+            ->whereMonth('date', now()->month)
+            ->whereYear('date', now()->year)
+            ->count();
+
+            $nombreVersementData = Entree::where('id_utilisateur', auth()->user()->id)
+            ->where('id_type_paiement', 1)
+            ->whereMonth('date', now()->month)
+            ->whereYear('date', now()->year)
+            ->count();
+
+            $devise = auth()->user()->id_succursale;
+            if ($devise === 4) {
+                return '$';
+            } else {
+                return 'FCFA';
+            }
+
+
+            $consultations = $this->prochaineConsultation();
+    
+
+            return view('dashboard', [
+                'entreeMensuel' => $entreeMensuelData['entreeMensuel'],
+                'moisEnCours' => $entreeMensuelData['moisEnCours'],
+                'devise' => $devise,
+                'nombreConsultationMensuel' => $nombreConsultationData['nombreConsultationMensuel'],
+                'nombreVersementMensuel' => $nombreVersementData['nombreVersementMensuel'],
+                'consultations' => $consultations,
+                'caisse' => $caisseMensuel['caisseMensuel'],
+            
+            ]);
         }
         if ($this->userAuth()['user']['role_as'] == 'informaticien') {
 
@@ -74,12 +119,10 @@ class HomeController extends Controller
     public function rendezVousAujourdhui(){
 
         $idUtilisateur = auth()->user()->id;
-
         $candidats = Candidat::where('id_utilisateur', $idUtilisateur)
             ->whereDate('date_rdv', Carbon::today())
             ->orderBy('date_enregistrement', 'desc')
             ->get();
-
         return $candidats;
      
     }
@@ -237,7 +280,23 @@ class HomeController extends Controller
         return response()->json(['success' => false, 'error' => 'Candidat not found.']);
     }
     
+    public function prochaineConsultation()
+    {
+        Carbon::setLocale('fr');
+        $consultations = InfoConsultation::where('date_heure', '>=', Carbon::today())
+            ->orderBy('date_heure')
+            ->take(4)
+            ->get();
 
+        $consultations->transform(function ($consultation) {
+            $dateFormatee = Carbon::parse($consultation->date_heure)->translatedFormat('l j F Y H:i');
+            $consultation->dateFormatee = ucwords($dateFormatee);
+
+            return $consultation;
+        });
+
+        return $consultations;
+    }
 
    
 }
