@@ -34,13 +34,14 @@
                                     {{ $consultante->nom }} {{ $consultante->prenoms }}
                                 </label>
                             </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="consultante{{ $consultante->id }}" name="consultante" checked>
+                                <label class="form-check-label" for="consultante{{ $consultante->id }}">
+                                    N / A
+                                </label>
+                            </div>
                         @endforeach
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="consultante{{ $consultante->id }}" name="consultante" checked>
-                            <label class="form-check-label" for="consultante{{ $consultante->id }}">
-                                N / A
-                            </label>
-                        </div>
+                        
                     </div>
                 </div>
 

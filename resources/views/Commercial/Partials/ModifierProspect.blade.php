@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('Commercial.ModifierProspect', $candidat->id) }}" method="POST" class="text-start"
+                <form action="{{ route('commercial.modifier_prospect', $candidat->id) }}" method="POST" class="text-start"
                     id="modifierContactForm{{ $candidat->id }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')

@@ -33,73 +33,85 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('Connexion.connexionPage');
 });
-
+// Routes d'authentification
+Route::get('connexion', [AuthController::class, 'showLoginForm'])->name('connexion.form');
+Route::post('connexion', [AuthController::class, 'login'])->name('login');
+Route::get('sign-in', [HomeController::class, 'sign-in'])->name('sign-in');
 // web.php
 
-//Route Qui Ramene la page d'acceuil
-Route::get('Dashboard', [HomeController::class, 'index'])->name('Dashboard');
+Route::middleware(['auth'])->group(function () {
+    Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
+
+    Route::prefix('commercial')->name('commercial.')->group(function () {
+
+        Route::get('Dashboard', [CommercialController::class, 'Dashboard'])->name('dashboard');
+        Route::get('AppelsChart', [CommercialController::class, 'appelChartData']);
+        Route::get('ConsultationsChart', [CommercialController::class, 'consultationChartData']);
+        Route::get('Contacts', [CommercialController::class, 'Contacts'])->name('contact');
+        Route::post('Contacts/AjouterProspect', [CommercialController::class, 'addProspect'])->name('add_prospect');
+        Route::put('Contacts/ModifierProspect/{id}', [CommercialController::class, 'addProspect'])->name('modifier_prospect');
+        Route::get('RendezVous', [CommercialController::class, 'RendezVous'])->name('rendez_vous');
+        Route::get('RendezVous/ConsultationPayee/{id}/{statut}', [CommercialController::class, 'changeStatutConsultationPayee'])->name('change_statut_consultation');
+        Route::get('RendezVous/RendezVousEffectue/{id}/{statut}', [CommercialController::class, 'changeStatutRendezVous'])->name('change_statut_rendez_vous');
+
+    });
+
+    //Routes Administratif
+    Route::prefix('administratif')->name('administratif.')->group(function () {
+
+        Route::get('Dashboard', [AdministratifController::class, 'Dashboard'])->name('dashboard');
+
+        Route::get('EntreeChartData', [AdministratifController::class, 'EntreeChartData']);
+        Route::get('Clients', [AdministratifController::class, 'Clients'])->name('clients');
+        Route::put('Clients/ModifierFicheConsultation/{idCandidat}', [AdministratifController::class, 'CreerOuModifierFiche'])->name('creer_ou_modifier_fiche');
+        Route::put('Clients/ModifierDateConsultation/{id}', [AdministratifController::class, 'ModifierDateConsultation'])->name('creer_ou_modifier_date_consultation');
+        Route::post('DossierClient/ModifierTypeVisa/{id}', [AdministratifController::class, 'ModifierTypeVisa'])->name('modifier_type_visa');
+
+        Route::get('DossierClients', [AdministratifController::class, 'DossierClients'])->name('dossier_clients');
+        Route::get('Banque', [AdministratifController::class, 'Banque'])->name('banque');
+        Route::get('Consultation', [AdministratifController::class, 'Consultation'])->name('consultation');
+        Route::post('UpdateTag/{candidatId}/{tagId}',[DossierController::class, 'Updatetag'])->name('update_tag');
+        Route::get('ficheRens/questions', [AdministratifController::class, 'showForm'])->name('question_fiche');
+        Route::post('ficheRens/{candidatId}', [FicheRenseignementController::class, 'store'])->name('fiche.renseignement.store');
+
+    });
+
+    Route::prefix('consultante')->name('consultante.')->group(function () {
+        //Routes Consultatnte
+        Route::get('Dashboard', [ConsultanteController::class, 'Dashboard'])->name('dashboard');
+        Route::get('DossierClient', [ConsultanteController::class, 'DossierClient'])->name('dossierClient');
+        Route::post('DossierClient/AjouterFichiersCandidat/{candidatId}', [DossierController::class, 'ajouterFichiersConsultante'])->name('ajout_fichiers_consultante');
+        Route::get('DossierClient/ficheRens/{candidatId}/view', [FicheRenseignementController::class, 'view'])->name('fiche.renseignement.view');
+
+    });
+
+    Route::prefix('direction')->name('direction.')->group(function () {
+        //Route Direction
+        Route::get('Dashboard', [DirectionController::class, 'Dashboard'])->name('dashboard');
+        Route::get('Dashboard/DataSuccursale', [DirectionController::class, 'dataSuccursale'])->name('data');;
+        Route::get('Banque', [DirectionController::class, 'Banque'])->name('banque');
+        Route::get('ChartEnsemble', [DirectionController::class, 'ChartData']);
+        Route::get('Consultation', [DirectionController::class, 'Consultation'])->name('consultation');
+        Route::get('DossierClient', [DirectionController::class, 'DossierClient'])->name('dossier_client');
+        Route::get('Equipe', [DirectionController::class, 'Equipe'])->name('equipe');
+
+    });
+
+    Route::prefix('consultation')->name('consultation.')->group(function () {
+
+        Route::get('list', [InformatiqueController::class, 'Consultation'])->name('dashboard');
+        Route::post('CreerConsultation', [consultationController::class, 'creerConsultation'])->name('creer_consultation');
+        Route::put('ModiferConsultation/{id}', [consultationController::class, 'ModifierConsultation'])->name('modifier_consultation');
+        Route::delete('SupprimerConsultation/{id}', [ConsultationController::class, 'SupprimerConsultation'])->name('supprimer_consultation');
+
+        Route::get('Clients', [InformatiqueController::class, 'Client'])->name('client');
+
+        Route::get('Equipe', [InformatiqueController::class, 'Equipe'])->name('equipe');
+
+    });
 
 
-//Routes Commercial
-Route::get('/Commercial/Dashboard', [CommercialController::class, 'Dashboard'])->name('Commercial.Dashboard');
-//Route Chart Dashboard Commercial
-Route::get('/Commercial/AppelsChart', [CommercialController::class, 'appelChartData']);
-Route::get('/Commercial/ConsultationsChart', [CommercialController::class, 'consultationChartData']);
-//Route Dossier Contacts Commercial
-Route::get('/Commercial/Contacts', [CommercialController::class, 'Contacts'])->name('Commercial.Contact');
-Route::post('/Commercial/Contacts/AjouterProspect', [CommercialController::class, 'addProspect'])->name('Commercial.AddProspect');
-Route::put('/Commercial/Contacts/ModifierProspect/{id}', [CommercialController::class, 'addProspect'])->name('Commercial.ModifierProspect');
-//Route Rendez Vous
-Route::get('/Commercial/RendezVous', [CommercialController::class, 'RendezVous'])->name('Commercial.RendezVous');
-//Route Toggle
-Route::get('/Commercial/RendezVous/ConsultationPayee/{id}/{statut}', [CommercialController::class, 'changeStatutConsultationPayee'])->name('Commercial.ChangeStatutConsultation');
-Route::get('/Commercial/RendezVous/RendezVousEffectue/{id}/{statut}', [CommercialController::class, 'changeStatutRendezVous'])->name('Commercial.ChangeStatutRendezVous');
-
-
-//Routes Administratif
-Route::get('/Administratif/Dashboard', [AdministratifController::class, 'Dashboard'])->name('Administratif.Dashboard');
-//Route Charts
-Route::get('/Administratif/EntreeChartData', [AdministratifController::class, 'EntreeChartData']);
-Route::get('/Administratif/Clients', [AdministratifController::class, 'Clients'])->name('Administratif.Clients');
-Route::put('/Administratif/Clients/ModifierFicheConsultation/{idCandidat}', [AdministratifController::class, 'CreerOuModifierFiche'])->name('Administratif.CreerOuModifierFiche');
-Route::put('/Administratif/Clients/ModifierDateConsultation/{id}', [AdministratifController::class, 'ModifierDateConsultation'])->name('Administratif.CreerOuModifierDateConsultation');
-Route::post('/Administratif/DossierClient/ModifierTypeVisa/{id}', [AdministratifController::class, 'ModifierTypeVisa'])->name('Administratif.ModifierTypeVisa');
-
-Route::get('/Administratif/DossierClients', [AdministratifController::class, 'DossierClients'])->name('Administratif.DossierClients');
-Route::get('/Administratif/Banque', [AdministratifController::class, 'Banque'])->name('Administratif.Banque');
-Route::get('/Administratif/Consultation', [AdministratifController::class, 'Consultation'])->name('Administratif.Consultation');
-Route::post('/Administratif/UpdateTag/{candidatId}/{tagId}',[DossierController::class, 'Updatetag'])->name('Administratif.UpdateTag');
-Route::get('/Administratif/ficheRens/questions', [AdministratifController::class, 'showForm'])->name('questionFiche');
-Route::post('/Administratif/ficheRens/{candidatId}', [FicheRenseignementController::class, 'store'])->name('fiche.renseignement.store');
-
-
-//Routes Consultatnte
-Route::get('/Consultante/Dashboard', [ConsultanteController::class, 'Dashboard'])->name('Consultante.Dashboard');
-Route::get('/Consultante/DossierClient', [ConsultanteController::class, 'DossierClient'])->name('Consultante.DossierClient');
-Route::post('/Consultante/DossierClient/AjouterFichiersCandidat/{candidatId}', [DossierController::class, 'ajouterFichiersConsultante'])->name('ajoutFichiersConsultante');
-Route::get('/Consultante/DossierClient/ficheRens/{candidatId}/view', [FicheRenseignementController::class, 'view'])->name('fiche.renseignement.view');
-
-//Route Direction
-Route::get('/Direction/Dashboard', [DirectionController::class, 'Dashboard'])->name('Direction.Dashboard');
-Route::get('/Direction/Dashboard/DataSuccursale', [DirectionController::class, 'dataSuccursale'])->name('Direction.Data');;
-Route::get('/Direction/Banque', [DirectionController::class, 'Banque'])->name('Direction.Banque');
-Route::get('/Direction/ChartEnsemble', [DirectionController::class, 'ChartData']);
-Route::get('/Direction/Consultation', [DirectionController::class, 'Consultation'])->name('Direction.Consultation');
-Route::get('/Direction/DossierClient', [DirectionController::class, 'DossierClient'])->name('Direction.DossierClient');
-Route::get('/Direction/Equipe', [DirectionController::class, 'Equipe'])->name('Direction.Equipe');
-
-//Routes IT
-Route::get('/Informatique/Consultation', [InformatiqueController::class, 'Consultation'])->name('Informatique.Dashboard');
-Route::post('/Informatique/Consultation/CreerConsultation', [consultationController::class, 'creerConsultation'])->name('creerConsultation');
-Route::put('/Informatique/Consultation/ModiferConsultation/{id}', [consultationController::class, 'ModifierConsultation'])->name('modifierConsultation');
-Route::delete('/Informatique/Consultation/SupprimerConsultation/{id}', [ConsultationController::class, 'SupprimerConsultation'])->name('supprimerConsultation');
-
-Route::get('/Informatique/Clients', [InformatiqueController::class, 'Client'])->name('Informatique.Client');
-
-Route::get('/Informatique/Equipe', [InformatiqueController::class, 'Equipe'])->name('Informatique.Equipe');
-
-
-Route::post('ajoutDepense', [DepenseController::class, 'ajoutDepense'])->name('ajoutDepense');
+    Route::post('ajoutDepense', [DepenseController::class, 'ajoutDepense'])->name('ajoutDepense');
 Route::post('Banque', [EntreeController::class, 'ajoutEntree'])->name('ajoutEntree');
 Route::get('Banque', [HomeController::class, 'Banque'])->name('Banque');
 Route::get('DossierClients', [HomeController::class, 'allClient'])->name('DossierClients');
@@ -110,11 +122,8 @@ Route::get('equipeView', [HomeController::class, 'equipeView'])->name('equipeVie
 Route::get('documentAgent', [HomeController::class, 'documentAgent'])->name('documentAgent');
 
 
-// Routes d'authentification
-Route::get('connexion', [AuthController::class, 'showLoginForm'])->name('connexion.form');
-Route::post('connexion', [AuthController::class, 'login'])->name('login');
-Route::get('sign-in', [HomeController::class, 'sign-in'])->name('sign-in');
-Route::get('adminDashboard', [HomeController::class, 'adminDashboard'])->name('adminDashboard');
+
+Route::get('adminDashboard', [HomeController::class, 'adminDashboard'])->name('admin_dashboard');
 Route::get('prochainesConsultations', [HomeController::class, 'prochainesConsultations'])->name('prochainesConsultations');
 
 Route::get('virtual-reality', [HomeController::class, 'virtual-reality'])->name('virtual-reality');
@@ -169,3 +178,8 @@ Route::get('/print/professionalServiceContract/{id}', [PDFController::class, 'pr
 
 //meme nom de name
 //Route::get('/print-professional-service-contract/{id}', [PDFController::class, 'printProfessionalServiceContract'])->name('print.professionalServiceContract');
+
+    
+});
+
+

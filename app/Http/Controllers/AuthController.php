@@ -21,7 +21,7 @@ class AuthController extends Controller
 
         if (FacadesAuth::attempt($credentials)) {
             // Authentication passed...
-            return redirect()->route('Dashboard');
+            return redirect()->route('dashboard');
         }
 
         return redirect()->route('connexion.form')->with('error', 'Adresse e-mail ou mot de passe incorrect.');

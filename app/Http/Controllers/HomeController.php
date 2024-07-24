@@ -25,21 +25,21 @@ class HomeController extends Controller
             switch ($userRole) {
                 case 0:
                     // Consultante, redirigez-la vers la page "Dashboard Consultante"
-                    return redirect()->route('Consultante.Dashboard');
+                    return redirect()->route('consultante.dashboard');
                     case 1:
                     // Commercial, redirigez-le vers le dashboard Commercial
-                    return redirect()->route('Commercial.Dashboard');
+                    return redirect()->route('commercial.dashboard');
                     
                 case 2:
                     // Administratif, redirigez-le vers le dashboard Administratif
-                    return redirect()->route('Administratif.Dashboard');
+                    return redirect()->route('administratif.dashboard');
                   
                 case 3:
                     // Informatique, redirigez-le vers le dashboard Informatique
-                    return redirect()->route('Informatique.Dashboard');
+                    return redirect()->route('informatique.dashboard');
                     case 4:
                     // Direction, redirigez-le vers le dashboard Direction
-                    return redirect()->route('Direction.Dashboard');
+                    return redirect()->route('direction.dashboard');
                 default:
                     // Si le rôle n'est pas reconnu, redirigez-le vers la page de connexion
                     return redirect()->route('login');

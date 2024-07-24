@@ -197,7 +197,7 @@ class CommercialController extends Controller
 
     public function addProspect(Request $request, $id = null)
     {
-        $validatedData = $request->validate([
+        $validated = $request->validate([
             'nom' => 'required|string|max:255',
             'prenoms' => 'required|string|max:255',
             'pays' => 'required|string|max:255',
@@ -208,50 +208,87 @@ class CommercialController extends Controller
             'date_rdv' => 'nullable|date',
         ]);
 
-            $data = [
-            'nom' => ucwords(strtolower($validatedData['nom'])),
-            'prenom' => ucwords(strtolower($validatedData['prenoms'])),
-            'pays' => ucwords(strtolower($validatedData['pays'])),
-            'ville' => ucwords(strtolower($validatedData['ville'])),
-            'numero_telephone' => $validatedData['numero_telephone'],
-            'email' => $validatedData['email'],
-            'profession' => ucwords(strtolower($validatedData['profession'])),
-                'consultation_payee' => $request->has('consultation_payee'),
-                'id_utilisateur' => Auth::id(),
-          'date_rdv' => $request->has('date_rdv') ? $validatedData['date_rdv'] : null,
+        $candidat = Candidat::create([
+            'nom' => ucwords(strtolower($validated['nom'])),
+            'prenom' => ucwords(strtolower($validated['prenoms'])),
+            'pays' => ucwords(strtolower($validated['pays'])),
+            'ville' => ucwords(strtolower($validated['ville'])),
+            'numero_telephone' => $validated['numero_telephone'],
+            'email' => $validated['email'],
+            'profession' => ucwords(strtolower($validated['profession'])),
+            'consultation_payee' => $request->consultation_payee,
+            'id_utilisateur' => Auth::id(),
+            'date_rdv' => $request->date_rdv ?? null,
+        ]);
+
+        if ($request->date_rdv) {
+            $rendezVousData = [
+                'date_rdv' => $request->date_rdv,
+                'candidat_id' => $candidat->id,
+                'commercial_id' => Auth::id(),
             ];
-
-            try {
-            $candidat = $id ? Candidat::findOrFail($id) : new Candidat;
-            $candidat->fill($data);
-            $candidat->save();
-            
-            if ($request->filled('date_rdv')) {
-                $rendezVousData = [
-                    'date_rdv' => $validatedData['date_rdv'],
-                    'candidat_id' => $candidat->id,
-                    'commercial_id' => Auth::id(),
-                ];
-        
-                $rendezVous = RendezVous::firstOrNew(['candidat_id' => $candidat->id]);
-                $rendezVous->fill($rendezVousData);
-                $rendezVous->save();
-            }
-
-            $message = $id ? 'Prospect updated successfully.' : 'Prospect added successfully.';
-            return redirect()->route('Commercial.Contacts')->with('success', $message);
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'An unexpected error occurred.'])->withInput();
+    
+            $rendezVous = RendezVous::firstOrNew(['candidat_id' => $candidat->id]);
+            $rendezVous->fill($rendezVousData);
+            $rendezVous->save();
         }
+
+        $message = $id ? 'Prospect updated successfully.' : 'Prospect added successfully.';
+        return redirect()->route('commercial.contact')->with('success', $message);
+        
+        // $validatedData = $request->validate([
+        //     'nom' => 'required|string|max:255',
+        //     'prenoms' => 'required|string|max:255',
+        //     'pays' => 'required|string|max:255',
+        //     'ville' => 'required|string|max:255',
+        //     'numero_telephone' => 'required|string|max:20',
+        //     'email' => 'required|email|max:255',
+        //     'profession' => 'required|string|max:255',
+        //     'date_rdv' => 'nullable|date',
+        // ]);
+       
+        //     $data = [
+        //         'nom' => ucwords(strtolower($validatedData['nom'])),
+        //         'prenom' => ucwords(strtolower($validatedData['prenoms'])),
+        //         'pays' => ucwords(strtolower($validatedData['pays'])),
+        //         'ville' => ucwords(strtolower($validatedData['ville'])),
+        //         'numero_telephone' => $validatedData['numero_telephone'],
+        //         'email' => $validatedData['email'],
+        //         'profession' => ucwords(strtolower($validatedData['profession'])),
+        //         'consultation_payee' => $request->has('consultation_payee'),
+        //         'id_utilisateur' => Auth::id(),
+        //         'date_rdv' => $request->has('date_rdv') ? $validatedData['date_rdv'] : null,
+        //     ];
+            
+        //     try {
+        //         $candidat = $id ? Candidat::findOrFail($id) : new Candidat;
+        //         $candidat->fill($data);
+        //         $candidat->save();
+            
+        //         if ($request->filled('date_rdv')) {
+        //             $rendezVousData = [
+        //                 'date_rdv' => $validatedData['date_rdv'],
+        //                 'candidat_id' => $candidat->id,
+        //                 'commercial_id' => Auth::id(),
+        //             ];
+            
+        //             $rendezVous = RendezVous::firstOrNew(['candidat_id' => $candidat->id]);
+        //             $rendezVous->fill($rendezVousData);
+        //             $rendezVous->save();
+        //         }
+
+        //         $message = $id ? 'Prospect updated successfully.' : 'Prospect added successfully.';
+        //     return redirect()->route('Commercial.Contacts')->with('success', $message);
+        // } catch (\Exception $e) {
+        //     return redirect()->back()->withErrors(['error' => 'An unexpected error occurred.'])->withInput();
+        // }
     }
 
     public function allCandiatWithRendezVous()
     {
-       
 
-         // Obtenir les données des candidats liés à la succursale de l'utilisateur
          $candidats = Candidat::where('id_utilisateur', auth()->user()->id) 
-            -> whereNotNull('date_rdv')
+            ->whereNotNull('date_rdv')
             ->orderBy('date_rdv', 'desc')
             ->get();
     

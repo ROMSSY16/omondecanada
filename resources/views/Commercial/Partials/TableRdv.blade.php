@@ -9,7 +9,7 @@
                             Rendez-vous du jour
                         </h3>
 
-                        <a href="{{ route('Commercial.RendezVous') }}" class="btn btn-primary">
+                        <a href="{{ route('commercial.rendez_vous') }}" class="btn btn-primary">
                             Voir tout
                         </a>
                     </div>

@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('Commercial.AddProspect')}}" method="POST" id="contactForm" enctype="multipart/form-data">
+                <form action="{{ route('commercial.add_prospect')}}" method="POST" id="contactForm" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-6 mb-3">

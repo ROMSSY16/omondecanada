@@ -28,8 +28,8 @@ return new class extends Migration
             $table->string('ville')->nullable();
             $table->string('pays')->nullable();
             $table->date('date_rdv')->nullable();
-            $table->integer('id_utilisateur');
-            $table->integer('id_info_consultation');
+            $table->integer('id_utilisateur')->nullable();
+            $table->integer('id_info_consultation')->nullable();
             $table->timestamps();
         });
     }

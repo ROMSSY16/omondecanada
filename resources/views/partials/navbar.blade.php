@@ -16,48 +16,48 @@
             @php
                 $pages = [
                     // Pages Consultante
-                    'Consultante.Dashboard' => 'Dashboard',
-                    'Consultante.DossierClient' => 'Dossier Client',
+                    'consultante.dashboard' => 'Dashboard',
+                    'consultante.dossier_client' => 'Dossier Client',
 
                     // Pages Commerciaux
-                    'Commercial.Dashboard' => 'Dashboard',
-                    'Commercial.Contact' => 'Contacts',
-                    'Commercial.RendezVous' => 'Rendez-Vous',
-                    'Administratif.Clients' => 'Clients',
-                    'Administratif.Consultation' => 'Consultation',
+                    'commercial.dashboard' => 'Dashboard',
+                    'commercial.contact' => 'Contacts',
+                    'commercial.rendez_vous' => 'Rendez-Vous',
+                    'administratif.clients' => 'Clients',
+                    'administratif.consultation' => 'Consultation',
 
 
                     // Pages Administratif
-                    'Administratif.Dashboard' => 'Dashboard',
-                    'Administratif.Clients' => 'Clients',
-                    'Administratif.DossierClients' => 'Dossier Client',
-                    'Administratif.Banque' => 'Banque',
-                    'Administratif.Consultation' => 'Consultation',
+                    'administratif.dashboard' => 'Dashboard',
+                    'administratif.clients' => 'Clients',
+                    'administratif.dossier_clients' => 'Dossier Client',
+                    'administratif.banque' => 'Banque',
+                    'administratif.consultation' => 'Consultation',
 
                     //Pages Direction
-                    'Direction.Dashboard' => 'Dashboard',
-                    'Direction.DossierClient' => 'Dossier Client',
-                    'Direction.Banque' => 'Banque',
-                    'Direction.Consultation' => 'Consultation',
-                    'Direction.Equipe' => 'L\'equipe',
+                    'direction.dashboard' => 'Dashboard',
+                    'direction.dossier_client' => 'Dossier Client',
+                    'direction.banque' => 'Banque',
+                    'direction.consultation' => 'Consultation',
+                    'direction.equipe' => 'L\'equipe',
                     
 
                     //Pages IT
-                    'Informatique.Dashboard' => 'Dashboard',
-                    'Informatique.Client' => 'Clients',
-                    'Informatique.Equipe' => 'L\'equipe',
+                    'informatique.dashboard' => 'Dashboard',
+                    'informatique.client' => 'Clients',
+                    'informatique.equipe' => 'L\'equipe',
 
 
                     // Other Pages
-                    'DossierContacts' => 'Contacts',
-                    'DossierClients' => 'Dossier Clients',
-                    'Banque' => 'Banque',
-                    'dashBoardConsultante' => 'Consultante',
-                    'Consultation' => 'Consultations',
-                    'adminDashboard' => "Vue d'ensemble",
+                    'dossier_contacts' => 'Contacts',
+                    'dossier_clients' => 'Dossier Clients',
+                    'banque' => 'Banque',
+                    'dashboard_consultante' => 'Consultante',
+                    'consultation' => 'Consultations',
+                    'admin_dashboard' => "Vue d'ensemble",
                     'dossier' => 'Document Clients',
-                    'equipeView' => "L'equipe",
-                    'documentAgent' => 'Document Agent',
+                    'equipe_view' => "L'equipe",
+                    'document_agent' => 'Document Agent',
                 ];
 
                 $currentRoute = \Request::route()->getName();
@@ -67,30 +67,30 @@
 
     @foreach ($pages as $page => $pageTitle)
         @if (
-            ($currentUserRole == 0 && in_array($page, ['Consultante.Dashboard' , 'Consultante.DossierClient'])) ||
+            ($currentUserRole == 0 && in_array($page, ['consultante.dashboard' , 'consultante.dossier_client'])) ||
 
-            ($currentUserRole == 1 && in_array($page, array_merge(['Commercial.Dashboard', 'Commercial.Contact', 'Commercial.RendezVous',  'Administratif.Clients', 'Administratif.Consultation' ], in_array(auth()->user()->id_poste_occupe, [3,5]) ? ['Administratif.Banque'] : []))) ||
+            ($currentUserRole == 1 && in_array($page, array_merge(['commercial.dashboard', 'commercial.contact', 'commercial.rendez_vous',  'administratif.clients', 'administratif.consultation' ], in_array(auth()->user()->id_poste_occupe, [3,5]) ? ['administratif.banque'] : []))) ||
     ($currentUserRole == 2 &&
         in_array($page, [
-            'Administratif.Dashboard',
-            'Administratif.Clients',
-            'Administratif.DossierClients',
-            'Administratif.Banque',
-            'Administratif.Consultation',
+            'administratif.dashboard',
+            'administratif.clients',
+            'administratif.dossier_clients',
+            'administratif.banque',
+            'administratif.consultation',
         ])) ||
     ($currentUserRole == 3 &&
         in_array($page, [
-            'Informatique.Dashboard',
-            'Informatique.Client',
-            'Informatique.Equipe'
+            'informatique.dashboard',
+            'informatique.client',
+            'informatique.equipe'
         ])) ||
     ($currentUserRole == 4 &&
         in_array($page, [
-            'Direction.Dashboard',
-            'Direction.Consultation',
-            'Direction.DossierClient',
-            'Direction.Banque',
-            'Direction.Equipe',
+            'direction.dashboard',
+            'direction.consultation',
+            'direction.dossier_client',
+            'direction.banque',
+            'direction.equipe',
         ]))
 )
                     <li class="nav-item">
@@ -99,55 +99,55 @@
                             <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
                                 <i class="material-icons opacity-10">
                                     @switch($page)
-                                        @case('adminDashboard')
-                                        @case('Administratif.Dashboard')
+                                        @case('admin_dashboard')
+                                        @case('administratif.dashboard')
 
-                                        @case('Direction.Dashboard')
-                                        @case('Commercial.Dashboard')
-                                        @case('Informatique.Dashboard')
+                                        @case('direction.dashboard')
+                                        @case('commercial.dashboard')
+                                        @case('informatique.dashboard')
                                         
                                             dashboard
                                         @break
 
-                                        @case('Administratif.Clients')
-                                        @case('DossierContacts')
-                                        @case('Direction.DossierClient')
-                                        @case('Commercial.Contact')
+                                        @case('administratif.Clients')
+                                        @case('dossier_contacts')
+                                        @case('direction.dossier_client')
+                                        @case('commercial.contact')
                                             contacts
                                         @break
 
-                                        @case('Administratif.DossierClients')
-                                        @case('Informatique.Client')
-                                        @case('DossierClients')
-                                        @case('Consultante.DossierClient')
+                                        @case('administratif.dossier_clients')
+                                        @case('informatique.client')
+                                        @case('dossier_clients')
+                                        @case('consultante.dossier_client')
                                    
                                         @case('dossier')
-                                        @case('documentAgent')
+                                        @case('document_agent')
                                             folder
                                         @break
 
-                                        @case('Administratif.Consultation')
-                                        @case('equipeView')
-                                        @case('Direction.Equipe')
-                                        @case('Informatique.Equipe')
+                                        @case('administratif.consultation')
+                                        @case('equipe_view')
+                                        @case('direction.equipe')
+                                        @case('informatique.equipe')
                                             groups
                                         @break
 
-                                        @case('Consultante.Dashboard')
-                                        @case('Consultation')
+                                        @case('consultante.dashboard')
+                                        @case('consultation')
 
-                                        @case('Direction.Consultation')
+                                        @case('direction.consultation')
                                             videocam
                                         @break
 
-                                        @case('Administratif.Banque')
-                                        @case('Banque')
+                                        @case('administratif.banque')
+                                        @case('banque')
 
                                         @case('Direction.Banque')
                                             account_balance
                                         @break
 
-                                        @case('Commercial.RendezVous')
+                                        @case('commercial.rendez_vous')
                                             handshake
                                         @break
 
