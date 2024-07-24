@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Entree;
+use App\Models\Candidat;
+use App\Models\RendezVous;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Candidat;
-use App\Models\Entree;
 
 
 
@@ -18,6 +20,8 @@ class HomeController extends Controller
 
     public function dashboard(){
 
+        $rendezVous = $this->rendezVousAujourdhui();
+
         if ($this->userAuth()['user']['role_as'] == 'direction') {
 
             return view('dashboard');
@@ -29,7 +33,34 @@ class HomeController extends Controller
         }
         if ($this->userAuth()['user']['role_as'] == 'commercial') {
 
-            return view('dashboard');
+            Carbon::setLocale('fr');
+            $jourActuel = Carbon::now()->translatedFormat('d F Y');
+            $moisActuel = Carbon::now()->monthName;
+            $anneeActuelle = Carbon::now()->year;
+
+            $utilisateurConnecte = auth()->user();
+  
+            $totalAppelDeCeJour = RendezVous::whereDate('date_enregistrement_appel', Carbon::now())
+                ->where('commercial_id' , $utilisateurConnecte->id )
+                ->count();
+            $totalVisiteAujourdhui = RendezVous::whereDate('date_enregistrement_appel', Carbon::now())
+                ->where('commercial_id' , $utilisateurConnecte->id )
+                ->whereNotNull('date_rdv')
+                ->count();
+            $totalConsultationsDeCeMois = RendezVous::where('consultation_payee', true)
+                ->whereMonth('date_rdv', $moisActuel)
+                ->whereYear('date_rdv', $anneeActuelle)
+                ->where('commercial_id', $utilisateurConnecte->id)
+                ->count();
+
+            return view('dashboard', [
+                'totalAppelDeCeJour' => $totalAppelDeCeJour, 
+                'totalVisiteAujourdhui' => $totalVisiteAujourdhui,
+                'totalConsultationsDeCeMois' => $totalConsultationsDeCeMois, 
+                'jourActuel' => $jourActuel, 
+                'moisActuel' => $moisActuel, 
+                'rendezVous' => $rendezVous, 
+            ]);
         }
         if ($this->userAuth()['user']['role_as'] == 'administratif') {
 
@@ -39,6 +70,18 @@ class HomeController extends Controller
 
             return view('dashboard');
         }
+    }
+    public function rendezVousAujourdhui(){
+
+        $idUtilisateur = auth()->user()->id;
+
+        $candidats = Candidat::where('id_utilisateur', $idUtilisateur)
+            ->whereDate('date_rdv', Carbon::today())
+            ->orderBy('date_enregistrement', 'desc')
+            ->get();
+
+        return $candidats;
+     
     }
 
     //Fonction qui ramene les dashbords en fonctions des roles
