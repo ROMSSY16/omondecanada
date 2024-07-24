@@ -40,61 +40,69 @@ Route::get('sign-in', [HomeController::class, 'sign-in'])->name('sign-in');
 // web.php
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
-    Route::prefix('commercial')->name('commercial.')->group(function () {
+    Route::middleware('isCommercial')->group(function () {
+        Route::prefix('commercial')->name('commercial.')->group(function () {
 
-        Route::get('Dashboard', [CommercialController::class, 'Dashboard'])->name('dashboard');
-        Route::get('AppelsChart', [CommercialController::class, 'appelChartData']);
-        Route::get('ConsultationsChart', [CommercialController::class, 'consultationChartData']);
-        Route::get('Contacts', [CommercialController::class, 'Contacts'])->name('contact');
-        Route::post('Contacts/AjouterProspect', [CommercialController::class, 'addProspect'])->name('add_prospect');
-        Route::put('Contacts/ModifierProspect/{id}', [CommercialController::class, 'addProspect'])->name('modifier_prospect');
-        Route::get('RendezVous', [CommercialController::class, 'RendezVous'])->name('rendez_vous');
-        Route::get('RendezVous/ConsultationPayee/{id}/{statut}', [CommercialController::class, 'changeStatutConsultationPayee'])->name('change_statut_consultation');
-        Route::get('RendezVous/RendezVousEffectue/{id}/{statut}', [CommercialController::class, 'changeStatutRendezVous'])->name('change_statut_rendez_vous');
+            Route::get('Dashboard', [CommercialController::class, 'Dashboard'])->name('dashboard');
+            Route::get('AppelsChart', [CommercialController::class, 'appelChartData']);
+            Route::get('ConsultationsChart', [CommercialController::class, 'consultationChartData']);
+            Route::get('Contacts', [CommercialController::class, 'Contacts'])->name('contact');
+            Route::post('Contacts/AjouterProspect', [CommercialController::class, 'addProspect'])->name('add_prospect');
+            Route::put('Contacts/ModifierProspect/{id}', [CommercialController::class, 'addProspect'])->name('modifier_prospect');
+            Route::get('RendezVous', [CommercialController::class, 'RendezVous'])->name('rendez_vous');
+            Route::get('RendezVous/ConsultationPayee/{id}/{statut}', [CommercialController::class, 'changeStatutConsultationPayee'])->name('change_statut_consultation');
+            Route::get('RendezVous/RendezVousEffectue/{id}/{statut}', [CommercialController::class, 'changeStatutRendezVous'])->name('change_statut_rendez_vous');
 
+        });
     });
 
     //Routes Administratif
-    Route::prefix('administratif')->name('administratif.')->group(function () {
+    Route::middleware('isAdministratif')->group(function () {
+        Route::prefix('administratif')->name('administratif.')->group(function () {
 
-        Route::get('Dashboard', [AdministratifController::class, 'Dashboard'])->name('dashboard');
+            Route::get('Dashboard', [AdministratifController::class, 'Dashboard'])->name('dashboard');
 
-        Route::get('EntreeChartData', [AdministratifController::class, 'EntreeChartData']);
-        Route::get('Clients', [AdministratifController::class, 'Clients'])->name('clients');
-        Route::put('Clients/ModifierFicheConsultation/{idCandidat}', [AdministratifController::class, 'CreerOuModifierFiche'])->name('creer_ou_modifier_fiche');
-        Route::put('Clients/ModifierDateConsultation/{id}', [AdministratifController::class, 'ModifierDateConsultation'])->name('creer_ou_modifier_date_consultation');
-        Route::post('DossierClient/ModifierTypeVisa/{id}', [AdministratifController::class, 'ModifierTypeVisa'])->name('modifier_type_visa');
+            Route::get('EntreeChartData', [AdministratifController::class, 'EntreeChartData']);
+            Route::get('Clients', [AdministratifController::class, 'Clients'])->name('clients');
+            Route::put('Clients/ModifierFicheConsultation/{idCandidat}', [AdministratifController::class, 'CreerOuModifierFiche'])->name('creer_ou_modifier_fiche');
+            Route::put('Clients/ModifierDateConsultation/{id}', [AdministratifController::class, 'ModifierDateConsultation'])->name('creer_ou_modifier_date_consultation');
+            Route::post('DossierClient/ModifierTypeVisa/{id}', [AdministratifController::class, 'ModifierTypeVisa'])->name('modifier_type_visa');
 
-        Route::get('DossierClients', [AdministratifController::class, 'DossierClients'])->name('dossier_clients');
-        Route::get('Banque', [AdministratifController::class, 'Banque'])->name('banque');
-        Route::get('Consultation', [AdministratifController::class, 'Consultation'])->name('consultation');
-        Route::post('UpdateTag/{candidatId}/{tagId}',[DossierController::class, 'Updatetag'])->name('update_tag');
-        Route::get('ficheRens/questions', [AdministratifController::class, 'showForm'])->name('question_fiche');
-        Route::post('ficheRens/{candidatId}', [FicheRenseignementController::class, 'store'])->name('fiche.renseignement.store');
+            Route::get('DossierClients', [AdministratifController::class, 'DossierClients'])->name('dossier_clients');
+            Route::get('Banque', [AdministratifController::class, 'Banque'])->name('banque');
+            Route::get('Consultation', [AdministratifController::class, 'Consultation'])->name('consultation');
+            Route::post('UpdateTag/{candidatId}/{tagId}',[DossierController::class, 'Updatetag'])->name('update_tag');
+            Route::get('ficheRens/questions', [AdministratifController::class, 'showForm'])->name('question_fiche');
+            Route::post('ficheRens/{candidatId}', [FicheRenseignementController::class, 'store'])->name('fiche.renseignement.store');
 
+        });
     });
 
-    Route::prefix('consultante')->name('consultante.')->group(function () {
-        //Routes Consultatnte
-        Route::get('Dashboard', [ConsultanteController::class, 'Dashboard'])->name('dashboard');
-        Route::get('DossierClient', [ConsultanteController::class, 'DossierClient'])->name('dossierClient');
-        Route::post('DossierClient/AjouterFichiersCandidat/{candidatId}', [DossierController::class, 'ajouterFichiersConsultante'])->name('ajout_fichiers_consultante');
-        Route::get('DossierClient/ficheRens/{candidatId}/view', [FicheRenseignementController::class, 'view'])->name('fiche.renseignement.view');
+    Route::middleware('isConsultante')->group(function () {
+        Route::prefix('consultante')->name('consultante.')->group(function () {
+            //Routes Consultatnte
+            Route::get('Dashboard', [ConsultanteController::class, 'Dashboard'])->name('dashboard');
+            Route::get('DossierClient', [ConsultanteController::class, 'DossierClient'])->name('dossierClient');
+            Route::post('DossierClient/AjouterFichiersCandidat/{candidatId}', [DossierController::class, 'ajouterFichiersConsultante'])->name('ajout_fichiers_consultante');
+            Route::get('DossierClient/ficheRens/{candidatId}/view', [FicheRenseignementController::class, 'view'])->name('fiche.renseignement.view');
 
+        });
     });
 
-    Route::prefix('direction')->name('direction.')->group(function () {
-        //Route Direction
-        Route::get('Dashboard', [DirectionController::class, 'Dashboard'])->name('dashboard');
-        Route::get('Dashboard/DataSuccursale', [DirectionController::class, 'dataSuccursale'])->name('data');;
-        Route::get('Banque', [DirectionController::class, 'Banque'])->name('banque');
-        Route::get('ChartEnsemble', [DirectionController::class, 'ChartData']);
-        Route::get('Consultation', [DirectionController::class, 'Consultation'])->name('consultation');
-        Route::get('DossierClient', [DirectionController::class, 'DossierClient'])->name('dossier_client');
-        Route::get('Equipe', [DirectionController::class, 'Equipe'])->name('equipe');
+    Route::middleware('isDirection')->group(function () {
+        Route::prefix('direction')->name('direction.')->group(function () {
+            //Route Direction
+            Route::get('Dashboard', [DirectionController::class, 'Dashboard'])->name('dashboard');
+            Route::get('Dashboard/DataSuccursale', [DirectionController::class, 'dataSuccursale'])->name('data');;
+            Route::get('Banque', [DirectionController::class, 'Banque'])->name('banque');
+            Route::get('ChartEnsemble', [DirectionController::class, 'ChartData']);
+            Route::get('Consultation', [DirectionController::class, 'Consultation'])->name('consultation');
+            Route::get('DossierClient', [DirectionController::class, 'DossierClient'])->name('dossier_client');
+            Route::get('Equipe', [DirectionController::class, 'Equipe'])->name('equipe');
 
+        });
     });
 
     Route::prefix('consultation')->name('consultation.')->group(function () {
@@ -111,7 +119,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
-    Route::post('ajoutDepense', [DepenseController::class, 'ajoutDepense'])->name('ajoutDepense');
+
+Route::post('ajoutDepense', [DepenseController::class, 'ajoutDepense'])->name('ajoutDepense');
 Route::post('Banque', [EntreeController::class, 'ajoutEntree'])->name('ajoutEntree');
 Route::get('Banque', [HomeController::class, 'Banque'])->name('Banque');
 Route::get('DossierClients', [HomeController::class, 'allClient'])->name('DossierClients');
