@@ -15,12 +15,12 @@
 
 
                         </div>
-                        <div class="d-flex align-items-center justify-content-around w-50">
+                        <div class="d-flex align-items-center justify-content-around">
 
-                            <button id="all" class="btn btn-primary">Voir tout</button>
-                            <button id="todayButton" class="btn btn-primary">Aujourd'hui</button>
-                            <button id="thisWeekButton" class="btn btn-primary filter-btn">Cette semaine</button>
-                            <button id="thisMonthButton" class="btn btn-primary filter-btn">Ce Mois</button>
+                            <button id="all" class="btn btn-primary me-1">Voir tout</button>
+                            <button id="todayButton" class="btn btn-primary me-1">Aujourd'hui</button>
+                            <button id="thisWeekButton" class="btn btn-primary filter-btn me-1">Cette semaine</button>
+                            <button id="thisMonthButton" class="btn btn-primary filter-btn me-1">Ce Mois</button>
                             <div class="dropdown">
                                 <button class="btn btn-primary" type="button" id="dropdownConsultante"
                                     data-toggle="dropdown">
@@ -50,22 +50,17 @@
                                 <th class="text-uppercase text-secondary  text-xxs font-weight-bolder opacity-7">
                                     REJOINDRE
                                 </th>
-                                <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2"
-                                    style=>
+                                <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">
                                     LABEL
                                 </th>
-                                <th
-                                    class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">
+                                <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">
                                     DATE ET HEURE
                                 </th>
 
-
-                                <th
-                                    class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">
+                                <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">
                                     NOMBRE DE CANDIDATS
                                 </th>
-                                <th
-                                    class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">
+                                <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">
                                     CONSULTANTE
                                 </th>
 

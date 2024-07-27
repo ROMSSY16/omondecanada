@@ -43,10 +43,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
     // Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
 
+
     Route::middleware('isCommercial')->group(function () {
         Route::prefix('commercial')->name('commercial.')->group(function () {
 
-            Route::get('Dashboard', [CommercialController::class, 'Dashboard'])->name('dashboard');
             Route::get('AppelsChart', [CommercialController::class, 'appelChartData']);
             Route::get('ConsultationsChart', [CommercialController::class, 'consultationChartData']);
             Route::get('Contacts', [CommercialController::class, 'Contacts'])->name('contact');
@@ -87,9 +87,16 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('consultante')->name('consultante.')->group(function () {
             //Routes Consultatnte
             Route::get('Dashboard', [ConsultanteController::class, 'Dashboard'])->name('dashboard');
-            Route::get('DossierClient', [ConsultanteController::class, 'DossierClient'])->name('dossierClient');
+            Route::get('DossierClient', [ConsultanteController::class, 'DossierClient'])->name('dossier_client');
             Route::post('DossierClient/AjouterFichiersCandidat/{candidatId}', [DossierController::class, 'ajouterFichiersConsultante'])->name('ajout_fichiers_consultante');
             Route::get('DossierClient/ficheRens/{candidatId}/view', [FicheRenseignementController::class, 'view'])->name('fiche.renseignement.view');
+
+            Route::get('/my-candidats', [ConsultanteController::class, 'myCandidat'])->name('my_candidat');
+            Route::get('/all-candidats', [ConsultanteController::class, 'allCandidats'])->name('all_candidats');
+
+            Route::get('/Consultation/{id}', [ConsultanteController::class, 'getListCandidatByConsultation'])->name('list_candidats');
+            Route::get('/Consultation/{id}/{id_candidat}', [ConsultanteController::class, 'getCandidatByConsultation'])->name('candidat');
+            Route::get('/ficheConsultation/{id_candidat}', [ConsultanteController::class, 'getCandidatFiche'])->name('candidatFiche');
 
         });
     });
@@ -148,9 +155,6 @@ Route::post('DossierContacts', [Controller::class, 'soumettreFormulaire'])->name
 
 // Exemple de route dans votre fichier web.php
 Route::get('/recherche-candidat', [Controller::class, 'rechercheCandidat'])->name('rechercheCandidat');
-Route::get('/Consultation/{id}', [ConsultanteController::class, 'getListCandidatByConsultation'])->name('listcandidats');
-Route::get('/Consultation/{id}/{id_candidat}', [ConsultanteController::class, 'getCandidatByConsultation'])->name('candidat');
-Route::get('/ficheConsultation/{id_candidat}', [ConsultanteController::class, 'getCandidatFiche'])->name('candidatFiche');
 
 // routes/web.php
 Route::post('/ajouterCandidatAConsultation', [Controller::class, 'ajouterCandidatAConsultation']);

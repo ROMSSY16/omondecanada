@@ -6,7 +6,7 @@
                 <h4 class="modal-title " id="exampleModalLabel">Créer Fiche de Consultation</h4>
             </div>
             <div class="modal-body">
-                <form action="{{ route('Administratif.CreerOuModifierFiche', $candidat->id) }}" method="POST"
+                <form action="{{ route('administratif.creer_ou_modifier_fiche', $candidat->id) }}" method="POST"
                     class="text-start ficheCons" id="modifierContactForm{{ $candidat->id }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')

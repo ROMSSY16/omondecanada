@@ -6,7 +6,5 @@
             $moisActuel = ucfirst(Carbon::now()->formatLocalized('%B'));
         @endphp
 
-        @include('partials.header', ['page' => "Banque - $moisActuel"])
-
         @include('Direction.Partials.TableauSuccursale')
    @endsection

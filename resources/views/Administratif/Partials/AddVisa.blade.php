@@ -6,7 +6,7 @@
                 <h5 class="modal-title" id="ajouterEntreeModalLabel">Ajouter le Type de Procedure</h5>
             </div>
             <div class="modal-body">
-                <form id="procedureForm{{ $candidat->id }}" action="{{ route('Administratif.ModifierTypeVisa', ['id' => $candidat->id]) }}" method="POST">
+                <form id="procedureForm{{ $candidat->id }}" action="{{ route('administratif.modifier_type_visa', ['id' => $candidat->id]) }}" method="POST">
                     @csrf
                     <!-- Champs Candidat -->
                     <input type="hidden" name="candidat_id" value="{{ $candidat->id }}">

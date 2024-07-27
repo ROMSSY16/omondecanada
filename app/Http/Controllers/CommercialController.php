@@ -10,85 +10,48 @@ use Carbon\Carbon;
 use App\Models\Candidat;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RendezVous;
+use App\Models\User;
 
 class CommercialController extends Controller
 {
 
+    public function Contacts(){
+        $pageTitle = 'Contacts';
+        $pays = auth()->user()->succursale->label;
+        $consultants = User::where('role_as', 'consultante')->orderBy('created_at', 'desc')->get();
+        $candidatsAgents = Candidat::where('id_utilisateur', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(5);
 
-    public function Dashboard()
-    {
-        $appels = $this->appelCount();
-        $visite = $this->visiteCount();
-        $consultations = $this->consultationPayeeCount();
-        $rendezVous = $this->rendezVousAujourdhui();
-    
-        // Fusionner les quatre tableaux en un seul
-        $data = array_merge($appels, $visite, $consultations, compact('rendezVous'));
-    
-        return view('Commercial.Views.Dashboard', $data);
+        return view('Commercial.contacts', [
+            'data_candidat' => $candidatsAgents,
+            'page' => $pageTitle,
+            'pays' => $pays,
+            'consultants' => $consultants,
+        ]);
     }
-    
-    private function appelCount()
-    {
-        Carbon::setLocale('fr');
-        $jourActuel = Carbon::now()->translatedFormat('d F Y');
-        $moisActuel = Carbon::now()->monthName;
-        // Récupère l'utilisateur connecté
-        $utilisateurConnecte = auth()->user();
-        // Calcule le nombre de rendez-vous de l'utilisateur dans le jour actuel
-        $totalAppelDeCeJour = RendezVous::whereDate('date_enregistrement_appel', Carbon::now())
-            ->where('commercial_id' , $utilisateurConnecte->id )
-            ->count();
-        return compact('totalAppelDeCeJour', 'jourActuel', 'moisActuel');
+    public function succursaleContacts(){
+        $pays = auth()->user()->succursale->label;
+        $pageTitle = 'Contacts'.' '.$pays;
+        $idSuccursaleUtilisateur = auth()->user()->id_succursale;
+        $candidatsSuccursalle = Candidat::whereHas('utilisateur', function ($query) use ($idSuccursaleUtilisateur) {
+            $query->where('id_succursale', $idSuccursaleUtilisateur);
+        })->orderBy('date_enregistrement', 'desc')->get();
+
+        return view('Commercial.contacts_succursale', [
+            'data_candidat' => $candidatsSuccursalle,
+            'page' => $pageTitle,
+            'pays' => $pays,
+        ]);
     }
-    
-    
-    private function visiteCount()
-    {
-        // Récupère l'utilisateur connecté
-        $utilisateurConnecte = auth()->user();
-
-        // Calcule le nombre de candidats de l'utilisateur avec une date de rendez-vous non vide pour le mois et l'année actuels
-        $totalVisiteAujourdhui = RendezVous::whereDate('date_enregistrement_appel', Carbon::now())
-        ->where('commercial_id' , $utilisateurConnecte->id )
-        ->whereNotNull('date_rdv')
-        ->count();
-    
-        return compact('totalVisiteAujourdhui');
-    }
-
-    private function consultationPayeeCount()
-    {
-        // Récupère l'utilisateur connecté
-        $utilisateurConnecte = auth()->user();
-
-        // Obtenez le mois et l'année actuels
-        $moisActuel = Carbon::now()->month;
-        $anneeActuelle = Carbon::now()->year;
-
-        // Calcule le nombre de consultations payées de l'utilisateur pour le mois et l'année actuels
-        $totalConsultationsDeCeMois = RendezVous::where('consultation_payee', true)
-            ->whereMonth('date_rdv', $moisActuel)
-            ->whereYear('date_rdv', $anneeActuelle)
-            ->where('commercial_id', $utilisateurConnecte->id)
-            ->count();
-
-        return compact('totalConsultationsDeCeMois');
-    }
-
-    public function rendezVousAujourdhui()
-    {
-        // Obtenir l'utilisateur connecté
-        $idUtilisateur = auth()->user()->id;
-    
-        // Obtenir les candidats enregistrés par l'utilisateur connecté avec une date de rendez-vous aujourd'hui
-        $candidats = Candidat::where('id_utilisateur', $idUtilisateur)
-            ->whereDate('date_rdv', Carbon::today())
-            ->orderBy('date_enregistrement', 'desc')
+    public function rendezVous(){
+        $pageTitle = 'Rendez Vous';
+        $candidats = Candidat::where('id_utilisateur', auth()->user()->id) 
+            ->whereNotNull('date_rdv')
+            ->orderBy('date_rdv', 'desc')
             ->get();
-
-        return $candidats;
-     
+        return view('Commercial.rendezvous', [
+            'candidats' => $candidats,
+            'page' => $pageTitle,
+        ]);
     }
 
     public function appelChartData()
@@ -187,13 +150,7 @@ class CommercialController extends Controller
         return $candidats;
     }
 
-    public function Contacts()
-    {
-        $candidatsSuccursalle = $this->contactSuccursalle();
-
-        // Pass the data to the main view
-        return view('Commercial.Views.Contacts', ['data_candidat' => $candidatsSuccursalle]);
-    }
+    
 
     public function addProspect(Request $request, $id = null)
     {
@@ -284,22 +241,8 @@ class CommercialController extends Controller
         // }
     }
 
-    public function allCandiatWithRendezVous()
-    {
-
-         $candidats = Candidat::where('id_utilisateur', auth()->user()->id) 
-            ->whereNotNull('date_rdv')
-            ->orderBy('date_rdv', 'desc')
-            ->get();
-    
-        return $candidats;
-    }
      
-    public function rendezVous()
-    {
-        $candidats = $this->allCandiatWithRendezVous();
-        return view('Commercial.Views.RendezVous', compact('candidats'));
-    }
+    
 
     public function changeStatutConsultationPayee($id, $statut)
     {

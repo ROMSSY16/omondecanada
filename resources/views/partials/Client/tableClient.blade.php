@@ -45,7 +45,7 @@
                             <td class="align-middle text-center">
 
                                 <span class="text-md font-weight-bold">
-                                    @if ($candidat->proceduresDemandees->isNotEmpty())
+                                    @if ($candidat->proceduresDemandees != null)
                                         @foreach ($candidat->proceduresDemandees as $procedure)
                                             {{ $procedure->typeProcedure->label }}
                                         @endforeach

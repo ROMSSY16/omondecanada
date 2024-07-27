@@ -21,10 +21,6 @@ use App\Notifications\ProcedureCreatedNotifications;
 use App\Notifications\StatutNotifications;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-
-
-
 
 class AdministratifController extends Controller
 {
@@ -33,38 +29,12 @@ class AdministratifController extends Controller
         $utilisateurConnecte = auth()->user();
         return in_array($utilisateurConnecte->id_poste_occupe, $postes);
     }
-    //Ramene la page principale avec les données necessaire
-    public function Dashboard()
-    {
-        $hasPoste = $this->utilisateurHasPoste([3, 5]);
 
-        $entreeMensuelData = $this->entreeMensuel();
-        $devise = $this->devise();
-        $nombreConsultationData = $this->nombreConsultationMensuel();
-        $nombreVersementData = $this->nombreVersementMensuel();
-        $consultations = $this->prochaineConsultation();
-        $caisseMensuel = $this->caisseMensuel();
-
-
-        return view('Administratif.Views.Dashboard', [
-            'entreeMensuel' => $entreeMensuelData['entreeMensuel'],
-            'moisEnCours' => $entreeMensuelData['moisEnCours'],
-            'devise' => $devise,
-            'nombreConsultationMensuel' => $nombreConsultationData['nombreConsultationMensuel'],
-            'nombreVersementMensuel' => $nombreVersementData['nombreVersementMensuel'],
-            'consultations' => $consultations,
-            'caisse' => $caisseMensuel['caisseMensuel'],
-            'hasPoste' => $hasPoste,
-
-        ]);
-    }
-    //Ramene le montant du mois pour l'utilisateur connecté
     private function entreeMensuel()
     {
         Carbon::setLocale('fr');
         $moisEnCours = Carbon::now()->monthName;
 
-        // Calculez la somme des entrées pour le mois actuel et l'année actuelle en utilisant le modèle Entree
         $entreeMensuel = Entree::where('id_utilisateur', auth()->user()->id)
             ->whereMonth('date', now()->month)
             ->whereYear('date', now()->year)
@@ -73,55 +43,7 @@ class AdministratifController extends Controller
         return ['entreeMensuel' => $entreeMensuel, 'moisEnCours' => $moisEnCours];
     }
 
-    //Ramene le montant du mois pour l'utilisateur connecté
-    private function caisseMensuel()
-    {
-        Carbon::setLocale('fr');
-        $moisEnCours = Carbon::now()->monthName;
 
-        // Calculez la somme des entrées pour le mois actuel et l'année actuelle en utilisant le modèle Entree
-        $entreeMensuel = Entree::where('id_utilisateur', auth()->user()->id)
-            ->whereMonth('date', now()->month)
-            ->whereYear('date', now()->year)
-            ->sum('montant');
-
-        // Calculez la somme des dépenses pour le mois actuel et l'année actuelle en utilisant le modèle Depense
-        $depenseMensuel = Depense::where('id_utilisateur', auth()->user()->id)
-            ->whereMonth('date', now()->month)
-            ->whereYear('date', now()->year)
-            ->sum('montant');
-
-        // Calculez la différence entre les entrées et les dépenses
-        $difference = $entreeMensuel - $depenseMensuel;
-
-        return ['caisseMensuel' => $difference];
-    }
-
-    //Ramene le nombre de consultations pour l'utilisateur connecté
-    private function nombreConsultationMensuel()
-    {
-        // Calculez le nombre de consultations pour le mois actuel et l'année actuelle en utilisant le modèle Entree
-        $nbrConsultation = Entree::where('id_utilisateur', auth()->user()->id)
-            ->where('id_type_paiement', 2)
-            ->whereMonth('date', now()->month)
-            ->whereYear('date', now()->year)
-            ->count();
-
-        return ['nombreConsultationMensuel' => $nbrConsultation];
-    }
-    //Ramene le nombre de versements pour l'utilisateur connecté
-    private function nombreVersementMensuel()
-    {
-        // Calculez le nombre de consultations pour le mois actuel et l'année actuelle en utilisant le modèle Entree
-        $nbrVersement = Entree::where('id_utilisateur', auth()->user()->id)
-            ->where('id_type_paiement', 1)
-            ->whereMonth('date', now()->month)
-            ->whereYear('date', now()->year)
-            ->count();
-
-        return ['nombreVersementMensuel' => $nbrVersement];
-    }
-    //Ramene la devise en fonction de la succursalle
     public function devise()
     {
         // Obtenez l'ID de la succursale de l'utilisateur connecté
@@ -136,7 +58,7 @@ class AdministratifController extends Controller
             return 'FCFA';
         }
     }
-    //Ramene les 3 prochaines consultations
+
     public function prochaineConsultation()
     {
         Carbon::setLocale('fr');
@@ -155,40 +77,32 @@ class AdministratifController extends Controller
         return $consultations;
     }
 
-    //Ramene la somme des entrées par mois pendant l'année en cours
     public function EntreeChartData()
     {
-        // Utilisateur connecté
         $utilisateurConnecte = Auth::user();
 
-        // Année actuelle
         $anneeActuelle = Carbon::now()->year;
 
-        // Récupérez les données de la base de données pour l'année actuelle
         $data = Entree::whereYear('date', $anneeActuelle)
             ->where('id_utilisateur', $utilisateurConnecte->id)
             ->get();
 
-        // Formatez les données pour le graphique
         $formattedData = $this->formatChartData($data);
 
-        // Retournez les données au format JSON
         return response()->json($formattedData);
     }
 
     private function formatChartData($data)
     {
-        // Initialisez un tableau pour stocker les données formatées
+
         $formattedData = [];
 
-        // Groupement des données par mois
         $groupedData = $data->groupBy(function ($entry) {
             return Carbon::parse($entry->date)->format('M');
         });
 
-        // Bouclez à travers les données groupées et formatez-les
         foreach ($groupedData as $month => $entries) {
-            // Calculez la somme des montants pour le mois actuel
+
             $totalMontant = $entries->sum('montant');
 
             $formattedData[] = [
@@ -196,48 +110,46 @@ class AdministratifController extends Controller
                 'totalMontant' => $totalMontant,
             ];
         }
-
-        // Retournez les données formatées
         return $formattedData;
     }
 
     public function Clients()
     {
+        $pageTitle = 'Clients';
         Carbon::setLocale('fr');
         $clients = $this->allClients();
 
         $consultations = $this->consultationsDisponible();
 
-
-
-        return view('Administratif.Views.Clients', ['clients' => $clients, 'consultationsDisponible' => $consultations]);
+        return view('Administratif.Views.Clients', [
+            'clients' => $clients, 
+            'consultationsDisponible' => $consultations,
+            'page' => $pageTitle,
+        ]);
     }
     public function allClients()
     {
         Carbon::setLocale('fr');
 
-        // Obtenir l'utilisateur connecté
         $idSuccursaleUtilisateur = auth()->user()->id_succursale;
 
-        // Obtenez les candidats avec les rendez-vous et la consultation payée pour le commercial de la même succursale
         $clientsIds = RendezVous::where('consultation_payee', 1)
             ->whereHas('commercial', function ($query) use ($idSuccursaleUtilisateur) {
                 $query->where('id_succursale', $idSuccursaleUtilisateur);
             })
             ->orderBy('date_rdv', 'desc')
-            ->pluck('candidat_id'); // Supposons que la clé étrangère soit id_candidat
+            ->pluck('candidat_id'); 
 
         $clients = Candidat::whereIn('id', $clientsIds)
             ->orderBy('date_enregistrement', 'desc')
             ->get();
 
-        // Convertir la date et l'heure pour chaque candidat
         $clients->transform(function ($client) {
             if ($client->infoConsultation) {
                 $dateFormatee = Carbon::parse($client->infoConsultation->date_heure)->translatedFormat('l j F Y H:i');
                 $client->dateFormatee = ucwords($dateFormatee);
             } else {
-                $client->dateFormatee = 'N / A'; // Ou toute autre valeur par défaut que vous souhaitez afficher pour les valeurs nulles
+                $client->dateFormatee = 'N / A'; 
             }
             return $client;
         });
@@ -550,19 +462,22 @@ class AdministratifController extends Controller
 
     public function DossierClients()
     {
+        $pageTitle = 'Dossier Clients';
         $donneesClients = $this->allClient();
         $categories = $this->showForm();
 
         return view('Administratif.Views.DossierClients', [
             'data_client' => $donneesClients['data_client'],
             'dates_paiement' => $donneesClients['dates_paiement'],
-            'categories' => $categories['categories']
+            'categories' => $categories['categories'],
+            'page' => $pageTitle,
         ]);
     }
 
 
     public function Banque()
     {
+        $page = 'Banque';
         $utilisateurConnecte = Auth::user();
         // Vérifie si le poste de l'utilisateur est 134 ou 5
         $hasPoste = in_array($utilisateurConnecte->id_poste_occupe, [3, 5]);
@@ -588,29 +503,30 @@ class AdministratifController extends Controller
         $transactions = $transactionController->getAllTransactions($utilisateurConnecte->id);
 
         // Passe la variable $hasPoste à la vue
-        return view('Administratif.Views.Banque', compact('entries', 'hasPoste', 'moisEnCours', 'entreeMensuelSuccursale', 'devise', 'depenseMensuelSuccursale', 'transactions'));
+        return view('Administratif.Views.Banque', compact('entries', 'hasPoste', 'moisEnCours', 'entreeMensuelSuccursale', 'devise', 'depenseMensuelSuccursale', 'transactions', 'page'));
     }
 
     public function Consultation()
     {
+        $pageTitle = 'Consultations';
         Carbon::setLocale('fr');
         $consultations = InfoConsultation::orderBy('date_heure', 'desc')->get();
         foreach ($consultations as $consultation) {
             $formattedDate = Carbon::parse($consultation->date_heure)->translatedFormat('l j F Y');
             $consultation->date_heure_formatee = ucwords($formattedDate);
         }
-        return view('Administratif.Views.Consultation', compact('consultations'));
+        return view('Administratif.Views.Consultation', [
+            'consultations' => $consultations,
+            'page' => $pageTitle, 
+        ]);
     }
 
     public function aucunVersement()
     {
-        // Récupérez l'ID de l'utilisateur actuel
-        $userId = Auth::id();
 
-        // Utilisez Eloquent pour récupérer les candidats enregistrés par l'utilisateur actuel
+        $userId = Auth::id();
         $candidats = Candidat::where('id_utilisateur', $userId)
             ->whereDoesntHave('entrees', function ($query) {
-                // Filtrez les candidats qui n'ont pas d'entrées de type 2 (consultation)
                 $query->where('type_entree', 2);
             })
             ->get();
@@ -622,27 +538,23 @@ class AdministratifController extends Controller
     public function ModifierTypeVisa(Request $request, $candidatId)
     {
         try {
-            // Validez l'existence du candidat
+
             $candidat = Candidat::find($candidatId);
             if (!$candidat) {
                 Log::error("Candidat introuvable avec l'ID : $candidatId");
                 return response()->json(['success' => false, 'message' => 'Candidat introuvable.'], 404);
             }
 
-            // Récupérez les valeurs du formulaire
             $typeProcedureId = $request->input('type_procedure');
             $statutId = $request->input('statut_id');
             $consultanteId = $request->input('consultante_id');
 
-            // Log des valeurs récupérées
             Log::info("Valeurs récupérées - typeProcedureId: $typeProcedureId, statutId: $statutId, consultanteId: $consultanteId");
 
-            // Recherchez une procédure existante pour le candidat
             $procedure = Procedure::where('id_candidat', $candidatId)->first();
             $isNewProcedure = false;
             $isStatutChanged = false;
 
-            // Si une procédure existe, vérifiez si le statut a changé
             if ($procedure) {
                 if ($procedure->statut_id != $statutId) {
                     $isStatutChanged = true;

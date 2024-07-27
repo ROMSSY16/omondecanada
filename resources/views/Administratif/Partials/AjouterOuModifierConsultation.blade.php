@@ -6,7 +6,7 @@
                 <h4 class="modal-title" id="exampleModalLabel">Ajouter ou Modifier la Consultation</h4>
             </div>
             <div class="modal-body">
-                <form action="{{ route('Administratif.CreerOuModifierDateConsultation', $candidat->id) }}" method="POST"
+                <form action="{{ route('administratif.creer_ou_modifier_date_consultation', $candidat->id) }}" method="POST"
                     class="text-start DateConsForm" id="modifierDateCons{{ $candidat->id }}" enctype="multipart/form-data"
                     data-modal-id="{{ $candidat->id }}">
                     @csrf

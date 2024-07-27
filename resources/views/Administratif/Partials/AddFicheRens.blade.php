@@ -65,7 +65,7 @@
 
         $('#submitBtn{{ $candidat->id }}').click(function() {
             $.ajax({
-                url: "{{ route('fiche.renseignement.store', $candidat->id) }}",
+                url: "{{ route('administratif.fiche.renseignement.store', $candidat->id) }}",
                 type: "POST",
                 data: $('#categoryForm{{ $candidat->id }}').serialize(),
                 success: function(response) {

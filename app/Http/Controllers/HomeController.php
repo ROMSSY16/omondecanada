@@ -21,17 +21,20 @@ class HomeController extends Controller
     }
 
     public function dashboard(){
-
-        $rendezVous = $this->rendezVousAujourdhui();
+        $pageTitle = 'Tableau de bord';
 
         if ($this->userAuth()['user']['role_as'] == 'direction') {
 
-            return view('dashboard');
+            return view('dashboard', [
+                'page' => $pageTitle, 
+            ]);
         }
 
         if ($this->userAuth()['user']['role_as'] == 'consultante') {
 
-            return view('dashboard');
+            return view('dashboard', [
+                'page' => $pageTitle, 
+            ]);
         }
         if ($this->userAuth()['user']['role_as'] == 'commercial') {
 
@@ -54,6 +57,10 @@ class HomeController extends Controller
                 ->whereYear('date_rdv', $anneeActuelle)
                 ->where('commercial_id', $utilisateurConnecte->id)
                 ->count();
+            $rendezVous = Candidat::where('id_utilisateur', $utilisateurConnecte->id)
+                ->whereDate('date_rdv', Carbon::today())
+                ->orderBy('date_enregistrement', 'desc')
+                ->get();
 
             return view('dashboard', [
                 'totalAppelDeCeJour' => $totalAppelDeCeJour, 
@@ -61,112 +68,74 @@ class HomeController extends Controller
                 'totalConsultationsDeCeMois' => $totalConsultationsDeCeMois, 
                 'jourActuel' => $jourActuel, 
                 'moisActuel' => $moisActuel, 
-                'rendezVous' => $rendezVous, 
+                'rendezVous' => $rendezVous,
+                'page' => $pageTitle, 
             ]);
         }
         if ($this->userAuth()['user']['role_as'] == 'administratif') {
 
             $entreeMensuelData = Entree::where('id_utilisateur', auth()->user()->id)
-            ->whereMonth('date', now()->month)
-            ->whereYear('date', now()->year)
-            ->sum('montant');
+                ->whereMonth('date', now()->month)
+                ->whereYear('date', now()->year)
+                ->sum('montant');
 
             $depenseMensuel = Depense::where('id_utilisateur', auth()->user()->id)
                 ->whereMonth('date', now()->month)
                 ->whereYear('date', now()->year)
                 ->sum('montant');
+
             $caisseMensuel = $entreeMensuelData - $depenseMensuel;
 
             $nombreConsultationData = Entree::where('id_utilisateur', auth()->user()->id)
-            ->where('id_type_paiement', 2)
-            ->whereMonth('date', now()->month)
-            ->whereYear('date', now()->year)
-            ->count();
+                ->where('id_type_paiement', 2)
+                ->whereMonth('date', now()->month)
+                ->whereYear('date', now()->year)
+                ->count();
 
             $nombreVersementData = Entree::where('id_utilisateur', auth()->user()->id)
-            ->where('id_type_paiement', 1)
-            ->whereMonth('date', now()->month)
-            ->whereYear('date', now()->year)
-            ->count();
+                ->where('id_type_paiement', 1)
+                ->whereMonth('date', now()->month)
+                ->whereYear('date', now()->year)
+                ->count();
 
             $devise = auth()->user()->id_succursale;
-            if ($devise === 4) {
-                return '$';
-            } else {
-                return 'FCFA';
-            }
+            // if ($devise === 4) {
+            //     return '$';
+            // } else {
+            //     return 'FCFA';
+            // }
 
+            $consultations = InfoConsultation::where('date_heure', '>=', Carbon::today())
+                ->orderBy('date_heure')
+                ->take(4)
+                ->get();
 
-            $consultations = $this->prochaineConsultation();
-    
+            $consultations->transform(function ($consultation) {
+                $dateFormatee = Carbon::parse($consultation->date_heure)->translatedFormat('l j F Y H:i');
+                $consultation->dateFormatee = ucwords($dateFormatee);
+                return $consultation;
+            });
 
             return view('dashboard', [
-                'entreeMensuel' => $entreeMensuelData['entreeMensuel'],
-                'moisEnCours' => $entreeMensuelData['moisEnCours'],
+                'entreeMensuel' => $entreeMensuelData,
+                'moisEnCours' => now()->month,
                 'devise' => $devise,
-                'nombreConsultationMensuel' => $nombreConsultationData['nombreConsultationMensuel'],
-                'nombreVersementMensuel' => $nombreVersementData['nombreVersementMensuel'],
+                'nombreConsultationMensuel' => $nombreConsultationData,
+                'nombreVersementMensuel' => $nombreVersementData,
                 'consultations' => $consultations,
-                'caisse' => $caisseMensuel['caisseMensuel'],
-            
+                'caisse' => $caisseMensuel,
+                'page' => $pageTitle, 
             ]);
+
         }
         if ($this->userAuth()['user']['role_as'] == 'informaticien') {
 
-            return view('dashboard');
+            return view('dashboard', [
+                'page' => $pageTitle, 
+            ]);
         }
     }
-    public function rendezVousAujourdhui(){
-
-        $idUtilisateur = auth()->user()->id;
-        $candidats = Candidat::where('id_utilisateur', $idUtilisateur)
-            ->whereDate('date_rdv', Carbon::today())
-            ->orderBy('date_enregistrement', 'desc')
-            ->get();
-        return $candidats;
      
-    }
-
-    //Fonction qui ramene les dashbords en fonctions des roles
-    // public function index()
-    // {
-    //     // Vérifiez si l'utilisateur est connecté
-    //     if (Auth::check()) {
-    //         // Obtenez le rôle de l'utilisateur
-    //         $userRole = Auth::user()->id_role_utilisateur;
-    
-    //         // Redirigez l'utilisateur en fonction de son rôle
-    //         switch ($userRole) {
-    //             case 0:
-    //                 // Consultante, redirigez-la vers la page "Dashboard Consultante"
-    //                 return redirect()->route('consultante.dashboard');
-    //                 case 1:
-    //                 // Commercial, redirigez-le vers le dashboard Commercial
-    //                 return redirect()->route('commercial.dashboard');
-                    
-    //             case 2:
-    //                 // Administratif, redirigez-le vers le dashboard Administratif
-    //                 return redirect()->route('administratif.dashboard');
-                  
-    //             case 3:
-    //                 // Informatique, redirigez-le vers le dashboard Informatique
-    //                 return redirect()->route('informatique.dashboard');
-    //                 case 4:
-    //                 // Direction, redirigez-le vers le dashboard Direction
-    //                 return redirect()->route('direction.dashboard');
-    //             default:
-    //                 // Si le rôle n'est pas reconnu, redirigez-le vers la page de connexion
-    //                 return redirect()->route('login');
-    //         }
-    //     }
-    
-    //     // Si l'utilisateur n'est pas connecté, redirigez-le vers la page de connexion
-    //     return redirect()->route('login');
-    // }
-    
-
-
-        
     public function DossierContacts()
     {
         return view('Contact.DossierContacts');
@@ -216,49 +185,47 @@ class HomeController extends Controller
     // Recuperer tous candidats
     public function allCandidat()
     {
-        // Obtenir l'utilisateur connecté
+        $pageTitle = 'Tous les candidats';
+
         $idSuccursaleUtilisateur = auth()->user()->id_succursale;
+
+        $candidats = Candidat::whereHas('utilisateur', function ($query) use ($idSuccursaleUtilisateur) {
+            $query->where('id_succursale', $idSuccursaleUtilisateur);
+        })
+        ->orderBy('date_enregistrement', 'desc')
+        ->get();
     
-            // Obtenir les données des candidats liés à la succursale de l'utilisateur
-            $candidats = Candidat::whereHas('utilisateur', function ($query) use ($idSuccursaleUtilisateur) {
-                $query->where('id_succursale', $idSuccursaleUtilisateur);
-            })
-            ->orderBy('date_enregistrement', 'desc')
-            ->get();
-    
-            // Passer les données à la vue principale
-            return view('Contact.DossierContacts', ['data_candidat' => $candidats]);
+        return view('Contact.DossierContacts', [
+            'data_candidat' => $candidats,
+            'page' => $pageTitle, 
+        ]);
      
     }
-    
  
-    // Recuperer tous clients
     public function allClient() {
-        // Récupérer l'id de la succursale de l'utilisateur en cours
+        $pageTitle = 'Dossier Clients';
+
         $idSuccursaleUtilisateur = auth()->user()->id_succursale;
-    
-        // Récupérer la liste des entrees de type 2 liées à la succursale de l'utilisateur
         $entreesType2 = Entree::where('id_type_paiement', 2)
             ->whereHas('utilisateur', function ($query) use ($idSuccursaleUtilisateur) {
                 $query->where('id_succursale', $idSuccursaleUtilisateur);
             })
             ->get();
-    
-        // Récupérer les candidats liés à ces entrées
         $candidats = Candidat::whereIn('id', $entreesType2->pluck('id_candidat'))->get();
     
-        // Créer un tableau associatif pour stocker la date de paiement correspondante à chaque candidat
         $datesPaiement = [];
         foreach ($entreesType2 as $entree) {
             $datesPaiement[$entree->id_candidat] = $entree->date;
         }
-    
-        // Trier les candidats par date de paiement (de la plus récente à la plus ancienne)
         $candidats = $candidats->sortByDesc(function ($candidat) use ($datesPaiement) {
             return $datesPaiement[$candidat->id];
         });
     
-        return view('Client.DossierClients', ['data_client' => $candidats, 'dates_paiement' => $datesPaiement]);
+        return view('Client.DossierClients', [
+            'data_client' => $candidats, 
+            'dates_paiement' => $datesPaiement,
+            'page' => $pageTitle, 
+        ]);
     }
 
 
@@ -275,28 +242,11 @@ class HomeController extends Controller
     
             return response()->json(['success' => true]);
         }
-    
-        // If Candidat with the given ID is not found
+
         return response()->json(['success' => false, 'error' => 'Candidat not found.']);
     }
     
-    public function prochaineConsultation()
-    {
-        Carbon::setLocale('fr');
-        $consultations = InfoConsultation::where('date_heure', '>=', Carbon::today())
-            ->orderBy('date_heure')
-            ->take(4)
-            ->get();
-
-        $consultations->transform(function ($consultation) {
-            $dateFormatee = Carbon::parse($consultation->date_heure)->translatedFormat('l j F Y H:i');
-            $consultation->dateFormatee = ucwords($dateFormatee);
-
-            return $consultation;
-        });
-
-        return $consultations;
-    }
+    
 
    
 }

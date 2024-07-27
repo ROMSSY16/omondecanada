@@ -5,8 +5,8 @@
                 <input type="text" id="searchInput" class="form-control text-lg bg-transparent border-0 p-1" placeholder="Rechercher...">
             </div>
 
-            <div class="p-2 d-flex align-items-center w-30 justify-content-around flex-direction-row">
-                <div class="dropdown">
+            <div class="p-2 d-flex align-items-center justify-content-around flex-direction-row">
+                <div class="dropdown mx-2">
                     <button class="btn btn-secondary" type="button" id="dropdownTypeVisa" data-toggle="dropdown">
                         Type de visa
                     </button>
@@ -22,7 +22,7 @@
                     </div>
                 </div>
 
-                <div class="dropdown">
+                <div class="dropdown mx-2">
                     <button class="btn btn-secondary" type="button" id="dropdownConsultante" data-toggle="dropdown">
                         Consultante
                     </button>
@@ -45,7 +45,7 @@
                     </div>
                 </div>
 
-                <div class="dropdown">
+                <div class="dropdown mx-2">
                     <button class="btn btn-secondary" type="button" id="dropdownStatut" data-toggle="dropdown">
                         Statut
                     </button>

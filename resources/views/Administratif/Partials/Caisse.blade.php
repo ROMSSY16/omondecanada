@@ -1,7 +1,7 @@
 
 {{-- Affiche du nombre d'appels de la journee --}}
 
-<div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
+<div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
     <div class="card">
         <div class="card-header p-3 pt-2 d-flex justify-content-between">
             <div class="icon icon-md icon-shape bg-gradient-primary shadow-dark text-center border-radius-xl mt-n4">

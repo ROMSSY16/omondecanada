@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Candidat;
-use App\Models\consultante;
-use App\Models\Depense;
-use App\Models\Entree;
-use App\Models\InfoConsultation;
-use App\Models\Succursale;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Entree;
+use App\Models\Depense;
+use App\Models\Candidat;
+use App\Models\Succursale;
+use App\Models\consultante;
+use App\Models\InfoConsultation;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DirectionController extends Controller
 {
@@ -136,71 +137,57 @@ private function allSuccursalle()
     
         
     public function Banque()
-{
-    setlocale(LC_TIME, 'fr_FR.utf8');
-    $transactionController = new Controller();
-    $donneesCandidat = $transactionController->getAllTransactions();
+    { 
+        $pageTitle = 'Banque';
+        setlocale(LC_TIME, 'fr_FR.utf8');
+        $transactionController = new Controller();
+        $donneesCandidat = $transactionController->getAllTransactions();
 
-   
-
-    // Passez les données à la vue
-    return view('Direction.Views.Banque', [
-        'donneesCandidat' => $donneesCandidat
-    ]);
-}
+        return view('Direction.Views.Banque', [
+            'donneesCandidat' => $donneesCandidat,
+            'page' => $pageTitle,
+        ]);
+    }
 
 public function ChartData()
 {
-    // Utilisateur connecté
-    $utilisateurConnecte = Auth::user();
-
-    // Année actuelle
     $anneeActuelle = Carbon::now()->year;
-
-    // Récupérez les données de la base de données pour l'année actuelle
     $data = Entree::whereYear('date', $anneeActuelle)
         ->join('users', 'entree.id_utilisateur', '=', 'users.id')
         ->join('succursale', 'users.id_succursale', '=', 'succursale.id')
         ->select('entree.*', 'succursale.label as succursale')
         ->get();
-
-    // Formatez les données pour le graphique
     $formattedData = $this->formatChartData($data);
 
-    // Retournez les données au format JSON
     return response()->json($formattedData);
 }
 
 private function formatChartData($data)
-{
-    // Initialisez un tableau pour stocker les données formatées
-    $formattedData = [];
+    {
 
-    // Groupement des données par succursale et par mois
-    $groupedData = $data->groupBy(['succursale', function ($entry) {
-        return Carbon::parse($entry->date)->format('M');
-    }]);
+        $formattedData = [];
 
-    // Bouclez à travers les données groupées et formatez-les
-    foreach ($groupedData as $succursale => $dataByMonth) {
-        foreach ($dataByMonth as $month => $entries) {
-            // Calculez la somme des montants pour le mois actuel
-            $totalMontant = $entries->sum('montant');
+        $groupedData = $data->groupBy(['succursale', function ($entry) {
+            return Carbon::parse($entry->date)->format('M');
+        }]);
 
-            $formattedData[] = [
-                'succursale' => $succursale,
-                'month' => $month,
-                'totalMontant' => $totalMontant,
-            ];
+        foreach ($groupedData as $succursale => $dataByMonth) {
+            foreach ($dataByMonth as $month => $entries) {
+                $totalMontant = $entries->sum('montant');
+                $formattedData[] = [
+                    'succursale' => $succursale,
+                    'month' => $month,
+                    'totalMontant' => $totalMontant,
+                ];
+            }
         }
+        return $formattedData;
     }
 
-    // Retournez les données formatées
-    return $formattedData;
-}
+public function Consultation()
+    {
 
-public function Consultation(){
-
+    $pageTitle = 'Consultations';
     Carbon::setLocale('fr');
     
     $consultations = InfoConsultation::with(['consultante', 'candidats'])
@@ -213,54 +200,57 @@ public function Consultation(){
             $consultation->datePassee = $date_heure->isPast();
             $consultation->dateFormatee = $date_heure->translatedFormat('l j F Y H:i');
         } else {
-            $consultation->datePassee = false; // Ou toute autre valeur par défaut que vous souhaitez définir
+            $consultation->datePassee = false; 
             $consultation->dateFormatee = 'N / A';
         }
         return $consultation;
     });
 
-    return view('Direction.Views.Consultation', ['consultations' => $consultations]);
-}
+    return view('Direction.Views.Consultation', [
+        'consultations' => $consultations,
+        'page' => $pageTitle,
+    ]);
+    }
 
 
 
-public function DossierClient(){
+public function DossierClient()
+{
+    $pageTitle = 'Dossier client';
 
-      // Récupérer l'id de la succursale de l'utilisateur en cours
       $idSuccursaleUtilisateur = auth()->user()->id_succursale;
-    
-      // Récupérer la liste des entrees de type 2 liées à la succursale de l'utilisateur
       $entreesType2 = Entree::where('id_type_paiement', 2)
           ->whereHas('utilisateur', function ($query) use ($idSuccursaleUtilisateur) {
               $query->where('id_succursale', $idSuccursaleUtilisateur);
           })
           ->get();
-  
-      // Récupérer les candidats liés à ces entrées
-      $candidats = Candidat::whereIn('id', $entreesType2->pluck('id_candidat'))->get();
-  
-      // Créer un tableau associatif pour stocker la date de paiement correspondante à chaque candidat
+
+      $candidats = Candidat::whereIn('id', $entreesType2->pluck('candidat_id'))->get();
       $datesPaiement = [];
       foreach ($entreesType2 as $entree) {
           $datesPaiement[$entree->id_candidat] = $entree->date;
       }
-  
-      // Trier les candidats par date de paiement (de la plus récente à la plus ancienne)
       $candidats = $candidats->sortByDesc(function ($candidat) use ($datesPaiement) {
           return $datesPaiement[$candidat->id];
       });
   
-      return view('Direction.Views.DossierClient', ['data_client' => $candidats, 'dates_paiement' => $datesPaiement]);
+      return view('Direction.Views.DossierClient', [
+        'data_client' => $candidats, 
+        'dates_paiement' => $datesPaiement,
+        'page' => $pageTitle,
+    ]);
   
-  
-   
 }
 
 public function Equipe(){
- 
-   $users  = \App\Models\User::all();
 
-    return view('Direction.Views.Equipe', ['users' => $users]);
+    $pageTitle = 'Equipe';
+   $users  = User::get();
+
+    return view('Direction.Views.Equipe', [
+        'users' => $users,
+        'page' => $pageTitle,
+    ]);
   }
 
   

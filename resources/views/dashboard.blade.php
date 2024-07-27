@@ -149,22 +149,219 @@
     @endif
 
     @if (auth()->user()->role_as == 'commercial')
-        <div class="row">
+        <div class="row mt-4 d-flex justify-content-around">
             {{-- Nombre d'appels --}}
-            @include('Commercial.Partials.Appels')
+            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-header1 p-3 pt-2 d-flex justify-content-between">
+                        <div class="icon icon-md icon-shape bg-gradient-primary shadow-dark text-center border-radius-xl mt-n4">
+                            <i class="material-icons opacity-10">phone</i>
+                        </div>
+                        <p class="text-xl text-bold mb-0 text-capitalize">Appels - Aujourd'hui</p>
+            
+                    </div>
+                    <div class="card-body">
+                        <div class="text-end">
+                            
+                            <h3 class="mb-0 pt-2">{{ $totalAppelDeCeJour ?? '0' }}</h3>
+                        </div>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-footer p-3">
+                        <div class="progress mt-2">
+                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: {{ ($totalAppelDeCeJour / 100) * 100 }}%; ; height:100%;" aria-valuenow="{{ $totalAppelDeCeJour }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
             {{-- Nombre de visites --}}
-            @include('Commercial.Partials.Visites')
+            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-header1 p-3 pt-2 d-flex justify-content-between">
+                        <div class="icon icon-md icon-shape bg-gradient-primary shadow-dark text-center border-radius-xl mt-n4 ">
+                            <i class="material-icons opacity-10">groups</i>
+                        </div>
+                        <p class="text-xl text-bold mb-0 text-capitalize">Rendez-vous conclus </br> Aujourd'hui </p>
+                        
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="text-end">
+                            <h3 class="mb-0 pt-2">{{ $totalVisiteAujourdhui ?? '0' }}</h3>
+                        </div>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-footer p-3">
+                        {{-- Barre de progression --}}
+                        <div class="progress mt-2">
+                            <div class="progress-bar progress-bar-striped bg-dark" role="progressbar" style="width: {{ ($totalVisiteAujourdhui / 25) * 100 }}%; ; height:100%;"" aria-valuenow="{{ $totalVisiteAujourdhui }}" aria-valuemin="0" aria-valuemax="25"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {{-- Nombre de consultations --}}
-            @include('Commercial.Partials.Consultations')
+            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-header1 p-3 pt-2 d-flex justify-content-between">
+                        <div class="icon icon-md icon-shape bg-gradient-primary shadow-dark text-center border-radius-xl mt-n4">
+                            <i class="material-icons opacity-10">handshake</i>
+                        </div>
+                        <p class="text-xl text-bold mb-0 text-capitalize">Consultations - {{ $moisActuel }}</p>
+            
+                    </div>
+                    <div class="card-body">
+                        <div class="text-end">
+                          
+                            <h3 class="mb-0 pt-2">{{  $totalConsultationsDeCeMois ?? '0' }}</h3>
+                        </div>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-footer p-3">
+                        <div class="progress mt-2">
+                            <div class="progress-bar progress-bar bg-dark" role="progressbar" style="width: {{ ($totalConsultationsDeCeMois / 25) * 100 }}%; height:100%;" aria-valuenow="{{$totalConsultationsDeCeMois }}" aria-valuemin="0" aria-valuemax="25"></div>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                </div>
+            </div>
             {{-- Nombre de consultations --}}
-            @include('Commercial.Partials.Objectifs')
+            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-header1 p-3 pt-2 d-flex justify-content-between">
+                        <div class="icon icon-md icon-shape bg-gradient-primary shadow-dark text-center border-radius-xl mt-n4">
+                            <i class="material-icons opacity-10">trending_up</i>
+                        </div>
+                        <p class="text-xl text-bold mb-0 text-capitalize">Objectifs - {{ $moisActuel }}</p>
+                    </div>
+                    <div class="row card-body">
+                        <div class="col-4 text-center ">
+                            <i class="material-icons text-bold text-success ">phone</i>
+                            <h5 class="text-bold">100</h5>
+                        </div>
+                        <div class="col-4 text-center">
+                            <i class="material-icons text-bold text-success ">groups</i>
+                            <h5 class="text-bold">25</h5>
+                        </div>
+                        <div class="col-4 text-center">
+                            <i class="material-icons text-bold text-success ">handshake</i>
+                            <h5 class="text-bold">25</h5>
+                        </div>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-footer p-3">
+                    </div>
+                    
+                </div>
+            </div>
         </div>
         <div class="row mt-4 d-flex justify-content-around">
-            @include('Commercial.Partials.ChartAppels')
-            @include('Commercial.Partials.ChartConsultations')
+            <div class="col-lg-5 col-md-6 mt-4 mb-4">
+                <div class="card z-index-2 ">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+                        <div class="bg-dark shadow-primary border-radius-lg py-3 pe-1">
+                            <div class="chart">
+                                <canvas id="chart-bars" class="chart-canvas" height="200px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="mb-0 ">Courbes des appels de la semaine</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-6 mt-4 mb-4">
+                <div class="card z-index-2  ">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+                        <div class="bg-dark shadow-success border-radius-lg py-3 pe-1">
+                            <div class="chart">
+                                <canvas id="chart-line" class="chart-canvas" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="mb-0 "> Consultation Conclue par mois</h6>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row mt-4 mb-3 d-flex justify-content-around">
-            @include('Commercial.Partials.TableRdv')
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3">
+                        <div class="bg-gradient-dark shadow-primary border-radius-lg pt-4 pb-3 d-flex align-items-center justify-content-between p-4">
+                            <div class="p-2 border-radius-lg w-100 d-flex flex-direction-row justify-content-between ">
+                                <h3 class="text-white">
+                                    Rendez-vous du jour
+                                </h3>
+        
+                                <a href="{{ route('commercial.rendez_vous') }}" class="btn btn-primary">
+                                    Voir tout
+                                </a>
+                            </div>
+                        </div>
+        
+                        <div class="card-body px-0 pb-2 ">
+                            <div class="table-responsive p-0" style="max-height: 750px; overflow-y: auto;">
+                                <table class="table align-items-center justify-content-between mb-0 bg-white">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                class="text-uppercase text-left text-secondary text-xxs font-weight-bolder opacity-7">
+                                                NOM
+                                            </th>
+                                            <th
+                                                class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                NUMERO
+                                            </th>
+                                            <th
+                                                class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                PROFFESSION
+                                            </th>
+        
+                                            <th
+                                                class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                DATE DE RDV
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($rendezVous as $candidat)
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex px-2">
+                                                        <h6 class="p-2 text-md">{{ $candidat->nom }} {{ $candidat->prenom }}
+                                                        </h6>
+                                                    </div>
+                                                </td>
+        
+                                                <td>
+                                                    <p class="text-md font-weight-bold mb-0">{{ $candidat->numero_telephone }}
+                                                    </p>
+                                                </td>
+        
+                                                <td>
+                                                    <span class="text-md font-weight-bold">{{ $candidat->profession }}</span>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        $carbonDate = \Carbon\Carbon::parse($candidat->rendezVous->date_rdv);
+                                                        $formattedDate = ucwords($carbonDate->translatedFormat('l j F Y'));
+                                                    @endphp
+                                                    <span class="text-md font-weight-bold">{{ $formattedDate ?? 'Pas de rdv' }}</span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     @endif
 
@@ -176,9 +373,9 @@
             @include('Administratif.Partials.Consultation')
             {{-- Nombre de versements --}}
             @include('Administratif.Partials.Versement')
-            @if ($hasPoste)
-                @include('Administratif.Partials.Entree')
-            @endif
+           
+            @include('Administratif.Partials.Entree')
+           
         </div>
         <div class="row d-flex justify-content-between flex-direction-column">
             @include('Administratif.Partials.ChartEntree')
