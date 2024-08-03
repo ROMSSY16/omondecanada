@@ -28,45 +28,17 @@ class AssignPermissionsToDirection extends Seeder
         }
 
         $permissions = [
-            'Manage Prospects',
-            'Afficher tous les prospects',
-            'Afficher mes prospects',
-            'Enregistrer prospect',
-            'Voir détail prospect',
-            'Supprimer prospect',
-            'Modifier prospect',
+           
 
-            'Manage Rendez-vous',
-            'Afficher tous les rendez-vous',
-            'Afficher mes rendez-vous',
-            'Enregistrer rendez-vous',
-            'Voir détail rendez-vous',
-            'Supprimer rendez-vous',
-            'Modifier date rendez-vous',
-            'Valider rendez-vous',
-
-            'Manage Clients',
-            'Afficher tous les clients',
-            'Afficher mes clients',
-            'Voir détail client',
-            'Supprimer client',
-
-            'Manage Consultations',
-            'Afficher toutes les consultations',
-            'Afficher mes consultations',
-            'Afficher consultations en attente',
-            'Faire une consultation',
+            
+            'Historique des consultations',
             'Voir détail consultation',
-            'Supprimer consultation',
-            'Modifier consultation',
 
             'Voir dossier client',
-            'Voir banque',
-            'Manage personnels',
-            'Voir personnels',
 
-            'Manage candidats',
-            'Voir candidat',
+            'Voir banque',
+           
+            'Voir personnels',
             'Afficher tous les candidats',
         ];
         $direction->roles()->sync($role->id);

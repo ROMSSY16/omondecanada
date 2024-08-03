@@ -31,7 +31,7 @@ class AssignPermissionsToCommercial extends Seeder
         $permissions = [
             'Manage Prospects',
             'Afficher tous les prospects',
-            'Afficher mes prospects',
+            'Afficher prospects',
             'Enregistrer prospect',
             'Voir détail prospect',
             'Supprimer prospect',
@@ -39,36 +39,19 @@ class AssignPermissionsToCommercial extends Seeder
 
             'Manage Rendez-vous',
             'Afficher tous les rendez-vous',
-            'Afficher mes rendez-vous',
+            'Afficher rendez-vous',
             'Enregistrer rendez-vous',
             'Voir détail rendez-vous',
             'Supprimer rendez-vous',
             'Modifier date rendez-vous',
             'Valider rendez-vous',
 
-            'Manage Clients',
-            'Afficher tous les clients',
-            'Afficher mes clients',
-            'Voir détail client',
-            'Supprimer client',
-
-            'Manage Consultations',
-            'Afficher toutes les consultations',
-            'Afficher mes consultations',
-            'Afficher consultations en attente',
-            'Faire une consultation',
-            'Voir détail consultation',
-            'Supprimer consultation',
-            'Modifier consultation',
-
-            'Voir dossier client',
-            'Voir banque',
-            'Manage personnels',
-            'Voir personnels',
-
+            'Historique des consultations',
+            'Consultations a venir',
+          
             'Manage candidats',
-            'Voir candidat',
-            'Afficher tous les candidats',
+            'Voir candidats',
+           'Afficher tous les candidats'
         ];
         $commercial->roles()->sync($role->id);
         $permissionIds = Permission::whereIn('name', $permissions)->pluck('id')->toArray();

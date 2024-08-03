@@ -18,7 +18,7 @@
                 <span class="nav-link-text ms-1">Tableau de bord</span>
                 </a>
             </li>
-            @can('voir-candidat')
+            @can('voir-candidats')
             <li class="nav-item">
                 <a class="nav-link text-white {{ Route::currentRouteName() === 'candidat.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('candidat.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
@@ -48,7 +48,7 @@
                 </a>
             </li>
             @endcan
-            @can('afficher-mes-prospects')
+            @can('afficher-prospects')
             <li class="nav-item">
                 <a class="nav-link text-white {{ Route::currentRouteName() === 'contact.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('contact.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
@@ -58,7 +58,7 @@
                 </a>
             </li>
             @endcan
-            @can('afficher-mes-rendez-vous')
+            @can('afficher-rendez-vous')
             <li class="nav-item">
                 <a class="nav-link text-white {{ Route::currentRouteName() === 'rendezvous.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('rendezvous.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
@@ -78,7 +78,7 @@
                 </a>
             </li>
             @endcan
-            @can('afficher-mes-consultations')
+            @can('historique-des-consultations')
                 <li class="nav-item">
                     <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.index')}}">
                     <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
@@ -88,7 +88,7 @@
                     </a>
                 </li>
             @endcan
-            @can('afficher-consultations-en-attente')
+            @can('consultations-a-venir')
             <li class="nav-item">
                 <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">

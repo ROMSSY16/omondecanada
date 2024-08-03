@@ -17,7 +17,7 @@ class PermissionSeeder extends Seeder
             $permissionsData = [
                 'Manage Prospects',
                 'Afficher tous les prospects',
-                'Afficher mes prospects',
+                'Afficher prospects',
                 'Enregister prospect',
                 'Voir détail prospect',
                 'Supprimer prospect',
@@ -25,7 +25,7 @@ class PermissionSeeder extends Seeder
 
                 'Manage Rendez-vous',
                 'Afficher tous les rendez-vous',
-                'Afficher mes rendez-vous',
+                'Afficher rendez-vous',
                 'Enregister rendez-vous',
                 'Voir détail rendez-vous',
                 'Supprimer rendez-vous',
@@ -39,9 +39,9 @@ class PermissionSeeder extends Seeder
                 'Supprimer client',
 
                 'Manage Consultations',
-                'Afficher toutes les consultations',
+                'Historique des consultations',
                 'Afficher mes consultations',
-                'Afficher consultations en attente',
+                'Consultations a venir',
                 'Faire une consultation',
                 'Voir détail consultation',
                 'Supprimer consultation',
@@ -53,7 +53,7 @@ class PermissionSeeder extends Seeder
                 'Voir personnels',
 
                 'Manage candidats',
-                'Voir candidat',
+                'Voir candidats',
                 'Afficher tous les candidats',
                
             ];
