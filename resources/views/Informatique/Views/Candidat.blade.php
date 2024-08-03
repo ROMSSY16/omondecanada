@@ -1,1 +1,0 @@
-@include('Administratif.Views.Clients')

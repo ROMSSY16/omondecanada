@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('rdv', function (Blueprint $table) {
             $table->id();
             $table->date('date_rdv')->nullable();
-            $table->integer('candidat_id');
-            $table->integer('commercial_id');
+            $table->integer('candidat_id')->nullable();
+            $table->integer('commercial_id')->nullable();
+            $table->integer('consultant_id')->nullable();
             $table->dateTime('date_enregistrement_appel')->nullable();
             $table->enum('rdv_effectue', ['0','1'])->nullable()->default(0);
             $table->enum('consultation_payee', ['0','1'])->nullable()->default(0);

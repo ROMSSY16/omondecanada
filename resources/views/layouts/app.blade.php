@@ -206,5 +206,37 @@
 <script src="{{ asset('assets/js/script/homePage.js') }}"></script>
 <script src="{{ asset('assets/js/script/DashboardCommercial.js') }}"></script>
 <script src="{{ asset('assets/js/validate.min.js') }}"></script>
-<script src="{{ asset('assets/js/vendor.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    @if (session('success'))
+        Swal.fire({
+            title: "Succès",
+            text: "{{ session('success') }}",
+            icon: "success"
+        });
+    @endif
+    @if (session('warning'))
+    Swal.fire({
+            title: "Désolé",
+            html: "{{ session('warning') }}",
+            icon: "warning"
+        });
+    @endif
+    @if (session('error'))
+        Swal.fire({
+                title: "Erreur",
+                text: "{{ session('error') }}",
+                icon: "error"
+        });
+    @endif
+    @if ($errors->any())
+        Swal.fire({
+                title: "Erreurs",
+                text: "{{ $errors->first() }}",
+                icon: "error"
+        });
+    @endif
+</script>
+
 </html>

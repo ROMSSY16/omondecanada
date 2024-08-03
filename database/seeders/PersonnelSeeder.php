@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Permission;
 use App\Models\User;
 use App\Models\Succursale;
 use App\Models\PosteOccupe;
+use App\Models\Role;
 use App\Models\RoleUtilisateur;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -19,10 +21,9 @@ class PersonnelSeeder extends Seeder
         $users = User::get();
         if(count($users) == 0){
             //ADMINISTRATION
-            $role = RoleUtilisateur::where('role', 'Direction')->first();
             $poste = PosteOccupe::where('label', 'PDG')->first();
             $succursale = Succursale::where('label', 'Cote d\'Ivoire')->first();
-    
+
             $direction = User::create([
                 'id' => 1,
                 'name' => 'Direction',
@@ -30,13 +31,10 @@ class PersonnelSeeder extends Seeder
                 'email' => 'direction@gmail.com',
                 'password' => bcrypt('123456789'),
                 'id_poste_occupe' => $poste->id,
-                'role_as' => 'direction',
-                'id_role_utilisateur' => $role->id,
                 'id_succursale' => $succursale->id,
             ]);
-
+           
             //CONSULTANTE
-            $role = RoleUtilisateur::where('role', 'Consultante')->first();
             $poste = PosteOccupe::where('label', 'Consultante')->first();
             $succursale = Succursale::where('label', 'Cote d\'Ivoire')->first();
     
@@ -47,13 +45,10 @@ class PersonnelSeeder extends Seeder
                 'email' => 'consultant@gmail.com',
                 'password' => bcrypt('123456789'),
                 'id_poste_occupe' => $poste->id,
-                'role_as' => 'consultante',
-                'id_role_utilisateur' => $role->id,
                 'id_succursale' => $succursale->id,
             ]);
 
             //COMMERCIAL - CONSEILLER
-            $role = RoleUtilisateur::where('role', 'Commercial')->first();
             $poste = PosteOccupe::where('label', 'Commercial(e)')->first();
             $succursale = Succursale::where('label', 'Cote d\'Ivoire')->first();
     
@@ -64,13 +59,10 @@ class PersonnelSeeder extends Seeder
                 'email' => 'commercial@gmail.com',
                 'password' => bcrypt('123456789'),
                 'id_poste_occupe' => $poste->id,
-                'role_as' => 'commercial',
-                'id_role_utilisateur' => $role->id,
                 'id_succursale' => $succursale->id,
             ]);
 
             //ADMINISTRATIF
-            $role = RoleUtilisateur::where('role', 'Administratif')->first();
             $poste = PosteOccupe::where('label', 'Attache Administrative')->first();
             $succursale = Succursale::where('label', 'Cote d\'Ivoire')->first();
     
@@ -81,13 +73,10 @@ class PersonnelSeeder extends Seeder
                 'email' => 'administratif@gmail.com',
                 'password' => bcrypt('123456789'),
                 'id_poste_occupe' => $poste->id,
-                'role_as' => 'administratif',
-                'id_role_utilisateur' => $role->id,
                 'id_succursale' => $succursale->id,
             ]);
 
             //IT
-            $role = RoleUtilisateur::where('role', 'Informaticien')->first();
             $poste = PosteOccupe::where('label', 'Informaticien(e)')->first();
             $succursale = Succursale::where('label', 'Cote d\'Ivoire')->first();
     
@@ -98,10 +87,9 @@ class PersonnelSeeder extends Seeder
                 'email' => 'informaticien@gmail.com',
                 'password' => bcrypt('123456789'),
                 'id_poste_occupe' => $poste->id,
-                'role_as' => 'informaticien',
-                'id_role_utilisateur' => $role->id,
                 'id_succursale' => $succursale->id,
             ]);
+           
         }
 
     }

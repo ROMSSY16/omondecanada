@@ -21,9 +21,8 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->string('remember_token')->nullable();
             $table->integer('id_poste_occupe')->nullable();
-            $table->string('role_as')->nullable();
-            $table->integer('id_role_utilisateur')->nullable();
             $table->integer('id_succursale')->nullable();
+            $table->enum('status', ['0','1'])->default(1);
             $table->timestamps();
         });
 

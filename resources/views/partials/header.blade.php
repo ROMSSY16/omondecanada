@@ -2,7 +2,7 @@
     <div class="container-fluid py-1 px-3">
       <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center w-100">
         <nav aria-label="breadcrumb">
-          <h2 class="font-weight-bolder mb-0 d-none d-md-block">{{ $page }}</h2> <!-- Hide on small screens -->
+          <h2 class="font-weight-bolder mb-0 d-none d-md-block">{{ $pageTitle ?? $page  }}</h2> <!-- Hide on small screens -->
               </nav>
         <ul class="navbar-nav d-flex justify-content-end w-auto">
           <li class="nav-item d-sm-none d-md-flex "> <!-- Hide on small screens -->

@@ -4026,7 +4026,7 @@ textarea.form-control-lg {
   margin-left: -1px; }
 
 .page-item.active .page-link {
-  z-index: 3;
+  z-index: 1;
   color: #fff;
   background-color: #e91e63;
   border-color: #e91e63; }

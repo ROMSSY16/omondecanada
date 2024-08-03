@@ -4,18 +4,21 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Role;
 use App\Models\Candidat;
 use App\Models\RendezVous;
 use App\Models\Succursale;
 use App\Models\PosteOccupe;
 use Laravel\Sanctum\HasApiTokens;
+use App\Traits\HasPermissionsTrait;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasPermissionsTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -54,7 +57,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
+    public function fullName() : string
+    {
+        return strtoupper($this->name) . ' ' . ucfirst(strtolower($this->last_name));
+    }
 
     public function posteOccupe()
     {
@@ -140,5 +146,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Candidat::class, 'id_utilisateur');
     }
-    
+	
+	  public function roles():BelongsToMany 
+    {
+		    return $this->belongsToMany(Role::class,'users_roles', 'user_id', 'role_id', 'id');
+	  }
+	  
+
 }

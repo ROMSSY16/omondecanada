@@ -15,28 +15,27 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public  function userAuth()
-    {
-        return ['user' => auth()->user()];
-    }
 
     public function dashboard(){
+
         $pageTitle = 'Tableau de bord';
+        $user = auth()->user();
+        $role = $user->roles;
 
-        if ($this->userAuth()['user']['role_as'] == 'direction') {
-
+        if (auth()->user()->hasRole('direction')) {
+            
             return view('dashboard', [
                 'page' => $pageTitle, 
             ]);
         }
 
-        if ($this->userAuth()['user']['role_as'] == 'consultante') {
+        if (auth()->user()->hasRole('consultante')) {
 
             return view('dashboard', [
                 'page' => $pageTitle, 
             ]);
         }
-        if ($this->userAuth()['user']['role_as'] == 'commercial') {
+        if (auth()->user()->hasRole('commercial')) {
 
             Carbon::setLocale('fr');
             $jourActuel = Carbon::now()->translatedFormat('d F Y');
@@ -72,7 +71,7 @@ class HomeController extends Controller
                 'page' => $pageTitle, 
             ]);
         }
-        if ($this->userAuth()['user']['role_as'] == 'administratif') {
+        if (auth()->user()->hasRole('administratif')) {
 
             $entreeMensuelData = Entree::where('id_utilisateur', auth()->user()->id)
                 ->whereMonth('date', now()->month)
@@ -128,7 +127,7 @@ class HomeController extends Controller
             ]);
 
         }
-        if ($this->userAuth()['user']['role_as'] == 'informaticien') {
+        if (auth()->user()->hasRole('informaticien')) {
 
             return view('dashboard', [
                 'page' => $pageTitle, 

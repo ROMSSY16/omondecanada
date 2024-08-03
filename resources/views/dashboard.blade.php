@@ -10,12 +10,11 @@
         $moisActuel = ucfirst(Carbon::now()->formatLocalized('%B'));
     @endphp
 
-    @if (auth()->user()->role_as == 'direction')
-        @include('Direction.Partials.VueEnsemble')
-        @include('Direction.Partials.ChartEnsemble')
-    @endif
+    @role('direction')
+        @include('components.dashboard.direction')
+    @endrole
 
-    @if (auth()->user()->role_as == 'consultante')
+    @role('consultante')
         @php
             Carbon::setLocale('fr');
             $userId = Auth::id();
@@ -146,9 +145,9 @@
                 });
             });
         </script>
-    @endif
+    @endrole
 
-    @if (auth()->user()->role_as == 'commercial')
+    @role('commercial')
         <div class="row mt-4 d-flex justify-content-around">
             {{-- Nombre d'appels --}}
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -298,7 +297,7 @@
                                     Rendez-vous du jour
                                 </h3>
         
-                                <a href="{{ route('commercial.rendez_vous') }}" class="btn btn-primary">
+                                <a href="{{ route('rendezvous.index') }}" class="btn btn-primary">
                                     Voir tout
                                 </a>
                             </div>
@@ -363,26 +362,12 @@
                 </div>
             </div>
         </div>
-    @endif
+    @endrole
 
-    @if (auth()->user()->role_as == 'administratif')
-        <div class="row">
-            {{-- Total caisse --}}
-            @include('Administratif.Partials.Caisse')
-            {{-- Nombre de Consultation --}}
-            @include('Administratif.Partials.Consultation')
-            {{-- Nombre de versements --}}
-            @include('Administratif.Partials.Versement')
-           
-            @include('Administratif.Partials.Entree')
-           
-        </div>
-        <div class="row d-flex justify-content-between flex-direction-column">
-            @include('Administratif.Partials.ChartEntree')
-            @include('Administratif.Partials.ProchaineConsultation')
-        </div>
-    @endif
+    @role('administratif')
+        @include('components.dashboard.administratif')
+    @endrole
 
-    @if (auth()->user()->role_as == 'informaticien')
-    @endif
+    @role('informaticien')
+    @endrole
 @endsection

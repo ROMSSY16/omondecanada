@@ -1,23 +1,27 @@
 <?php
 
-use App\Http\Controllers\AdministratifController;
-use App\Http\Controllers\CommercialController;
-use App\Http\Controllers\DossierController;
-use App\Http\Controllers\DepenseController;
-use App\Http\Controllers\EntreeController;
-use App\Http\Controllers\UtilisateurController;
-use App\Http\Controllers\consultationController;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\ConsultanteController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\EntreeController;
+use App\Http\Controllers\DepenseController;
+use App\Http\Controllers\DossierController;
 use App\Http\Controllers\DirectionController;
-use App\Http\Controllers\FicheDeRenseignementController;
-use App\Http\Controllers\FicheRenseignementController;
-use App\Http\Controllers\InformatiqueController;
-use App\Http\Controllers\PdfController;
+use App\Http\Controllers\CommercialController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ConsultanteController;
 use App\Http\Controllers\TransactionController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UtilisateurController;
+use App\Http\Controllers\consultationController;
+use App\Http\Controllers\InformatiqueController;
+use App\Http\Controllers\AdministratifController;
+use App\Http\Controllers\EquipeController;
+use App\Http\Controllers\FicheRenseignementController;
+use App\Http\Controllers\FicheDeRenseignementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,80 +45,104 @@ Route::get('sign-in', [HomeController::class, 'sign-in'])->name('sign-in');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
-    // Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
 
-
-    Route::middleware('isCommercial')->group(function () {
-        Route::prefix('commercial')->name('commercial.')->group(function () {
-
-            Route::get('AppelsChart', [CommercialController::class, 'appelChartData']);
-            Route::get('ConsultationsChart', [CommercialController::class, 'consultationChartData']);
-            Route::get('Contacts', [CommercialController::class, 'Contacts'])->name('contact');
-            Route::post('Contacts/AjouterProspect', [CommercialController::class, 'addProspect'])->name('add_prospect');
-            Route::put('Contacts/ModifierProspect/{id}', [CommercialController::class, 'addProspect'])->name('modifier_prospect');
-            Route::get('RendezVous', [CommercialController::class, 'RendezVous'])->name('rendez_vous');
-            Route::get('RendezVous/ConsultationPayee/{id}/{statut}', [CommercialController::class, 'changeStatutConsultationPayee'])->name('change_statut_consultation');
-            Route::get('RendezVous/RendezVousEffectue/{id}/{statut}', [CommercialController::class, 'changeStatutRendezVous'])->name('change_statut_rendez_vous');
-
-            //A revoir
-            Route::get('Consultation', [AdministratifController::class, 'Consultation'])->name('consultation');
-        });
+    Route::prefix('equipes')->name('equipes.')->group(function () {
+        Route::get('index', [EquipeController::class, 'index'])->name('index');
+        Route::get('create', [EquipeController::class, 'create'])->name('create');
+        Route::post('store', [EquipeController::class, 'store'])->name('store');
+        Route::post('update', [EquipeController::class, 'update'])->name('update');
+        Route::get('destroy/{id}', [EquipeController::class, 'destroy'])->name('destroy');
+        Route::get('show/{id}', [EquipeController::class, 'show'])->name('show');
+        Route::get('edit/{id}', [EquipeController::class, 'edit'])->name('edit');
     });
 
-    //Routes Administratif
-    Route::middleware('isAdministratif')->group(function () {
-        Route::prefix('administratif')->name('administratif.')->group(function () {
-
-            Route::get('Dashboard', [AdministratifController::class, 'Dashboard'])->name('dashboard');
-
-            Route::get('EntreeChartData', [AdministratifController::class, 'EntreeChartData']);
-            Route::get('Clients', [AdministratifController::class, 'Clients'])->name('clients');
-            Route::put('Clients/ModifierFicheConsultation/{idCandidat}', [AdministratifController::class, 'CreerOuModifierFiche'])->name('creer_ou_modifier_fiche');
-            Route::put('Clients/ModifierDateConsultation/{id}', [AdministratifController::class, 'ModifierDateConsultation'])->name('creer_ou_modifier_date_consultation');
-            Route::post('DossierClient/ModifierTypeVisa/{id}', [AdministratifController::class, 'ModifierTypeVisa'])->name('modifier_type_visa');
-
-            Route::get('DossierClients', [AdministratifController::class, 'DossierClients'])->name('dossier_clients');
-            Route::get('Banque', [AdministratifController::class, 'Banque'])->name('banque');
-            Route::get('Consultation', [AdministratifController::class, 'Consultation'])->name('consultation');
-            Route::post('UpdateTag/{candidatId}/{tagId}',[DossierController::class, 'Updatetag'])->name('update_tag');
-            Route::get('ficheRens/questions', [AdministratifController::class, 'showForm'])->name('question_fiche');
-            Route::post('ficheRens/{candidatId}', [FicheRenseignementController::class, 'store'])->name('fiche.renseignement.store');
-
-        });
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('index', [UserController::class, 'index'])->name('index');
+        Route::get('create', [UserController::class, 'create'])->name('create');
+        Route::post('store', [UserController::class, 'store'])->name('store');
+        Route::post('update', [UserController::class, 'update'])->name('update');
+        Route::get('destroy/{id}', [UserController::class, 'destroy'])->name('destroy');
+        Route::get('show/{id}', [UserController::class, 'show'])->name('show');
+        Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
     });
 
-    Route::middleware('isConsultante')->group(function () {
-        Route::prefix('consultante')->name('consultante.')->group(function () {
-            //Routes Consultatnte
-            Route::get('Dashboard', [ConsultanteController::class, 'Dashboard'])->name('dashboard');
-            Route::get('DossierClient', [ConsultanteController::class, 'DossierClient'])->name('dossier_client');
-            Route::post('DossierClient/AjouterFichiersCandidat/{candidatId}', [DossierController::class, 'ajouterFichiersConsultante'])->name('ajout_fichiers_consultante');
-            Route::get('DossierClient/ficheRens/{candidatId}/view', [FicheRenseignementController::class, 'view'])->name('fiche.renseignement.view');
+    Route::prefix('role')->name('role.')->group(function () {
+        Route::get('list', [RoleController::class, 'listRole'])->name('index');
+        Route::get('create', [RoleController::class, 'createRole'])->name('create');
+        Route::post('store', [RoleController::class, 'store'])->name('store');
+        Route::post('update/{slug}', [RoleController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [RoleController::class, 'destroy'])->name('destroy');
 
-            Route::get('/my-candidats', [ConsultanteController::class, 'myCandidat'])->name('my_candidat');
-            Route::get('/all-candidats', [ConsultanteController::class, 'allCandidats'])->name('all_candidats');
-
-            Route::get('/Consultation/{id}', [ConsultanteController::class, 'getListCandidatByConsultation'])->name('list_candidats');
-            Route::get('/Consultation/{id}/{id_candidat}', [ConsultanteController::class, 'getCandidatByConsultation'])->name('candidat');
-            Route::get('/ficheConsultation/{id_candidat}', [ConsultanteController::class, 'getCandidatFiche'])->name('candidatFiche');
-
-        });
+        Route::get('edit/{slug}', [RoleController::class, 'edit'])->name('edit');
     });
 
-    Route::middleware('isDirection')->group(function () {
-        Route::prefix('direction')->name('direction.')->group(function () {
-            //Route Direction
-            Route::get('Dashboard', [DirectionController::class, 'Dashboard'])->name('dashboard');
-            Route::get('Dashboard/DataSuccursale', [DirectionController::class, 'dataSuccursale'])->name('data');;
-            Route::get('Banque', [DirectionController::class, 'Banque'])->name('banque');
-            Route::get('ChartEnsemble', [DirectionController::class, 'ChartData']);
-            Route::get('Consultation', [DirectionController::class, 'Consultation'])->name('consultation');
-            Route::get('DossierClient', [DirectionController::class, 'DossierClient'])->name('dossier_client');
-            Route::get('Equipe', [DirectionController::class, 'Equipe'])->name('equipe');
-
-        });
+    Route::prefix('permissions')->name('permissions.')->group(function () {
+        Route::get('index', [PermissionController::class, 'index'])->name('index');
+        Route::get('create', [PermissionController::class, 'create'])->name('create');
+        Route::post('store', [PermissionController::class, 'store'])->name('store');
+        Route::post('update', [PermissionController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
     });
 
+    Route::prefix('consultation')->name('consultation.')->group(function () {
+        Route::get('index', [PermissionController::class, 'index'])->name('index');
+        Route::get('create', [PermissionController::class, 'create'])->name('create');
+        Route::post('store', [PermissionController::class, 'store'])->name('store');
+        Route::post('update', [PermissionController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
+    });
+    Route::prefix('client')->name('client.')->group(function () {
+        Route::get('index', [PermissionController::class, 'index'])->name('index');
+        Route::get('create', [PermissionController::class, 'create'])->name('create');
+        Route::post('store', [PermissionController::class, 'store'])->name('store');
+        Route::post('update', [PermissionController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
+    });
+    Route::prefix('contact')->name('contact.')->group(function () {
+        Route::get('index', [PermissionController::class, 'index'])->name('index');
+        Route::get('create', [PermissionController::class, 'create'])->name('create');
+        Route::post('store', [PermissionController::class, 'store'])->name('store');
+        Route::post('update', [PermissionController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
+    });
+    Route::prefix('rendezvous')->name('rendezvous.')->group(function () {
+        Route::get('index', [PermissionController::class, 'index'])->name('index');
+        Route::get('create', [PermissionController::class, 'create'])->name('create');
+        Route::post('store', [PermissionController::class, 'store'])->name('store');
+        Route::post('update', [PermissionController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
+    });
+    Route::prefix('banque')->name('banque.')->group(function () {
+        Route::get('index', [PermissionController::class, 'index'])->name('index');
+        Route::get('create', [PermissionController::class, 'create'])->name('create');
+        Route::post('store', [PermissionController::class, 'store'])->name('store');
+        Route::post('update', [PermissionController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
+    });
+    Route::prefix('candidat')->name('candidat.')->group(function () {
+        Route::get('index', [PermissionController::class, 'index'])->name('index');
+        Route::get('create', [PermissionController::class, 'create'])->name('create');
+        Route::post('store', [PermissionController::class, 'store'])->name('store');
+        Route::post('update', [PermissionController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
+        Route::get('succursale', [PermissionController::class, 'succursale'])->name('succursale');
+    });
+
+   
     Route::prefix('consultation')->name('consultation.')->group(function () {
 
         Route::get('list', [InformatiqueController::class, 'Consultation'])->name('dashboard');

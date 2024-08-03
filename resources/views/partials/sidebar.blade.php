@@ -18,146 +18,106 @@
                 <span class="nav-link-text ms-1">Tableau de bord</span>
                 </a>
             </li>
-
-        @if (auth()->user()->role_as == 'direction')
+            @can('voir-candidat')
             <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'direction.dossier_client' ? 'active bg-gradient-primary' : '' }}" href="{{route('direction.dossier_client')}}">
-                <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">folder</i>
-                </div>
-                <span class="nav-link-text ms-1">Dossier Client</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'direction.banque' ? 'active bg-gradient-primary' : '' }}" href="{{route('direction.banque')}}">
-                <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">account_balance</i>
-                </div>
-                <span class="nav-link-text ms-1">Banque</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'direction.consultation' ? 'active bg-gradient-primary' : '' }}" href="{{route('direction.consultation')}}">
-                <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">videocam</i>
-                </div>
-                <span class="nav-link-text ms-1">Consultations</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'direction.equipe' ? 'active bg-gradient-primary' : '' }}" href="{{route('direction.equipe')}}">
-                <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">groups</i>
-                </div>
-                <span class="nav-link-text ms-1">Equipes</span>
-                </a>
-            </li>
-        @endif
-
-        @if (auth()->user()->role_as == 'consultante')
-            <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'consultante.my_candidat' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultante.my_candidat')}}">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'candidat.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('candidat.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">person</i>
                 </div>
                 <span class="nav-link-text ms-1">Candidat</span>
                 </a>
             </li>
+            @endcan
+            @can('afficher-tous-les-candidats')
             <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'consultante.all_candidats' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultante.all_candidats')}}">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'candidat.succursale' ? 'active bg-gradient-primary' : '' }}" href="{{route('candidat.succursale')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">groups</i>
                 </div>
                 <span class="nav-link-text ms-1">Liste des Candidats</span>
                 </a>
             </li>
+            @endcan
+            @can('voir-dossier-client')
             <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'consultante.dossier_client' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultante.dossier_client')}}">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'client.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('client.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">folder</i>
                 </div>
                 <span class="nav-link-text ms-1">Dossier Client</span>
                 </a>
             </li>
-        @endif
-
-        @if (auth()->user()->role_as == 'commercial')
+            @endcan
+            @can('afficher-mes-prospects')
             <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'commercial.contact' ? 'active bg-gradient-primary' : '' }}" href="{{route('commercial.contact')}}">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'contact.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('contact.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">contacts</i>
                 </div>
                 <span class="nav-link-text ms-1">Contacts</span>
                 </a>
             </li>
+            @endcan
+            @can('afficher-mes-rendez-vous')
             <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'commercial.rendez_vous' ? 'active bg-gradient-primary' : '' }}" href="{{route('commercial.rendez_vous')}}">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'rendezvous.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('rendezvous.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">handshake</i>
                 </div>
                 <span class="nav-link-text ms-1">Rendez Vous</span>
                 </a>
             </li>
+            @endcan
+            @can('afficher-mes-clients')
             <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'dossier_clients' ? 'active bg-gradient-primary' : '' }}" href="{{route('dossier_clients')}}">
-                <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">folder</i>
-                </div>
-                <span class="nav-link-text ms-1">Dossier Client</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'commercial.consultation' ? 'active bg-gradient-primary' : '' }}" href="{{route('commercial.consultation')}}">
-                <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">videocam</i>
-                </div>
-                <span class="nav-link-text ms-1">Consultations</span>
-                </a>
-            </li>
-        
-        @endif
-
-        @if (auth()->user()->role_as == 'administratif')
-            <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'administratif.clients' ? 'active bg-gradient-primary' : '' }}" href="{{route('administratif.clients')}}">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'client.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('client.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">person</i>
                 </div>
                 <span class="nav-link-text ms-1">Clients</span>
                 </a>
             </li>
+            @endcan
+            @can('afficher-mes-consultations')
+                <li class="nav-item">
+                    <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.index')}}">
+                    <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">videocam</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Consultations</span>
+                    </a>
+                </li>
+            @endcan
+            @can('afficher-consultations-en-attente')
             <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'administratif.consultation' ? 'active bg-gradient-primary' : '' }}" href="{{route('administratif.consultation')}}">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">videocam</i>
                 </div>
-                <span class="nav-link-text ms-1">Consultations</span>
+                <span class="nav-link-text ms-1">Consultations en attente</span>
                 </a>
             </li>
+            @endcan
+            @can('voir-personnels')
             <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'administratif.dossier_clients' ? 'active bg-gradient-primary' : '' }}" href="{{route('administratif.dossier_clients')}}">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'equipes.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('equipes.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">folder</i>
+                    <i class="material-icons opacity-10">groups</i>
                 </div>
-                <span class="nav-link-text ms-1">Dossier Client</span>
+                <span class="nav-link-text ms-1">Equipes</span>
                 </a>
             </li>
+            @endcan
+            @can('voir-banque')
             <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'administratif.banque' ? 'active bg-gradient-primary' : '' }}" href="{{route('administratif.banque')}}">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'banque.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('banque.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">account_balance</i>
                 </div>
                 <span class="nav-link-text ms-1">Banque</span>
                 </a>
-            </li> 
-        @endif
-
-        @if (auth()->user()->role_as == 'informaticien')
-           
-        @endif
-
+            </li>
+            @endcan
       </ul>
     </div>
     
