@@ -34,7 +34,7 @@ class PermissionSeeder extends Seeder
 
                 'Manage Clients',
                 'Afficher tous les clients',
-                'Afficher mes clients',
+                'Afficher clients',
                 'Voir détail client',
                 'Supprimer client',
 
@@ -55,7 +55,7 @@ class PermissionSeeder extends Seeder
                 'Manage candidats',
                 'Voir candidats',
                 'Afficher tous les candidats',
-               
+
             ];
 
             foreach ($permissionsData as $permissionName) {

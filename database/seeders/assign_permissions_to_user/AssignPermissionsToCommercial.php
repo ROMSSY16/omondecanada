@@ -47,11 +47,13 @@ class AssignPermissionsToCommercial extends Seeder
             'Valider rendez-vous',
 
             'Historique des consultations',
-            'Consultations a venir',
           
             'Manage candidats',
             'Voir candidats',
-           'Afficher tous les candidats'
+            'Afficher tous les candidats',
+
+            'Afficher clients',
+            'Afficher tous les clients',
         ];
         $commercial->roles()->sync($role->id);
         $permissionIds = Permission::whereIn('name', $permissions)->pluck('id')->toArray();

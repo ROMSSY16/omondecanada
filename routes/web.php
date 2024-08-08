@@ -19,6 +19,8 @@ use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\consultationController;
 use App\Http\Controllers\InformatiqueController;
 use App\Http\Controllers\AdministratifController;
+use App\Http\Controllers\CandidatController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EquipeController;
 use App\Http\Controllers\FicheRenseignementController;
 use App\Http\Controllers\FicheDeRenseignementController;
@@ -105,13 +107,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
     });
     Route::prefix('contact')->name('contact.')->group(function () {
-        Route::get('index', [PermissionController::class, 'index'])->name('index');
-        Route::get('create', [PermissionController::class, 'create'])->name('create');
-        Route::post('store', [PermissionController::class, 'store'])->name('store');
-        Route::post('update', [PermissionController::class, 'update'])->name('update');
-        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
-        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
-        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
+        Route::get('index', [ContactController::class, 'index'])->name('index');
+        Route::get('create', [ContactController::class, 'create'])->name('create');
+        Route::post('store', [ContactController::class, 'store'])->name('store');
+        Route::put('update/{id}', [ContactController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [ContactController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [ContactController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [ContactController::class, 'edit'])->name('edit');
+        Route::get('succursale', [ContactController::class, 'succursaleContacts'])->name('succursale');
     });
     Route::prefix('rendezvous')->name('rendezvous.')->group(function () {
         Route::get('index', [PermissionController::class, 'index'])->name('index');
@@ -132,14 +135,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
     });
     Route::prefix('candidat')->name('candidat.')->group(function () {
-        Route::get('index', [PermissionController::class, 'index'])->name('index');
-        Route::get('create', [PermissionController::class, 'create'])->name('create');
-        Route::post('store', [PermissionController::class, 'store'])->name('store');
-        Route::post('update', [PermissionController::class, 'update'])->name('update');
-        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
-        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
-        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
-        Route::get('succursale', [PermissionController::class, 'succursale'])->name('succursale');
+        Route::get('index', [CandidatController::class, 'index'])->name('index');
+        Route::get('create', [CandidatController::class, 'create'])->name('create');
+        Route::post('store', [CandidatController::class, 'store'])->name('store');
+        Route::post('update', [CandidatController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [CandidatController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [CandidatController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [CandidatController::class, 'edit'])->name('edit');
+        Route::get('succursale', [CandidatController::class, 'succursale'])->name('succursale');
     });
 
    

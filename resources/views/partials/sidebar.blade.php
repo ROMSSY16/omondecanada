@@ -18,36 +18,6 @@
                 <span class="nav-link-text ms-1">Tableau de bord</span>
                 </a>
             </li>
-            @can('voir-candidats')
-            <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'candidat.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('candidat.index')}}">
-                <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">person</i>
-                </div>
-                <span class="nav-link-text ms-1">Candidat</span>
-                </a>
-            </li>
-            @endcan
-            @can('afficher-tous-les-candidats')
-            <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'candidat.succursale' ? 'active bg-gradient-primary' : '' }}" href="{{route('candidat.succursale')}}">
-                <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">groups</i>
-                </div>
-                <span class="nav-link-text ms-1">Liste des Candidats</span>
-                </a>
-            </li>
-            @endcan
-            @can('voir-dossier-client')
-            <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'client.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('client.index')}}">
-                <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">folder</i>
-                </div>
-                <span class="nav-link-text ms-1">Dossier Client</span>
-                </a>
-            </li>
-            @endcan
             @can('afficher-prospects')
             <li class="nav-item">
                 <a class="nav-link text-white {{ Route::currentRouteName() === 'contact.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('contact.index')}}">
@@ -68,7 +38,7 @@
                 </a>
             </li>
             @endcan
-            @can('afficher-mes-clients')
+            @can('afficher-clients')
             <li class="nav-item">
                 <a class="nav-link text-white {{ Route::currentRouteName() === 'client.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('client.index')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
@@ -78,6 +48,28 @@
                 </a>
             </li>
             @endcan
+            
+            {{-- @can('afficher-tous-les-candidats')
+            <li class="nav-item">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'candidat.succursale' ? 'active bg-gradient-primary' : '' }}" href="{{route('candidat.succursale')}}">
+                <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
+                    <i class="material-icons opacity-10">groups</i>
+                </div>
+                <span class="nav-link-text ms-1">Liste des Candidats</span>
+                </a>
+            </li>
+            @endcan --}}
+            @can('voir-dossier-client')
+            <li class="nav-item">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'client.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('client.index')}}">
+                <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
+                    <i class="material-icons opacity-10">folder</i>
+                </div>
+                <span class="nav-link-text ms-1">Dossier Client</span>
+                </a>
+            </li>
+            @endcan
+            
             @can('historique-des-consultations')
                 <li class="nav-item">
                     <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.index')}}">
