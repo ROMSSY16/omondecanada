@@ -66,9 +66,9 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center justify-content-around">
-                                                    @if ($candidat->rendezVous && $candidat->rendezVous->rdv_effectue === 0)
+                                                    @if ($candidat->consultation_effectue == 0)
                                                         <button
-                                                            onclick="toggleStatutRendezVous('{{ $candidat->rendezVous->id }}', 'yes');"
+                                                            onclick="toggleStatutRendezVous('{{ $candidat->id }}', 'yes');"
                                                             data-candidat-id="{{ $candidat->id }}"
                                                             class="btn btn-primary">
                                                             <i class="material-icons text-bolder icon-large toggle-consultation"
@@ -76,13 +76,13 @@
                                                         </button>
 
                                                         <button
-                                                            onclick="toggleStatutRendezVous('{{ $candidat->rendezVous->id }}', 'no');"
+                                                            onclick="toggleStatutRendezVous('{{ $candidat->id }}', 'no');"
                                                             data-candidat-id="{{ $candidat->id }}"
                                                             class="btn btn-primary">
                                                             <i class="material-icons text-bolder icon-large toggle-consultation"
                                                                 style="font-size: 2rem;">close</i>
                                                         </button>
-                                                    @elseif ($candidat->rendezVous && $candidat->rendezVous->rdv_effectue === 1)
+                                                    @elseif ($candidat->consultation_effectue == 1)
                                                         <i class="material-icons text-success text-bolder icon-large"
                                                             style="font-size: 2rem;">check</i>
                                                     @endif
@@ -93,23 +93,15 @@
 
                                             <td>
                                                 <div class="d-flex align-items-center justify-content-around ">
-                                                    @if ($candidat->rendezVous && $candidat->rendezVous->consultation_payee === 0)
-                                                        <button
-                                                            onclick="toggleConsultationPayee('{{ $candidat->rendezVous->id }}', 'yes');"
-                                                            data-candidat-id="{{ $candidat->id }}"
-                                                            class="btn btn-primary">
-                                                            <i class="material-icons text-bolder icon-large toggle-consultation"
-                                                                style="font-size: 2rem;">check</i>
+                                                    @if ($candidat->consultation_payee == 0)
+                                                        <button onclick="toggleConsultationPayee('{{ $candidat->id }}', 'yes');" data-candidat-id="{{ $candidat->id }}" class="btn btn-primary">
+                                                            <i class="material-icons text-bolder icon-large toggle-consultation" style="font-size: 2rem;">check</i>
                                                         </button>
 
-                                                        <button
-                                                            onclick="toggleConsultationPayee('{{ $candidat->rendezVous->id }}', 'no');"
-                                                            data-candidat-id="{{ $candidat->id }}"
-                                                            class="btn btn-primary">
-                                                            <i class="material-icons text-bolder icon-large toggle-consultation"
-                                                                style="font-size: 2rem;">close</i>
+                                                        <button onclick="toggleConsultationPayee('{{ $candidat->id }}', 'no');" data-candidat-id="{{ $candidat->id }}" class="btn btn-primary">
+                                                            <i class="material-icons text-bolder icon-large toggle-consultation" style="font-size: 2rem;">close</i>
                                                         </button>
-                                                    @elseif ($candidat->rendezVous && $candidat->rendezVous->consultation_payee === 1)
+                                                    @elseif ($candidat->rendezVous && $candidat->consultation_payee === 1)
                                                         <i class="material-icons text-success text-bolder icon-large"
                                                             style="font-size: 2rem;">check</i>
                                                     @endif
@@ -137,7 +129,7 @@
                                                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="{{ route('commercial.modifier_prospect', $candidat->id) }}" method="POST" class="text-start"
+                                                        <form action="{{ route('contact.update', $candidat->id) }}" method="POST" class="text-start"
                                                             id="modifierContactForm{{ $candidat->id }}" enctype="multipart/form-data">
                                                             @csrf
                                                             @method('PUT')

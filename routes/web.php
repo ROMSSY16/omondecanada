@@ -24,6 +24,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EquipeController;
 use App\Http\Controllers\FicheRenseignementController;
 use App\Http\Controllers\FicheDeRenseignementController;
+use App\Http\Controllers\RendezvousController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,13 +118,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('succursale', [ContactController::class, 'succursaleContacts'])->name('succursale');
     });
     Route::prefix('rendezvous')->name('rendezvous.')->group(function () {
-        Route::get('index', [PermissionController::class, 'index'])->name('index');
-        Route::get('create', [PermissionController::class, 'create'])->name('create');
-        Route::post('store', [PermissionController::class, 'store'])->name('store');
-        Route::post('update', [PermissionController::class, 'update'])->name('update');
-        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
-        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
-        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
+        Route::get('index', [RendezvousController::class, 'index'])->name('index');
+        Route::get('create', [RendezvousController::class, 'create'])->name('create');
+        Route::post('store', [RendezvousController::class, 'store'])->name('store');
+        Route::post('update', [RendezvousController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [RendezvousController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [RendezvousController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [RendezvousController::class, 'edit'])->name('edit');
     });
     Route::prefix('banque')->name('banque.')->group(function () {
         Route::get('index', [PermissionController::class, 'index'])->name('index');
