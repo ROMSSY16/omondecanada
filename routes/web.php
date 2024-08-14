@@ -8,23 +8,18 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EntreeController;
+use App\Http\Controllers\EquipeController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\DossierController;
-use App\Http\Controllers\DirectionController;
-use App\Http\Controllers\CommercialController;
+use App\Http\Controllers\CandidatController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\ConsultanteController;
+use App\Http\Controllers\RendezvousController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UtilisateurController;
-use App\Http\Controllers\consultationController;
+use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\InformatiqueController;
-use App\Http\Controllers\AdministratifController;
-use App\Http\Controllers\CandidatController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\EquipeController;
-use App\Http\Controllers\FicheRenseignementController;
-use App\Http\Controllers\FicheDeRenseignementController;
-use App\Http\Controllers\RendezvousController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,22 +85,25 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('consultation')->name('consultation.')->group(function () {
-        Route::get('index', [PermissionController::class, 'index'])->name('index');
-        Route::get('create', [PermissionController::class, 'create'])->name('create');
-        Route::post('store', [PermissionController::class, 'store'])->name('store');
-        Route::post('update', [PermissionController::class, 'update'])->name('update');
-        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
-        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
-        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
+        Route::get('index', [ConsultationController::class, 'index'])->name('index');
+        Route::get('create', [ConsultationController::class, 'create'])->name('create');
+        Route::post('store', [ConsultationController::class, 'store'])->name('store');
+        Route::post('update', [ConsultationController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [ConsultationController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [ConsultationController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [ConsultationController::class, 'edit'])->name('edit');
+
+        Route::post('confirm/{id}', [ConsultationController::class, 'confirmConsultation'])->name('confirm');
+        Route::post('cancel/{id}', [ConsultationController::class, 'cancelConsultation'])->name('cancel');
     });
     Route::prefix('client')->name('client.')->group(function () {
-        Route::get('index', [PermissionController::class, 'index'])->name('index');
-        Route::get('create', [PermissionController::class, 'create'])->name('create');
-        Route::post('store', [PermissionController::class, 'store'])->name('store');
-        Route::post('update', [PermissionController::class, 'update'])->name('update');
-        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
-        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
-        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
+        Route::get('index', [ClientController::class, 'index'])->name('index');
+        Route::get('create', [ClientController::class, 'create'])->name('create');
+        Route::post('store', [ClientController::class, 'store'])->name('store');
+        Route::post('update', [ClientController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [ClientController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [ClientController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [ClientController::class, 'edit'])->name('edit');
     });
     Route::prefix('contact')->name('contact.')->group(function () {
         Route::get('index', [ContactController::class, 'index'])->name('index');
@@ -125,6 +123,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('destroy/{slug}', [RendezvousController::class, 'destroy'])->name('destroy');
         Route::get('show/{slug}', [RendezvousController::class, 'show'])->name('show');
         Route::get('edit/{slug}', [RendezvousController::class, 'edit'])->name('edit');
+
+        Route::post('confirm/{id}', [RendezvousController::class, 'confirmRendezVous'])->name('confirm');
+        Route::post('cancel/{id}', [RendezvousController::class, 'cancelRendezVous'])->name('cancel');
     });
     Route::prefix('banque')->name('banque.')->group(function () {
         Route::get('index', [PermissionController::class, 'index'])->name('index');

@@ -12,7 +12,7 @@
                             class="form-control text-dark text-md bg-transparent border-0 p-1"
                             placeholder="Rechercher...">
                     </div>
-                    <button class="btn bg-info text-white circle" data-bs-toggle="modal"
+                    <button class="btn bg-primary text-white circle" data-bs-toggle="modal"
                         data-bs-target="#addContactModal">
                         <i class="material-icons">add</i> Ajouter un prospect
                     </button>

@@ -6,13 +6,27 @@ use App\Models\Candidat;
 use App\Models\Consultante;
 use App\Models\InfoConsultation;
 use App\Models\User;
-use App\Notifications\ConsultationNotification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class ConsultationController extends Controller
 {
+    public function confirmConsultation($id){
+        $candidat = Candidat::findOrFail($id);
+        $candidat->update([
+            'consultation_payee' => '1',
+        ]);
+        return redirect()->back()->with('success', 'Consultation confirmée avec succès.');
+    }
+
+    public function cancelConsultation($id){
+        $candidat = Candidat::findOrFail($id);
+        $candidat->update([
+            'consultation_payee' => '0',
+        ]);
+        return redirect()->back()->with('success', 'Consultation annulée avec succès.');
+    }
+
     public function toggleConsultation($candidatId)
     {
         $candidat = Candidat::find($candidatId);
