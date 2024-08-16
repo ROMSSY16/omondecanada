@@ -22,7 +22,7 @@ class RendezvousController extends Controller
     public function confirmRendezVous($id){
         $candidat = Candidat::findOrFail($id);
         $candidat->update([
-            'consultation_payee' => '1',
+            'consultation_effectuee' => '1',
         ]);
         $rendezvous = RendezVous::where('candidat_id', $candidat->id)->first();
         $rendezvous->update([

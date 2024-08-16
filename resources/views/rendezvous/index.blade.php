@@ -33,7 +33,9 @@
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             NUMERO
                                         </th>
-
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            DATE RDV
+                                        </th>
 
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center ">
                                             RDV EFFECTUÉE
@@ -61,6 +63,10 @@
                                             <td>
                                                 <p class="text-md font-weight-bold mb-0">
                                                     {{ $candidat->numero_telephone }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="text-md font-weight-bold mb-0">
+                                                    {{ $candidat->date_rdv }}</p>
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center justify-content-around">
@@ -111,14 +117,14 @@
 
                                                 </div>
                                             </td>
-                                            @if ($candidat->consultation_effectuee == '0' && $candidat->consultation_payee == '0')
+                                            
                                             <td>
                                                 <a class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                                     data-bs-target="#modifierContactModal{{ $candidat->id }}">
                                                     <i class="material-icons text-xl"
                                                         style="font-size: 1rem;">edit</i>
                                             </td>
-                                            @endif
+                                           
                                         </tr>
                                         {{-- Modal modifier prospect --}}
                                         <div class="modal z-index-1 fade" id="modifierContactModal{{ $candidat->id }}" aria-labelledby="exampleModalLabel"

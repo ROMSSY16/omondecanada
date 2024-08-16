@@ -17,7 +17,7 @@
                         <i class="material-icons">add</i> Ajouter un prospect
                     </button>
                     <a href="{{route('contact.index')}}">
-                        <button class="btn bg-info text-white circle">
+                        <button class="btn bg-primary text-white circle">
                             <i class="material-icons">groups</i> Mes contacts
                         </button>
                     </a>

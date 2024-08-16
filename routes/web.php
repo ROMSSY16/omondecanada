@@ -95,6 +95,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('confirm/{id}', [ConsultationController::class, 'confirmConsultation'])->name('confirm');
         Route::post('cancel/{id}', [ConsultationController::class, 'cancelConsultation'])->name('cancel');
+        Route::post('modifier/date/{id}', [ConsultationController::class, 'modifierDateConsultation'])->name('modifier_date');
+
+        Route::get('/waiting-list/{consultation_id}', [ConsultationController::class, 'getConsultationWaitingList'])->name('listedattente');
     });
     Route::prefix('client')->name('client.')->group(function () {
         Route::get('index', [ClientController::class, 'index'])->name('index');
@@ -104,6 +107,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('destroy/{slug}', [ClientController::class, 'destroy'])->name('destroy');
         Route::get('show/{slug}', [ClientController::class, 'show'])->name('show');
         Route::get('edit/{slug}', [ClientController::class, 'edit'])->name('edit');
+
+        Route::post('modifier/fiche/{id}', [ClientController::class, 'modifierFiche'])->name('modifier_fiche');
     });
     Route::prefix('contact')->name('contact.')->group(function () {
         Route::get('index', [ContactController::class, 'index'])->name('index');
@@ -215,7 +220,7 @@ Route::post('/ajouterFichiersAgent/{userId}', [DossierController::class, 'ajoute
 
 Route::get('/toggle-consultation/{candidatId}', [consultationController::class, 'toggleConsultation'])->name('toggleConsultation');
 
-Route::get('/waiting-list/{consultation_id}', [ConsultationController::class, 'getConsultationWaitingList'])->name('listedattente');
+
 
 
 //Route Documents

@@ -2,18 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Candidat;
-use App\Models\Consultante;
-use App\Models\InfoConsultation;
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Candidat;
+use App\Models\RendezVous;
+use App\Models\Consultante;
 use Illuminate\Http\Request;
+use App\Models\InfoConsultation;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\DateConsultationNotification;
 
 class ConsultationController extends Controller
 {
+    public function index()
+    {
+        $pageTitle = 'Consultations';
+        Carbon::setLocale('fr');
+        $consultations = InfoConsultation::orderBy('date_heure', 'desc')->get();
+        foreach ($consultations as $consultation) {
+            $formattedDate = Carbon::parse($consultation->date_heure)->translatedFormat('l j F Y');
+            $consultation->date_heure_formatee = ucwords($formattedDate);
+        }
+        return view('consultation.index', [
+            'consultations' => $consultations,
+            'page' => $pageTitle, 
+        ]);
+    }
+
     public function confirmConsultation($id){
         $candidat = Candidat::findOrFail($id);
         $candidat->update([
+            'consultation_payee' => '1',
+        ]);
+        $rendezvous = RendezVous::where('candidat_id', $candidat->id)->first();
+        $rendezvous->update([
             'consultation_payee' => '1',
         ]);
         return redirect()->back()->with('success', 'Consultation confirmée avec succès.');
@@ -24,9 +47,55 @@ class ConsultationController extends Controller
         $candidat->update([
             'consultation_payee' => '0',
         ]);
+        $rendezvous = RendezVous::where('candidat_id', $candidat->id)->first();
+        $rendezvous->update([
+            'consultation_payee' => '0',
+        ]);
         return redirect()->back()->with('success', 'Consultation annulée avec succès.');
     }
+    public function modifierDateConsultation(Request $request, $candidatId)
+    {
+        try {
+            Carbon::setLocale('fr');
 
+            $consultation = InfoConsultation::findOrFail($request->input('consultation_id'));
+            $candidat = Candidat::findOrFail($candidatId);
+
+            $dateConsultation = Carbon::parse($consultation->date_heure)->translatedFormat('l j F');
+            $heureConsultation = Carbon::parse($consultation->date_heure)->translatedFormat('H:i');
+
+            $firstTime = is_null($candidat->id_info_consultation);
+
+            $candidat->update(['id_info_consultation' => $consultation->id]);
+
+            // A refaire
+
+            // Notification::route('mail', $candidat->email)->notify(
+            //     new DateConsultationNotification(
+            //         $candidat->nom,
+            //         $candidat->prenom,
+            //         $firstTime,
+            //         $dateConsultation,
+            //         $heureConsultation,
+            //         $consultation->lien_zoom
+            //     )
+            // );
+
+            return redirect()->back()->with('success', 'Consultation mise à jour avec succès');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Echec de mise à jour');
+        }
+    }
+    public function getConsultationWaitingList($consultationId)
+    {
+        $info_consultation = InfoConsultation::find($consultationId);
+        return view('consultation.waitingList', ['data_candidat' => $info_consultation->candidats]);
+    }
+
+
+
+
+    //Other codes
     public function toggleConsultation($candidatId)
     {
         $candidat = Candidat::find($candidatId);
@@ -50,12 +119,7 @@ class ConsultationController extends Controller
         return view('Consultation.Consultation', ['data_consultante' => $consultantes]);
     }
 
-    public function getConsultationWaitingList($consultationId)
-    {
-        // Récupérer la consultation par son ID
-        $info_consultation = InfoConsultation::find($consultationId);
-        return view('Consultation.waitingList', ['data_candidat' => $info_consultation->candidats]);
-    }
+    
 
     public function creerConsultation(Request $request)
     {

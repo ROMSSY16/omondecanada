@@ -91,12 +91,8 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            {{-- @include('Administratif.Partials.AjouterOuModifierFiche', [
-                                                'candidat' => $candidat,
-                                            ])
-                                            @include('Administratif.Partials.AjouterOuModifierConsultation', [
-                                                'candidat' => $candidat,
-                                            ]) --}}
+                                            @include('components.ficheclient')
+                                            @include('components.ficheconsultation')
                     
                                         </tr>
                                     @endforeach

@@ -44,7 +44,13 @@ class ClientController extends Controller
                 $consultation->dateFormatee = ucwords(Carbon::parse($consultation->date_heure)->translatedFormat('l j F Y H:i'));
             });
 
-        return view('client.index', compact('pageTitle', 'clients', 'consultations'));
+            
+
+        return view('client.index', [
+            'pageTitle' => $pageTitle, 
+            'clients' => $clients, 
+            'consultationsDisponible' => $consultations,
+            ]);
     }
 
 

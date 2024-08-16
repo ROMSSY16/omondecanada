@@ -15,7 +15,7 @@ class ContactController extends Controller
         $pageTitle = 'Contacts';
         $pays = auth()->user()->succursale->label;
         $consultants = Role::where('name', 'Consultante')->orderBy('created_at', 'desc')->get();
-        $candidatsAgents = Candidat::where('id_utilisateur', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(5);
+        $candidatsAgents = Candidat::where('id_utilisateur', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10);
 
         return view('contact.index', [
             'data_candidat' => $candidatsAgents,

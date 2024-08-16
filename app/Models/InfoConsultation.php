@@ -20,11 +20,11 @@ class InfoConsultation extends Model
 
         public function consultante(): BelongsTo
         {
-            return $this->belongsTo(Consultante::class, 'id_consultante', 'id');
+            return $this->belongsTo(User::class, 'id_consultante', 'id');
         }
 
         public function candidats(): HasMany
         {
-            return $this->hasMany(Candidat::class);
+            return $this->hasMany(Candidat::class, 'id_info_consultation', 'id');
         }
 }
