@@ -6,7 +6,7 @@
                 <h4 class="modal-title " id="exampleModalLabel">Créer Fiche de Consultation</h4>
             </div>
             <div class="modal-body">
-                <form action="{{ route('client.modifier_fiche', $candidat->id) }}" method="POST"
+                <form action="{{ route('consultation.modifier_fiche_client', $candidat->id) }}" method="POST"
                     class="text-start ficheCons" id="modifierContactForm{{ $candidat->id }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -91,12 +91,12 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="btn btn-dark afficherQuestionnaire" id="consultation-payee-{{ $candidat->id }}">
+                        <div class="btn btn-dark afficherQuestionnaire">
                             Modifier ou remplir la fiche de consultation
                         </div>
                     </div>
 
-                    <div class="questionnaire-form" id="questionnaire-form-{{ $candidat->id }}" style="display: none;">
+                    <div class="questionnaire-form" style="display: none;">
 
 
                         <h3 class="mb-6 text-center">Questionnaire supplémentaire</h3>
@@ -678,18 +678,10 @@
                         </div>
 
                     </div>
-
-
                     <div class="text-center d-flex align-items-center justify-content-around">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
-                        <button type="submit" class="btn btn-success"
-                           >Enregistrer les
-                            modifications</button>
+                        <button type="submit" class="btn btn-success">Enregistrer les modifications</button>
                     </div>
-
-
-
-
             </div>
             <div id="loadingOverlay" class="loading-overlay">
                 <div class="loading-spinner"></div>
@@ -699,27 +691,19 @@
         </div>
     </div>
 </div>
-</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
     $(document).ready(function() {
-        // Écouter le clic sur le bouton afficherQuestionnaire
-        $('.afficherQuestionnaire').click(function() {
-            // Récupérer l'ID unique du candidat
-            // Vous devrez ajuster cette ligne en fonction de la manière dont l'ID du candidat est stocké dans le bouton
-            var candidatId = $(this).attr('id').split('-')[2];
-            // Construire l'ID unique de la section du questionnaire
-            var questionnaireId = '#questionnaire-form-' + candidatId;
-            // Afficher le questionnaire
-            $(questionnaireId).show();
+        $(".afficherQuestionnaire").click(function() {
+            $(".questionnaire-form").toggle(); 
         });
-
-
-
-
     });
+</script>
 
-
+<script>
+   
     $(document).ready(function() {
         // Cacher la question de la date d'expiration au chargement de la page
         $('.question-passeport').hide();

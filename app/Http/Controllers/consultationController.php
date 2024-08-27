@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Entree;
 use App\Models\Candidat;
 use App\Models\RendezVous;
 use App\Models\Consultante;
 use Illuminate\Http\Request;
 use App\Models\InfoConsultation;
+use App\Models\FicheConsultation;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\DateConsultationNotification;
 
 class ConsultationController extends Controller
 {
@@ -91,17 +94,12 @@ class ConsultationController extends Controller
         $info_consultation = InfoConsultation::find($consultationId);
         return view('consultation.waitingList', ['data_candidat' => $info_consultation->candidats]);
     }
-
-
-
-
-    //Other codes
     public function toggleConsultation($candidatId)
     {
         $candidat = Candidat::find($candidatId);
 
         if (!$candidat) {
-            return response()->json(['message' => 'Candidat non trouvé'], 404);
+            return redirect()->back()->with('message', 'Candidat non trouvé');
         }
 
         $status = request('status');
@@ -188,18 +186,13 @@ class ConsultationController extends Controller
 
     protected function sendNotification($consultation, $action)
     {
-        // Predefined email addresses
         $emails = ['info@omondecanada.com', 'doh.tosseta@omondecanada.com', 'andreamelissaf@gmail.com'];
-
-        // Users with role type 3
         $roleBasedUsers = $this->getUsersByRole(3);
 
-        // Send email to predefined email addresses
         foreach ($emails as $email) {
             Mail::to($email)->send(new \App\Mail\ConsultationMail($consultation, $action));
         }
 
-        // Notify users with role type 3
         foreach ($roleBasedUsers as $user) {
             Mail::to($user->email)->send(new \App\Mail\ConsultationMail($consultation, $action));
         }
@@ -209,4 +202,77 @@ class ConsultationController extends Controller
     {
         return User::where('id_role_utilisateur', $roleId)->get();
     }
+
+    public function modifierAjouterFicheConsultationClient(Request $request, $id)
+    {
+        $candidat = Candidat::find($id);
+
+        if (!$candidat) {
+            return response()->json(['error' => 'Candidat not found'], 404);
+        }
+
+        $ficheconsultation = FicheConsultation::firstOrNew(['id_candidat' => $candidat->id]);
+
+        $cvPath = $ficheconsultation->lien_cv; 
+        if ($request->hasFile('cv')) {
+
+            if ($ficheconsultation->lien_cv && Storage::exists($ficheconsultation->lien_cv)) {
+                Storage::delete($ficheconsultation->lien_cv);
+            }
+
+            $cvPath = $request->file('cv')->store('cv');
+        }
+        $reponses = [
+            'lien_cv' => $cvPath,
+            'type_visa' => $request->input('type_visa'),
+            'reponse1' => $request->input('statut_matrimonial'),
+            'reponse2' => $request->input('passeport_valide'),
+            'reponse3' => $request->input('passeport_valide') == 'oui' ? $request->input('date_expiration_passeport') : 'Pas de Passeport valide',
+            'reponse4' => $request->input('casier_judiciaire'),
+            'reponse5' => $request->input('soucis_sante'),
+            'reponse6' => $request->input('enfants'),
+            'reponse7' => $request->input('enfants') == 'oui' ? $request->input('age_enfants') : "Pas d'enfant",
+            'reponse8' => $request->input('profession_domaine_travail'),
+            'reponse9' => $request->input('temps_travail_actuel'),
+            'reponse10' => $request->input('documents_emploi'),
+            'reponse11' => $request->input('procedure_immigration'),
+            'reponse12' => $request->input('procedure_immigration') == 'oui' ? $request->input('questions-procedure-immigration1') : 'Pas de procedure deja tentee',
+            'reponse13' => $request->input('procedure_immigration') == 'oui' ? $request->input('questions-procedure-immigration2') : 'Pas de procedure deja tentee',
+            'reponse14' => $request->input('diplome_etudes'),
+            'reponse15' => $request->input('annee_obtention_diplome'),
+            'reponse16' => $request->input('membre_famille_canada'),
+            'reponse17' => $request->input('immigrer_seul_ou_famille'),
+            'reponse18' => $request->input('langues_parlees'),
+            'reponse19' => $request->input('test_connaissances_linguistiques'),
+            'reponse20' => $request->input('niveau_scolarite_conjoint'),
+            'reponse21' => $request->input('domaine_formation_conjoint'),
+            'reponse22' => $request->input('age_conjoint'),
+            'reponse23' => $request->input('niveau_francais'),
+            'reponse24' => $request->input('niveau_anglais'),
+            'reponse25' => $request->input('age_enfants_linguistique'),
+            'reponse26' => $request->input('niveau_scolarite_enfants'),
+            'reponse27' => $request->input('reponse27'),
+            'reponse28' => $request->input('reponse28'),
+            'reponse29' => $request->input('reponse29'),
+        ];
+
+        $ficheconsultation->fill($reponses)->save();
+
+        $entree = Entree::where('id_candidat', $candidat->id)->where('id_utilisateur', Auth::user()->id)->first();
+        if (!$entree) {
+            $montant = auth()->user()->succursale->montant;
+
+            Entree::create([
+                'id_candidat' => $candidat->id,
+                'montant' => $montant,
+                'date' => now(),
+                'id_utilisateur' => auth()->id(),
+                'id_type_paiement' => 2,
+                'id_moyen_paiement' => $request->input('modePaiement'),
+            ]);
+        }
+
+        return redirect()->back()->with('success','Fiche consultation modifiee avec succes.');
+    }
+
 }

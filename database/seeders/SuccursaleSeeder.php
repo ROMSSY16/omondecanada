@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Succursale;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class SuccursaleSeeder extends Seeder
 {
@@ -14,20 +14,49 @@ class SuccursaleSeeder extends Seeder
     public function run(): void
     {
         $succursale = Succursale::get();
-        if(count($succursale) == 0){
-
-            $succursale = [
-                'Cote d\'Ivoire',
-                'Cameroun',
-                'Congo Brazzaville',
-                'Rd Congo',
-                'Canada',
+        if (count($succursale) == 0) {
+            $succursales = [
+                [
+                    'label' => 'Canada',
+                    'montant' => '100',
+                    'devis' => 'USD',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'label' => 'Cote d\'Ivoire',
+                    'montant' => '50000',
+                    'devis' => 'FCFA',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'label' => 'Cameroun',
+                    'montant' => '50000',
+                    'devis' => 'FCFA',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'label' => 'Congo Brazzaville',
+                    'montant' => '50000',
+                    'devis' => 'FCFA',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'label' => 'Rd Congo',
+                    'montant' => '100',
+                    'devis' => 'USD',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
             ];
-            foreach($succursale as $succ){
-                Succursale::create([
-                    'label' => $succ,
-                ]);
+
+            foreach ($succursales as $succ) {
+                Succursale::create($succ);
             }
         }
     }
+
 }

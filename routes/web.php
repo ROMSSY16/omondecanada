@@ -7,13 +7,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EntreeController;
 use App\Http\Controllers\EquipeController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\DossierController;
 use App\Http\Controllers\CandidatController;
-use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RendezvousController;
 use App\Http\Controllers\TransactionController;
@@ -156,13 +156,15 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('consultation')->name('consultation.')->group(function () {
 
         Route::get('list', [InformatiqueController::class, 'Consultation'])->name('dashboard');
-        Route::post('CreerConsultation', [consultationController::class, 'creerConsultation'])->name('creer_consultation');
-        Route::put('ModiferConsultation/{id}', [consultationController::class, 'ModifierConsultation'])->name('modifier_consultation');
+        Route::post('CreerConsultation', [ConsultationController::class, 'creerConsultation'])->name('creer_consultation');
+        Route::put('ModiferConsultation/{id}', [ConsultationController::class, 'ModifierConsultation'])->name('modifier_consultation');
         Route::delete('SupprimerConsultation/{id}', [ConsultationController::class, 'SupprimerConsultation'])->name('supprimer_consultation');
 
         Route::get('Clients', [InformatiqueController::class, 'Client'])->name('client');
 
         Route::get('Equipe', [InformatiqueController::class, 'Equipe'])->name('equipe');
+
+        Route::put('modifer/fiche_consultation/{id}', [ConsultationController::class, 'modifierAjouterFicheConsultationClient'])->name('modifier_fiche_client');
 
     });
 
