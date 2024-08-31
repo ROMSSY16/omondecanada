@@ -60,6 +60,7 @@ class AssignPermissionsToInformatique extends Seeder
             'Voir détail consultation',
             'Supprimer consultation',
             'Modifier consultation',
+            'Historique des consultations',
 
             'Voir dossier client',
             'Voir banque',

@@ -1,5 +1,7 @@
 @extends('layouts.app')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.9.8/tagify.min.css">
 @section('content')
+
     <div class="container-fluid py-4">
 
         <div class="row">
@@ -227,13 +229,9 @@
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="permission" class="form-label text-dark">Autorisations :</label>
-                                <select id="permission" name="permissions[]" class="form-select ps-2" multiple required>
-                                    <!-- Options de rôle à récupérer de la base de données -->
-                                    @foreach ($permissions as $permission)
-                                        <option value="{{ $permission->id }}" class="text-dark">{{ $permission->name }}</option>
-                                    @endforeach
-                                </select>
+                                <input id="permission" name="permissions[]" class="form-control" required>
                             </div>
+
                         </div>
                         <div class="mb-3">
                             <label for="photo_profil" class="form-label text-dark">Photo de profil :</label>
@@ -256,8 +254,27 @@
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.9.8/tagify.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var input = document.querySelector('#permission');
+            var tagify = new Tagify(input, {
+                whitelist: [
+                    @foreach($permissions as $permission)
+                        "{{ $permission->name }}",
+                    @endforeach
+                ],
+                dropdown: {
+                    maxItems: 20,
+                    enabled: 0,
+                    closeOnSelect: false
+                }
+            });
+        });
+    </script>
 
-    
+
+
     <script>
         const table = $('.dataTable').DataTable({
             "language": {

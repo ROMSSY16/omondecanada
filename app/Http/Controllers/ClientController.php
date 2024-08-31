@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Entree;
 use App\Models\Candidat;
 use App\Models\RendezVous;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ class ClientController extends Controller
                 $consultation->dateFormatee = ucwords(Carbon::parse($consultation->date_heure)->translatedFormat('l j F Y H:i'));
             });
 
-            
+       
 
         return view('client.index', [
             'pageTitle' => $pageTitle, 

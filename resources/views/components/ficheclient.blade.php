@@ -76,27 +76,39 @@
                                 id="consultation-payee-{{ $candidat->id }}"
                                 {{ $candidat->consultation_payee ? 'checked' : '' }}>
                         </div>
+                        @php
+                            $entree = \App\Models\Entree::where('id_candidat', $candidat->id)->first();
+                        @endphp
+                        @if ($entree)
+                            <div class="mb-3 p-2">
+                                <label for="modePaiement" class="form-label">Mode de paiement :</label>
+                                <input class="form-control" type="text" value="{{ $entree->modePaiement->label }}" disabled>
+                            </div>
+                        @else
+                            <div class="mb-3 p-2">
+                                <label for="modePaiement" class="form-label">Mode de paiement :</label>
+                                <select name="modePaiement" id="modePaiement" class="form-control" required>
+                                    <option value="" disabled {{ old('modePaiement') ? '' : 'selected' }}>Choisissez un moyen de paiement</option>
+                                    <!-- Boucle PHP pour récupérer et afficher les modes de paiement -->
+                                    @foreach(\App\Models\ModePaiement::get() as $item)
+                                        <option value="{{ $item->id }}" {{ old('modePaiement') == $item->id ? 'selected' : '' }}>
+                                            {{ $item->label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
 
-                        <div class="mb-3 p-2">
-                            <label for="modePaiement" class="form-label">Mode de paiement :</label>
-                            <select name="modePaiement" id="modePaiement" class="form-control" required>
-                                <option value="" disabled selected>Choisissez un moyen de paiement</option>
-                                <!-- Boucle PHP pour récupérer et afficher les modes de paiement -->
-                                @foreach(\App\Models\ModePaiement::get() as $modePaiement)
-                                    <option value="{{ $modePaiement->id }}">{{ $modePaiement->label }}</option>
-                                @endforeach
-                            </select>
-                        </div>
 
                     </div>
 
                     <div class="row mb-3">
-                        <div class="btn btn-dark afficherQuestionnaire">
+                        <div class="btn btn-dark afficherQuestionnaire{{$candidat->id}}">
                             Modifier ou remplir la fiche de consultation
                         </div>
                     </div>
 
-                    <div class="questionnaire-form" style="display: none;">
+                    <div class="questionnaire-form{{$candidat->id}}" style="display: none;">
 
 
                         <h3 class="mb-6 text-center">Questionnaire supplémentaire</h3>
@@ -627,17 +639,17 @@
                         <div class="mb-6 d-flex justify-content-between align-items-center">
                             <textarea class="form-control" id="reponse27" name="reponse27"  oninput="handleTextareaInput(this)"
                                 style="height: 6rem">
-                                {{ $candidat->ficheConsultation->reponse27 ?? 'Pas de question' }}
+                                {{ $candidat->ficheConsultation->reponse27 ?? '' }}
                                 </textarea>
 
                             <textarea class="form-control ms-2 mx-2 " id="reponse28" name="reponse28"  oninput="handleTextareaInput(this)"
                                 style="height: 6rem">
-                                {{ $candidat->ficheConsultation->reponse28 ?? 'Pas de question' }}
+                                {{ $candidat->ficheConsultation->reponse28 ?? '' }}
                             </textarea>
 
                             <textarea class="form-control " id="reponse29" name="reponse29"  oninput="handleTextareaInput(this)"
                                 style="height: 6rem">
-                                {{ $candidat->ficheConsultation->reponse29 ?? 'Pas de question' }}
+                                {{ $candidat->ficheConsultation->reponse29 ?? '' }}
                             </textarea>
 
                         </div>
@@ -663,7 +675,7 @@
                                 <label for="cv" class="form-label">CV :</label>
                                 @if ($candidat->ficheConsultation && $candidat->ficheConsultation->lien_cv)
                                     <p>
-                                        <a href="{{ asset('storage/' . $candidat->ficheConsultation->lien_cv) }}"
+                                        <a href="{{ asset($candidat->ficheConsultation->lien_cv) }}"
                                             target="_blank">
                                             Voir le CV
                                         </a>
@@ -696,8 +708,8 @@
 
 <script>
     $(document).ready(function() {
-        $(".afficherQuestionnaire").click(function() {
-            $(".questionnaire-form").toggle(); 
+        $(".afficherQuestionnaire{{$candidat->id}}").click(function() {
+            $(".questionnaire-form{{$candidat->id}}").toggle(); 
         });
     });
 </script>

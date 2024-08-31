@@ -6,15 +6,16 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Entree;
 use App\Models\Candidat;
+use App\Models\Category;
 use App\Models\RendezVous;
 use App\Models\Consultante;
 use Illuminate\Http\Request;
 use App\Models\InfoConsultation;
 use App\Models\FicheConsultation;
+use App\Models\ConsultationRecord;
+use App\Models\ConsultationResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Notification;
 
 class ConsultationController extends Controller
 {
@@ -91,8 +92,12 @@ class ConsultationController extends Controller
     }
     public function getConsultationWaitingList($consultationId)
     {
+        $pageTitle = 'Liste d\'attente';
         $info_consultation = InfoConsultation::find($consultationId);
-        return view('consultation.waitingList', ['data_candidat' => $info_consultation->candidats]);
+        return view('consultation.waitingList', [
+            'data_candidat' => $info_consultation->candidats,
+            'page' => $pageTitle, 
+        ]);
     }
     public function toggleConsultation($candidatId)
     {
@@ -110,14 +115,6 @@ class ConsultationController extends Controller
 
         return redirect()->back()->with('success', $message);
     }
-
-    public function listeConsultantes()
-    {
-        $consultantes = Consultante::all();
-        return view('Consultation.Consultation', ['data_consultante' => $consultantes]);
-    }
-
-    
 
     public function creerConsultation(Request $request)
     {
@@ -146,7 +143,6 @@ class ConsultationController extends Controller
 
     public function ModifierConsultation(Request $request, $id)
     {
-        // Valider les données du formulaire
         $request->validate([
             'lien_zoom' => 'required',
             'lien_zoom_demarrer' => 'required',
@@ -198,11 +194,6 @@ class ConsultationController extends Controller
         }
     }
 
-    public function getUsersByRole($roleId)
-    {
-        return User::where('id_role_utilisateur', $roleId)->get();
-    }
-
     public function modifierAjouterFicheConsultationClient(Request $request, $id)
     {
         $candidat = Candidat::find($id);
@@ -215,13 +206,13 @@ class ConsultationController extends Controller
 
         $cvPath = $ficheconsultation->lien_cv; 
         if ($request->hasFile('cv')) {
-
-            if ($ficheconsultation->lien_cv && Storage::exists($ficheconsultation->lien_cv)) {
-                Storage::delete($ficheconsultation->lien_cv);
+            if ($ficheconsultation->lien_cv && file_exists(public_path($ficheconsultation->lien_cv))) {
+                unlink(public_path($ficheconsultation->lien_cv));
             }
-
-            $cvPath = $request->file('cv')->store('cv');
+            $cvPath = 'cv/' . $request->file('cv')->getClientOriginalName();
+            $request->file('cv')->move(public_path('cv'), $cvPath);
         }
+
         $reponses = [
             'lien_cv' => $cvPath,
             'type_visa' => $request->input('type_visa'),
@@ -266,13 +257,70 @@ class ConsultationController extends Controller
                 'id_candidat' => $candidat->id,
                 'montant' => $montant,
                 'date' => now(),
-                'id_utilisateur' => auth()->id(),
+                'id_utilisateur' => Auth::user()->id,
                 'id_type_paiement' => 2,
                 'id_moyen_paiement' => $request->input('modePaiement'),
             ]);
         }
 
         return redirect()->back()->with('success','Fiche consultation modifiee avec succes.');
+    }
+
+    public function getListCandidatByConsultation($id)
+    {
+        $pageTitle = 'Liste des candidats';
+        $info_consultation = InfoConsultation::find($id);
+        $info_consultation->date_heure = ucfirst(Carbon::parse($info_consultation->date_heure)->translatedFormat('d F Y'));
+        $info_consultation->load(['candidats' => function ($query) {
+            $query->join('entree', 'candidat.id', '=', 'entree.id_candidat')
+            ->where('entree.id_type_paiement', 2)
+            ->orderBy('entree.date', 'asc')
+            ->select('candidat.*');
+        }]);
+    
+        return view('consultation.listcandidats', compact('info_consultation', 'pageTitle'));
+    }
+    public function getCandidatByConsultation($id, $id_candidat)
+    {
+        $pageTitle = 'Informations du candidat';
+        $info_consultation = InfoConsultation::find($id);
+        $candidats = $info_consultation->candidats()->pluck('id')->toArray();
+        $currentIndex = array_search($id_candidat, $candidats);
+        $previousId = $candidats[$currentIndex - 1] ?? null;
+        $nextId = $candidats[$currentIndex + 1] ?? null;
+        $consultation = Candidat::find($id_candidat);
+        return view('consultation.candidat', compact('info_consultation', 'consultation', 'previousId', 'nextId', 'pageTitle'));
+    }
+
+    public function consultationProgrammee()
+    {
+        $pageTitle = 'Consultation en attente';
+        $candidats = Candidat::whereHas('proceduresDemandees', function ($query) {
+            $query->where('consultante_id', Auth::user()->id);
+        })->get();
+
+        return view('consultation.programmee', compact('candidats', 'pageTitle'));
+    }
+
+
+    public function viewFicheRenseignement($candidatId)
+    {
+        $pageTitle = 'Fiche de renseignement du candidat';
+
+        $categories = Category::with('questions')->get();
+        $consultationRecord = ConsultationRecord::where('user_id', $candidatId)->latest()->first();
+        $responses = [];
+        $candidat = Candidat::find($candidatId);
+
+        if ($consultationRecord) {
+            $consultationResponses = ConsultationResponse::where('consultation_record_id', $consultationRecord->id)->get();
+
+            foreach ($consultationResponses as $response) {
+                $responses[$response->question->category_id][$response->question_id] = $response->response;
+            }
+        }
+
+        return view('consultation.fiche_renseignement', compact('pageTitle','categories', 'responses', 'candidat', 'consultationRecord'));
     }
 
 }

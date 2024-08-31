@@ -82,11 +82,11 @@
             @endcan
             @can('consultations-a-venir')
             <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.index')}}">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.programmee' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.programmee')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">videocam</i>
                 </div>
-                <span class="nav-link-text ms-1">Consultations en attente</span>
+                <span class="nav-link-text ms-1">Consultations programmees</span>
                 </a>
             </li>
             @endcan

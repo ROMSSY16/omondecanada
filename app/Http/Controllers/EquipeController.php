@@ -28,6 +28,7 @@ class EquipeController extends Controller
     }
 
     public function store(Request $request){
+        //dd($request->permissions);
 
         $request->validate([
             'prenom' => 'required|string|max:255',
@@ -37,6 +38,8 @@ class EquipeController extends Controller
             'id_poste_occupe' => 'required|exists:poste_occupe,id',
             'id_succursale' => 'required|exists:succursale,id',
             'photo_profil' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'permissions' => 'required|array',
+            'permissions.*' => 'string',
         ]);
 
         if ($request->hasFile('photo_profil')) {
@@ -59,10 +62,18 @@ class EquipeController extends Controller
             $utilisateur->roles()->sync($request->roles);
         }
 
-        if ($request->has('permissions')) {
-            $utilisateur->permissions()->sync($request->permissions);
+        $permissions = json_decode($request->permissions[0], true);
+        if (is_array($permissions)) {
+            foreach ($permissions as $permissionData) {
+                if (isset($permissionData['value'])) {
+                    $permissionName = $permissionData['value'];
+                    $permission = Permission::where('name', $permissionName)->first();
+                    if ($permission) {
+                        $utilisateur->permissions()->attach($permission->id);
+                    }
+                }
+            }
         }
-        
 
         return redirect()->route('equipes.index')->with('success', 'Personnel enregistré avec succès !');
     }

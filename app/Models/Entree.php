@@ -84,7 +84,7 @@ class Entree extends Model
     {
         return $this->belongsTo(TypePaiement::class, 'id_type_paiement');
     }
-    public function ModePaiement(): BelongsTo
+    public function modePaiement(): BelongsTo
     {
         return $this->belongsTo(ModePaiement::class, 'id_moyen_paiement');
     }

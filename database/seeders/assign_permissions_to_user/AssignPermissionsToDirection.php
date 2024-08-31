@@ -28,9 +28,6 @@ class AssignPermissionsToDirection extends Seeder
         }
 
         $permissions = [
-           
-
-            
             'Historique des consultations',
             'Voir détail consultation',
 

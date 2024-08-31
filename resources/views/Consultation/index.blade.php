@@ -59,8 +59,8 @@
                                             </p>
                                         </td>
                                         <td class="text-center">
-                                            <span class="text-md font-weight-normal">{{ $consultation->consultante->nom }}
-                                                {{ $consultation->consultante->prenoms }}</span>
+                                            <span class="text-md font-weight-normal">{{ $consultation->consultante->name }}
+                                                {{ $consultation->consultante->last_name }}</span>
                                         </td>
                                         <td class="align-middle text-center">
                                             <div class="d-flex align-items-center justify-content-center">
@@ -69,11 +69,11 @@
                                         </td>
                                         <td class="align-middle d-flex align-items-center justify-content-center">
                                             @if (now()->isSameDay(Carbon\Carbon::parse($consultation->date_heure)))
-                                                <a href="{{ route('consultation.listedattente' . $consultation->id) }}" class="btn btn-dark">
+                                                <a href="{{ route('consultation.listedattente', $consultation->id) }}" class="btn btn-dark">
                                                     <i class="material-icons">list</i> Liste d'Attente
                                                 </a>
                                             @else
-                                            <a href="{{ route('consultation.listedattente' . $consultation->id) }}" class="btn btn-dark @if (!now()->isSameDay(Carbon\Carbon::parse($consultation->date_heure))) disabled @endif">
+                                            <a href="{{ route('consultation.listedattente', $consultation->id) }}" class="btn btn-dark @if (!now()->isSameDay(Carbon\Carbon::parse($consultation->date_heure))) disabled @endif">
                                                 <i class="material-icons">list</i> Liste d'Attente
                                             </a>
                                             
@@ -83,7 +83,7 @@
                                         <td>
                                             <div class="d-flex align-items-center justify-content-center">
                                                 @if ($consultation->candidats->isNotEmpty())
-                                                    <a href="{{ url('/Consultation/' . $consultation->id) }}" class="btn btn-dark">
+                                                    <a href="{{ route('consultation.listcandidats',$consultation->id) }}" class="btn btn-dark">
                                                         <i class="material-icons">visibility</i> Voir les Candidat(s)
                                                     </a>
                                                 @else

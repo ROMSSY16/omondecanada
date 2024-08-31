@@ -93,11 +93,22 @@ Route::middleware(['auth'])->group(function () {
         Route::get('show/{slug}', [ConsultationController::class, 'show'])->name('show');
         Route::get('edit/{slug}', [ConsultationController::class, 'edit'])->name('edit');
 
+        Route::post('CreerConsultation', [ConsultationController::class, 'creerConsultation'])->name('creer_consultation');
+        Route::put('ModiferConsultation/{id}', [ConsultationController::class, 'ModifierConsultation'])->name('modifier_consultation');
+        Route::delete('SupprimerConsultation/{id}', [ConsultationController::class, 'SupprimerConsultation'])->name('supprimer_consultation');
         Route::post('confirm/{id}', [ConsultationController::class, 'confirmConsultation'])->name('confirm');
         Route::post('cancel/{id}', [ConsultationController::class, 'cancelConsultation'])->name('cancel');
         Route::post('modifier/date/{id}', [ConsultationController::class, 'modifierDateConsultation'])->name('modifier_date');
 
-        Route::get('/waiting-list/{consultation_id}', [ConsultationController::class, 'getConsultationWaitingList'])->name('listedattente');
+        Route::put('modifer/fiche_consultation/{id}', [ConsultationController::class, 'modifierAjouterFicheConsultationClient'])->name('modifier_fiche_client');
+        Route::get('waiting-list/{consultation_id}', [ConsultationController::class, 'getConsultationWaitingList'])->name('listedattente');
+
+        Route::get('list/candidats/{id}', [ConsultationController::class, 'getListCandidatByConsultation'])->name('listcandidats');
+        Route::get('candidat/{id}/{id_candidat}', [ConsultationController::class, 'getCandidatByConsultation'])->name('candidat');
+        Route::get('/ficheConsultation/{id_candidat}', [ConsultationController::class, 'getCandidatFiche'])->name('candidatFiche');
+
+        Route::get('programmee', [ConsultationController::class, 'consultationProgrammee'])->name('programmee');
+        Route::get('fiche_renseignement/candidat/{id_candidat}', [ConsultationController::class, 'viewFicheRenseignement'])->name('fiche_renseignement');
     });
     Route::prefix('client')->name('client.')->group(function () {
         Route::get('index', [ClientController::class, 'index'])->name('index');
@@ -153,22 +164,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
    
-    Route::prefix('consultation')->name('consultation.')->group(function () {
-
-        Route::get('list', [InformatiqueController::class, 'Consultation'])->name('dashboard');
-        Route::post('CreerConsultation', [ConsultationController::class, 'creerConsultation'])->name('creer_consultation');
-        Route::put('ModiferConsultation/{id}', [ConsultationController::class, 'ModifierConsultation'])->name('modifier_consultation');
-        Route::delete('SupprimerConsultation/{id}', [ConsultationController::class, 'SupprimerConsultation'])->name('supprimer_consultation');
-
-        Route::get('Clients', [InformatiqueController::class, 'Client'])->name('client');
-
-        Route::get('Equipe', [InformatiqueController::class, 'Equipe'])->name('equipe');
-
-        Route::put('modifer/fiche_consultation/{id}', [ConsultationController::class, 'modifierAjouterFicheConsultationClient'])->name('modifier_fiche_client');
-
-    });
-
-
+   
 
 Route::post('ajoutDepense', [DepenseController::class, 'ajoutDepense'])->name('ajoutDepense');
 Route::post('Banque', [EntreeController::class, 'ajoutEntree'])->name('ajoutEntree');
