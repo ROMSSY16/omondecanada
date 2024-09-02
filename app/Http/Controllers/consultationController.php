@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Entree;
+use App\Models\Dossier;
 use App\Models\Candidat;
 use App\Models\Category;
 use App\Models\RendezVous;
@@ -43,6 +44,13 @@ class ConsultationController extends Controller
         $rendezvous->update([
             'consultation_payee' => '1',
         ]);
+        if($candidat){
+            Dossier::create([
+                'id_candidat'=> $candidat->id,
+                'id_agent'=> Auth::user()->id,
+                'id_type_procedure'=> $candidat->typeProcedure->id,
+            ]);
+        }
         return redirect()->back()->with('success', 'Consultation confirmée avec succès.');
     }
 
@@ -321,6 +329,13 @@ class ConsultationController extends Controller
         }
 
         return view('consultation.fiche_renseignement', compact('pageTitle','categories', 'responses', 'candidat', 'consultationRecord'));
+    }
+
+    public function consultationHistorique()
+    {
+        $pageTitle = 'Historique de mes consultations';
+
+        return view('consultation.historique', compact('pageTitle'));
     }
 
 }

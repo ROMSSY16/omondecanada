@@ -61,7 +61,7 @@
             @endcan --}}
             @can('voir-dossier-client')
             <li class="nav-item">
-                <a class="nav-link text-white {{ Route::currentRouteName() === 'client.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('client.index')}}">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'client.dossier' ? 'active bg-gradient-primary' : '' }}" href="{{route('client.dossier')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">folder</i>
                 </div>
@@ -69,27 +69,27 @@
                 </a>
             </li>
             @endcan
-            
-            @can('historique-des-consultations')
-                <li class="nav-item">
-                    <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.index')}}">
-                    <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">videocam</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Consultations</span>
-                    </a>
-                </li>
-            @endcan
             @can('consultations-a-venir')
             <li class="nav-item">
                 <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.programmee' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.programmee')}}">
                 <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">videocam</i>
+                    <i class="large material-icons opacity-10">access_time</i>
                 </div>
                 <span class="nav-link-text ms-1">Consultations programmees</span>
                 </a>
             </li>
             @endcan
+            @can('historique-des-consultations')
+                <li class="nav-item">
+                    <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.historique' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.historique')}}">
+                    <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">date_range</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Historique des Consultations</span>
+                    </a>
+                </li>
+            @endcan
+            
             @can('voir-personnels')
             <li class="nav-item">
                 <a class="nav-link text-white {{ Route::currentRouteName() === 'equipes.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('equipes.index')}}">

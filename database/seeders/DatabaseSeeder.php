@@ -11,6 +11,7 @@ use Database\Seeders\PersonnelSeeder;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\SuccursaleSeeder;
 use Database\Seeders\PosteOccupeSeeder;
+use Database\Seeders\TypeProcedureSeeder;
 use Database\Seeders\RoleUtilisateurSeeder;
 use Database\Seeders\InfoConsultationSeeder;
 use Database\Seeders\assign_permissions_to_user\AssignPermissionsToDirection;
@@ -37,5 +38,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AssignPermissionsToInformatique::class);
         $this->call(MoyenPaiementSeeder::class);
         $this->call(InfoConsultationSeeder::class);
+        $this->call(TypeProcedureSeeder::class);
     }
 }

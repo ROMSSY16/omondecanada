@@ -109,6 +109,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('programmee', [ConsultationController::class, 'consultationProgrammee'])->name('programmee');
         Route::get('fiche_renseignement/candidat/{id_candidat}', [ConsultationController::class, 'viewFicheRenseignement'])->name('fiche_renseignement');
+
+        Route::get('historique', [ConsultationController::class, 'consultationHistorique'])->name('historique');
     });
     Route::prefix('client')->name('client.')->group(function () {
         Route::get('index', [ClientController::class, 'index'])->name('index');
@@ -120,6 +122,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('edit/{slug}', [ClientController::class, 'edit'])->name('edit');
 
         Route::post('modifier/fiche/{id}', [ClientController::class, 'modifierFiche'])->name('modifier_fiche');
+
+        Route::get('dossier', [ClientController::class, 'voirDossierClient'])->name('dossier');
+        Route::get('dossier/{id}', [ClientController::class, 'detailDossierClient'])->name('dossier_detail');
+
+        Route::post('ajouter/document/{id}', [ClientController::class, 'addDocument'])->name('add_document');
+        Route::delete('supprimer/documents/{id}', [ClientController::class, 'deleteDocument'])->name('document.delete');
+
     });
     Route::prefix('contact')->name('contact.')->group(function () {
         Route::get('index', [ContactController::class, 'index'])->name('index');

@@ -8,6 +8,7 @@ use App\Models\Entree;
 use App\Models\Dossier;
 use App\Models\Procedure;
 use App\Models\RendezVous;
+use App\Models\TypeProcedure;
 use App\Models\InfoConsultation;
 use App\Models\FicheConsultation;
 use Illuminate\Database\Eloquent\Model;
@@ -59,6 +60,9 @@ class Candidat extends Model
     {
         return $this->hasOne(Dossier::class, 'id_candidat', 'id');
     }
-    
+    public function typeProcedure(): BelongsTo
+    {
+        return $this->belongsTo(TypeProcedure::class, 'id_type_procedure', 'id');
+    }
 }
 

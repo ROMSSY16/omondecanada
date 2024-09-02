@@ -5,8 +5,7 @@
                 <div class="card my-4">
                     <div class="card-header p-0 position-relative mt-n4 mx-3">
 
-                        <div
-                            class="bg-gradient-dark border-radius-lg pt-4 pb-3 d-flex align-items-center justify-content-between p-4">
+                        <div class="bg-gradient-dark border-radius-lg pt-4 pb-3 d-flex align-items-center justify-content-between p-4">
                             <div class="p-2 border-radius-lg w-40 bg-white">
                                 <input type="text " id="searchInput"
                                     class="form-control text-dark  text-lg bg-transparent border-0 p-1"
@@ -15,8 +14,7 @@
                             </div>
 
                             <div class="d-flex align-items-center justify-content-around col-4">
-                                <div
-                                    class="p-2 d-flex align-items-center w-30 justify-content-around flex-direction-row">
+                                <div class="p-2 d-flex align-items-center w-30 justify-content-around flex-direction-row">
                                     <div class="dropdown">
                                         <div class="btn btn-secondary" type="button" id="dropdownTypeVisa"
                                             data-toggle="dropdown">
@@ -75,9 +73,6 @@
 
 
                             </div>
-
-
-
                         </div>
                         <div class="table-responsive p-0"
                             style="min-height: 700px; max-height: 700px; overflow-y: auto;">
