@@ -59,34 +59,40 @@
                                     {{ $candidat->profession }}
                                 </td>
                                 <td style="width: 20%;">
-                                    <a href="{{ route('consultation.candidat', ['id' => $info_consultation->id, 'id_candidat' => $candidat->id]) }}">
-                                        <button class="btn bg-dark text-white">
-                                            Voir fiche de consultation
-                                        </button>
-                                    </a>
+                                    <button class="btn bg-primary text-white circle" data-bs-toggle="modal" data-bs-target="#viewDocumentsModal{{$candidat->id}}"> <i class="material-icons">remove_red_eye</i> Voir son dossier</button>
                                 </td>
 
                                 <td class="text-center" style="width: 20%;">
                                     <div class="d-flex align-items-center justify-content-around">
-                                        @if (!$candidat->consultation_effectuee)
-                                            <a href="{{ route('toggleConsultation', ['candidatId' => $candidat->id, 'status' => 'yes']) }}"
-                                                data-status="yes" data-candidat-id="{{ $candidat->id }}">
-                                                <i class="material-icons text-success text-bolder icon-large toggle-consultation"
-                                                    style="font-size: 2rem;">check</i>
+                                        @role('consultante')
+                                            <a href="{{ route('consultation.candidat', ['id' => $info_consultation->id, 'id_candidat' => $candidat->id]) }}" class="btn btn-primary">
+                                                <i class="material-icons">visibility</i> Faire la consultation
                                             </a>
-
-                                            <a href="{{ route('toggleConsultation', ['candidatId' => $candidat->id, 'status' => 'no']) }}"
-                                                data-status="no" data-candidat-id="{{ $candidat->id }}">
-                                                <i class="material-icons text-danger icon-large text-bolder toggle-consultation"
-                                                    style="font-size: 2rem">close</i>
-                                            </a>
-                                        @else
-                                            <i class="material-icons text-success text-bolder icon-large"
-                                                style="font-size: 2rem;">check</i>
-                                        @endif
+                                        @endrole
                                     </div>
                                 </td>
                             </tr>
+
+                            <div class="modal z-index-1 fade" id="viewDocumentsModal{{ $candidat->id }}" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Dossier de : {{$candidat->nom}} {{$candidat->prenom}}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="pdfViewer">
+                                                <!-- This will be dynamically updated -->
+                                                <iframe id="pdfFrame" width="100%" height="500px"></iframe>
+                                            </div>
+                                            <div class="text-center mt-3">
+                                                <button id="prevDoc" class="btn btn-secondary">Previous</button>
+                                                <button id="nextDoc" class="btn btn-secondary">Next</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
                     </tbody>
                 </table>
@@ -94,4 +100,49 @@
         </div>
     </div>
 </div>
+
+
+
+<script>
+       
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            let filter = this.value.toLowerCase();
+            let folderCards = document.querySelectorAll('.folder-card');
+
+            folderCards.forEach(card => {
+                let title = card.querySelector('.card-title').textContent.toLowerCase();
+                if (title.includes(filter)) {
+                    card.parentElement.style.display = '';
+                } else {
+                    card.parentElement.style.display = 'none';
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            let documents = @json($documents);
+            let currentIndex = 0;
+
+            function showDocument(index) {
+                if (index >= 0 && index < documents.length) {
+                    document.getElementById('pdfFrame').src = `{{ asset('') }}${documents[index].url}`;
+                }
+            }
+
+            document.getElementById('prevDoc').addEventListener('click', function() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    showDocument(currentIndex);
+                }
+            });
+
+            document.getElementById('nextDoc').addEventListener('click', function() {
+                if (currentIndex < documents.length - 1) {
+                    currentIndex++;
+                    showDocument(currentIndex);
+                }
+            });
+            showDocument(currentIndex);
+        });
+    </script>
 @endsection

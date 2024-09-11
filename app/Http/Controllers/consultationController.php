@@ -8,6 +8,8 @@ use App\Models\Entree;
 use App\Models\Dossier;
 use App\Models\Candidat;
 use App\Models\Category;
+use App\Models\Document;
+use App\Models\Procedure;
 use App\Models\RendezVous;
 use App\Models\Consultante;
 use Illuminate\Http\Request;
@@ -49,6 +51,19 @@ class ConsultationController extends Controller
                 'id_candidat'=> $candidat->id,
                 'id_agent'=> Auth::user()->id,
                 'id_type_procedure'=> $candidat->typeProcedure->id,
+            ]);
+            Procedure::create([
+                'id_candidat'=> $candidat->id,
+                'id_type_procedure'=> $candidat->typeProcedure->id,
+            ]);
+            $montant = auth()->user()->succursale->montant;
+
+            Entree::create([
+                'id_candidat' => $candidat->id,
+                'montant' => $montant,
+                'date' => now(),
+                'id_utilisateur' => Auth::user()->id,
+                'id_moyen_paiement' => 2,
             ]);
         }
         return redirect()->back()->with('success', 'Consultation confirmée avec succès.');
@@ -278,16 +293,23 @@ class ConsultationController extends Controller
     {
         $pageTitle = 'Liste des candidats';
         $info_consultation = InfoConsultation::find($id);
-        $info_consultation->date_heure = ucfirst(Carbon::parse($info_consultation->date_heure)->translatedFormat('d F Y'));
+
         $info_consultation->load(['candidats' => function ($query) {
             $query->join('entree', 'candidat.id', '=', 'entree.id_candidat')
-            ->where('entree.id_type_paiement', 2)
-            ->orderBy('entree.date', 'asc')
-            ->select('candidat.*');
+                ->where('candidat.status', '0') 
+                ->orderBy('entree.date', 'asc')
+                ->select('candidat.*');
         }]);
-    
-        return view('consultation.listcandidats', compact('info_consultation', 'pageTitle'));
+
+        $documents = Document::whereIn('id_dossier', function($query) use ($info_consultation) {
+            $query->select('id')
+                ->from('dossiers')
+                ->whereIn('id_candidat', $info_consultation->candidats->pluck('id'));
+        })->get();
+
+        return view('consultation.listcandidats', compact('info_consultation', 'documents', 'pageTitle'));
     }
+
     public function getCandidatByConsultation($id, $id_candidat)
     {
         $pageTitle = 'Informations du candidat';
@@ -297,17 +319,27 @@ class ConsultationController extends Controller
         $previousId = $candidats[$currentIndex - 1] ?? null;
         $nextId = $candidats[$currentIndex + 1] ?? null;
         $consultation = Candidat::find($id_candidat);
-        return view('consultation.candidat', compact('info_consultation', 'consultation', 'previousId', 'nextId', 'pageTitle'));
+       
+        return view('consultation.candidat', compact('info_consultation', 'consultation', 'previousId', 'nextId','pageTitle'));
     }
 
     public function consultationProgrammee()
     {
         $pageTitle = 'Consultation en attente';
-        $candidats = Candidat::whereHas('proceduresDemandees', function ($query) {
-            $query->where('consultante_id', Auth::user()->id);
-        })->get();
-
-        return view('consultation.programmee', compact('candidats', 'pageTitle'));
+        $consultations = InfoConsultation::where('id_consultante', Auth::user()->id)->orderBy('date_heure', 'desc')->get();
+        $consultations->transform(function ($consultations) {
+            if ($consultations->date_heure) {
+                $dateFormatee = Carbon::parse($consultations->date_heure)->translatedFormat('l j F Y H:i');
+                $consultations->dateFormatee = ucwords($dateFormatee);
+            } else {
+                $consultations->dateFormatee = 'N / A'; 
+            }
+            return $consultations;
+        });
+        return view('consultation.programmee',  [
+            'page' => $pageTitle, 
+            'consultations' => $consultations,
+            ]);
     }
 
 
@@ -335,7 +367,23 @@ class ConsultationController extends Controller
     {
         $pageTitle = 'Historique de mes consultations';
 
-        return view('consultation.historique', compact('pageTitle'));
+        Carbon::setLocale('fr');
+        $candidats = Candidat::where(function($query) {
+                $query->where('id_utilisateur', Auth::user()->id)
+                    ->orWhere('id_consultante', Auth::user()->id);
+            })
+            ->where('status', '1')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $allcandidats = Candidat::where('status', '1')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return view('consultation.historique', [
+            'candidats' => $candidats,
+            'allcandidats' => $allcandidats,
+            'page' => $pageTitle, 
+        ]);
     }
+
 
 }

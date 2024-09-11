@@ -54,6 +54,8 @@ class AssignPermissionsToCommercial extends Seeder
 
             'Afficher clients',
             'Afficher tous les clients',
+
+            'Afficher consultations',
         ];
         $commercial->roles()->sync($role->id);
         $permissionIds = Permission::whereIn('name', $permissions)->pluck('id')->toArray();

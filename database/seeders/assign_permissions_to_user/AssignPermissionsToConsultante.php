@@ -29,8 +29,6 @@ class AssignPermissionsToConsultante extends Seeder
         }
 
         $permissions = [
-
-            'Afficher consultations',
             'Historique des consultations',
             'Consultations a venir',
             'Voir détail consultation',

@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BanqueController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EntreeController;
 use App\Http\Controllers\EquipeController;
@@ -153,13 +154,13 @@ Route::middleware(['auth'])->group(function () {
         Route::post('cancel/{id}', [RendezvousController::class, 'cancelRendezVous'])->name('cancel');
     });
     Route::prefix('banque')->name('banque.')->group(function () {
-        Route::get('index', [PermissionController::class, 'index'])->name('index');
-        Route::get('create', [PermissionController::class, 'create'])->name('create');
-        Route::post('store', [PermissionController::class, 'store'])->name('store');
-        Route::post('update', [PermissionController::class, 'update'])->name('update');
-        Route::get('destroy/{slug}', [PermissionController::class, 'destroy'])->name('destroy');
-        Route::get('show/{slug}', [PermissionController::class, 'show'])->name('show');
-        Route::get('edit/{slug}', [PermissionController::class, 'edit'])->name('edit');
+        Route::get('index', [BanqueController::class, 'index'])->name('index');
+        Route::get('create', [BanqueController::class, 'create'])->name('create');
+        Route::post('store', [BanqueController::class, 'store'])->name('store');
+        Route::post('update', [BanqueController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [BanqueController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [BanqueController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [BanqueController::class, 'edit'])->name('edit');
     });
     Route::prefix('candidat')->name('candidat.')->group(function () {
         Route::get('index', [CandidatController::class, 'index'])->name('index');
@@ -170,6 +171,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('show/{slug}', [CandidatController::class, 'show'])->name('show');
         Route::get('edit/{slug}', [CandidatController::class, 'edit'])->name('edit');
         Route::get('succursale', [CandidatController::class, 'succursale'])->name('succursale');
+
+        Route::post('/save-remarques/{id}', [CandidatController::class, 'saveRemarques'])->name('save_remarque');
+
     });
 
    

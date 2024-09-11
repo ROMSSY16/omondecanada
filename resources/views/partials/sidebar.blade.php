@@ -79,6 +79,16 @@
                 </a>
             </li>
             @endcan
+            @can('afficher-consultations')
+            <li class="nav-item">
+                <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.index')}}">
+                <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
+                    <i class="large material-icons opacity-10">voice_chat</i>
+                </div>
+                <span class="nav-link-text ms-1">Consultations en cours</span>
+                </a>
+            </li>
+            @endcan
             @can('historique-des-consultations')
                 <li class="nav-item">
                     <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.historique' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.historique')}}">

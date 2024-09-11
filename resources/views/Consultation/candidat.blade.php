@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 
     @php
@@ -7,7 +8,7 @@
             'Identité du candidat' => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
             'Statut professionnel' => [12, 13, 14, 15, 16, 17],
             'Informations supplémentaires' => [18, 19, 20, 21, 22, 23],
-            'Informations sur le conjoint' => [24 , 25, 26, 27, 28, 29, 30],
+            'Informations sur le conjoint' => [24, 25, 26, 27, 28, 29, 30],
             'Question du candidat' => [34, 35, 36],
             'CV et remarques' => [32, 33],
         ];
@@ -57,8 +58,7 @@
             @foreach ($sections as $sectionTitle => $sectionQuestions)
                 <div class="card my-4 mt-5 mb-1">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                        <div
-                            class="bg-gradient-dark border-radius-lg pt-4 pb-3 d-flex align-items-center justify-content-between p-4">
+                        <div class="bg-gradient-dark border-radius-lg pt-4 pb-3 d-flex align-items-center justify-content-between p-4">
                             <h3 class="card-title text-white">{{ $sectionTitle }}</h3>
                         </div>
                     </div>
@@ -67,89 +67,69 @@
                             @foreach ($sectionQuestions as $index => $key)
                                 @if ($index === 0 && $sectionTitle === 'Resumé du profil')
                                     <div class="col-md-12 mb-2">
-                                    @else
-                                        <div class="col-md-4 mb-2">
-                                @endif
-                                <strong class="question d-block fs-5 mb-1">{{ $questions[$key] }}</strong>
-                                @if ($key === 1)
-                                    <p class="answer text-right fs-5 ">
-                                        {{ $consultation->nom ?? '' }}
-                                        {{ $consultation->prenom ?? '' }}
-                                    </p>
-                                @elseif ($key === 2)
-                                    <p class="answer text-right fs-5 ">
-                                        {{ $consultation->date_naissance ? now()->diffInYears($consultation->date_naissance) . ' An(s)' : '' }}
-                                    </p>
-                                @elseif ($key === 3)
-                                    <p class="answer text-right fs-5 ">
-                                        {{ $consultation->pays ?? '' }}
-                                    </p>
-                                @elseif ($key === 4)
-                                    <p class="answer text-right fs-5 ">
-                                        {{ $consultation->ficheConsultation->type_visa ?? '' }}
-                                    </p>
-                                @elseif ($key === 31)
-                                    <p class="answer text-right text-bold text-xl" style="font-size:1.8rem;">
-                                        {{ $consultation->remarque_agent ?? '' }}
-                                    </p>
-                                @elseif ($key === 32)
-                                    <p class="answer text-right fs-5  mt-1">
-                                        {{ $consultation->remarque_consultante ?? '' }}
-                                    </p>
-                                @elseif ($key === 33)
-                                    <a href="{{ asset($consultation->ficheConsultation->lien_cv) }}"
-                                        class="btn btn-primary" target="_blank">Afficher le CV</a>
-                                @elseif ($key === 34)
-                                    <p class="answer text-right fs-5 ">
-                                        {{ $consultation->ficheConsultation->reponse27 ?? 'Aucune question' }}
-                                    </p>
-                                @elseif ($key === 35)
-                                    <p class="answer text-right fs-5 ">
-                                        {{ $consultation->ficheConsultation->reponse28 ?? 'Aucune question' }}
-                                    </p>
-                                @elseif ($key === 36)
-                                    <p class="answer text-right fs-5 ">
-                                        {{ $consultation->ficheConsultation->reponse29 ?? 'Aucune question' }}
-                                    </p>
                                 @else
-                                    {{-- For other questions, get the data from the "fiche consultation" table --}}
-                                    <p class="answer text-right fs-5 ">
-                                        {{ $consultation->ficheConsultation->{'reponse' . ($key - 4)} ?? '' }}
-                                    </p>
+                                    <div class="col-md-4 mb-2">
                                 @endif
+                                        <strong class="question d-block fs-5 mb-1">{{ $questions[$key] }}</strong>
+                                        @php
+                                            $answer = '';
+                                            switch ($key) {
+                                                case 1:
+                                                    $answer = $consultation->nom . ' ' . $consultation->prenom;
+                                                    break;
+                                                case 2:
+                                                    $answer = $consultation->date_naissance ? now()->diffInYears($consultation->date_naissance) . ' An(s)' : '';
+                                                    break;
+                                                case 3:
+                                                    $answer = $consultation->pays;
+                                                    break;
+                                                case 4:
+                                                    $answer = $consultation->ficheConsultation->type_visa;
+                                                    break;
+                                                case 31:
+                                                    $answer = $consultation->remarque_agent;
+                                                    break;
+                                                case 32:
+                                                    $answer = $consultation->remarque_consultante;
+                                                    break;
+                                                case 33:
+                                                    $answer = '<a href="' . asset($consultation->ficheConsultation->lien_cv) . '" class="btn btn-primary" target="_blank">Afficher le CV</a>';
+                                                    break;
+                                                case 34:
+                                                    $answer = $consultation->ficheConsultation->reponse27 ?? 'Aucune question';
+                                                    break;
+                                                case 35:
+                                                    $answer = $consultation->ficheConsultation->reponse28 ?? 'Aucune question';
+                                                    break;
+                                                case 36:
+                                                    $answer = $consultation->ficheConsultation->reponse29 ?? 'Aucune question';
+                                                    break;
+                                                default:
+                                                    $answer = $consultation->ficheConsultation->{'reponse' . ($key - 4)} ?? '';
+                                            }
+                                        @endphp
+                                        <p class="answer text-right fs-5">{!! $answer !!}</p>
+                                    </div>
+                            @endforeach
                         </div>
+                    </div>
+                </div>
             @endforeach
         </div>
     </div>
-    </div>
-    @endforeach
-    </div>
-    <div class="row justify-content-center align-items-center bg-white pt-4">
-        <div class="col-md-11 d-flex justify-content-between align-items-center">
-            <a class="btn btn-dark mt-2 mb-5" href="{{ $previousId ?? '#' }}">Candidat précédent</a>
 
-            @role('consultante')
-                <form action="{{ route('SaveRemarque', ['id' => $consultation->id]) }}" method="post"
-                    class="d-flex align-items-center justify-content-between">
+    @role('consultante')
+        <div class="row pt-4">
+            <div class="col-md-12">
+                <form action="{{ route('candidat.save_remarque', ['id' => $consultation->id]) }}" method="post">
                     @csrf
-                    <div class="input-group input-group-outline mb-3 p-2">
-                        <textarea class="form-control" name="consultant_opinion" id="consultant_opinion" oninput="handleTextareaInput(this)"
-                            style="height: 8rem ; width: 20rem">
-                                    {{ $consultation->remarque_consultante ?? '' }}
-                                    </textarea>
+                    <div class="input-group mb-3 p-2">
+                        <textarea class="form-control" name="consultant_opinion" id="consultant_opinion" oninput="handleTextareaInput(this)" style="height: 8rem; width: 20rem;">{{ $consultation->remarque_consultante ?? '' }}</textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                    <button type="submit" class="btn btn-warning float-end">SOUMETTRE ET TERMINER</button>
                 </form>
-            @endrole
-
-            <a class="btn btn-dark mt-2 mb-5" href="{{ $nextId ?? '#' }}">Candidat suivant</a>
+            </div>
         </div>
-    </div>
-
-
-    </div>
-
-
-    </div>
+    @endrole
 
 @endsection

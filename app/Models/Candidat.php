@@ -37,6 +37,10 @@ class Candidat extends Model
     {
         return $this->belongsTo(User::class, 'id_utilisateur', 'id');
     }
+    public function consultante(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'id_consultante', 'id');
+    }
 
     public function ficheConsultation(): HasOne
     {

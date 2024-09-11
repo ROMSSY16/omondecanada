@@ -40,7 +40,7 @@ class PermissionSeeder extends Seeder
 
                 'Manage Consultations',
                 'Historique des consultations',
-                'Afficher mes consultations',
+                'Afficher consultations',
                 'Consultations a venir',
                 'Faire une consultation',
                 'Voir détail consultation',

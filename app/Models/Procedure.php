@@ -3,15 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Procedure extends Model
 {
     use HasFactory;
-
-    protected $table = 'procedure_demande';
     protected $guarded = [];
 
     public function candidat(): BelongsTo
@@ -36,5 +35,10 @@ class Procedure extends Model
     public function tag(): HasOne
     {
         return $this->hasOne(Tags::class, 'id', 'tag_id');
+    }
+
+    public function versements(): HasMany
+    {
+        return $this->hasMany(Versement::class);
     }
 }

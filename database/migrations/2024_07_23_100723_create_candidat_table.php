@@ -31,6 +31,8 @@ return new class extends Migration
             $table->integer('id_utilisateur')->nullable();
             $table->integer('id_info_consultation')->nullable();
             $table->integer('id_type_procedure')->nullable();
+            $table->integer('id_consultante')->nullable();
+            $table->enum('status', ['0','1'])->default(0);
             $table->timestamps();
         });
     }

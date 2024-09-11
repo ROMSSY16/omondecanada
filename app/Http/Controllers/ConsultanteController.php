@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Candidat;
 use App\Models\consultante;
+use Illuminate\Http\Request;
 use App\Models\InfoConsultation;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class ConsultanteController extends Controller

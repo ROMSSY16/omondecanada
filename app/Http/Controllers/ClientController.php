@@ -35,7 +35,6 @@ class ClientController extends Controller
                     ? ucwords(Carbon::parse($client->infoConsultation->date_heure)->translatedFormat('l j F Y H:i'))
                     : 'N / A';
             });
-            //dd($clients);
 
         $consultations = InfoConsultation::where('nombre_candidats', '>', function ($query) {
                 $query->selectRaw('count(*)')
