@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('versements', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->nullable();
             $table->integer('id_procedure')->nullable();
             $table->integer('id_moyen_paiement')->nullable();
+            $table->string('type_versement')->nullable();
+            $table->integer('client_id')->nullable();
             $table->string('montant')->nullable();
             $table->string('date')->nullable();
+            $table->text('note')->nullable();
+            $table->string('recu')->nullable();
             $table->timestamps();
         });
     }

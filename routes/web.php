@@ -156,11 +156,13 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('banque')->name('banque.')->group(function () {
         Route::get('index', [BanqueController::class, 'index'])->name('index');
         Route::get('create', [BanqueController::class, 'create'])->name('create');
-        Route::post('store', [BanqueController::class, 'store'])->name('store');
+        Route::post('store/versement', [BanqueController::class, 'storeVersement'])->name('entree.store');
         Route::post('update', [BanqueController::class, 'update'])->name('update');
         Route::get('destroy/{slug}', [BanqueController::class, 'destroy'])->name('destroy');
         Route::get('show/{slug}', [BanqueController::class, 'show'])->name('show');
         Route::get('edit/{slug}', [BanqueController::class, 'edit'])->name('edit');
+
+        Route::post('store/depense', [DepenseController::class, 'storeDepense'])->name('sortie.store');
     });
     Route::prefix('candidat')->name('candidat.')->group(function () {
         Route::get('index', [CandidatController::class, 'index'])->name('index');

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Depense;
+use Carbon\Carbon;
 use App\Models\User;
-use App\Notifications\DepenseNotification;
-use Illuminate\Http\Request; // Ajoutez cette ligne
+use App\Models\Depense;
+use App\Models\Transaction; // Ajoutez cette ligne
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Notifications\DepenseNotification;
 
 class DepenseController extends Controller
 {
@@ -53,5 +56,54 @@ class DepenseController extends Controller
         $utilisateurs = User::where('id_role_utilisateur', $roleId)->get();
 
         return $utilisateurs;
+    }
+
+
+
+    public function storeDepense(Request $request)
+    {
+        $data = $request->validate([
+            'type_depense' => 'required|string',
+            'montant' => 'required|numeric',
+            'recu' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'note' => 'nullable|string',
+            'moyen_paiement' => 'required',
+        ]);
+        if ($request->hasFile('recu')) {
+            $fileName = time() . '_' . $request->file('recu')->getClientOriginalName();
+            $request->file('recu')->move(public_path('recus'), $fileName);
+            $filePath = 'recus/' . $fileName;
+        }
+        
+        $depenseCount = Depense::count();
+        $depenseCode = 'V' . Carbon::now()->format('Y') . str_pad($depenseCount + 1, 4, '0', STR_PAD_LEFT);
+        
+        $depense = Depense::create([
+            'code' => $depenseCode,
+            'type_depense' => $data['type_depense'],
+            'id_moyen_paiement' => $data['moyen_paiement'],
+            'montant' => $data['montant'],
+            'id_agent' => Auth::user()->id,
+            'recu' => $filePath ?? null, 
+            'note' => $data['note'],
+            'date'=> now(),
+        ]);
+
+        if ($depense) {
+            Transaction::create([
+                'code' => $depenseCode,
+                'motif'=> $data['type_depense'],
+                'type'=> "sortie",
+                'montant' => $data['montant'],
+                'date' => now(),
+                'id_agent' => Auth::user()->id,
+                'id_moyen_paiement' => 2,
+                'recu' => $filePath ?? null, 
+                'note' => $data['note'],
+                'id_succursale' => Auth::user()->succursale->id,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Dépense ajoutée avec succès');
     }
 }

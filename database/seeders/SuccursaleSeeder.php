@@ -19,7 +19,7 @@ class SuccursaleSeeder extends Seeder
                 [
                     'label' => 'Canada',
                     'montant' => '100',
-                    'devis' => 'USD',
+                    'devis' => '$',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -47,7 +47,7 @@ class SuccursaleSeeder extends Seeder
                 [
                     'label' => 'Rd Congo',
                     'montant' => '100',
-                    'devis' => 'USD',
+                    'devis' => '$',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]

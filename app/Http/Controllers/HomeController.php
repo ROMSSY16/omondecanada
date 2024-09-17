@@ -7,6 +7,7 @@ use App\Models\Entree;
 use App\Models\Depense;
 use App\Models\Candidat;
 use App\Models\RendezVous;
+use App\Models\Succursale;
 use Illuminate\Http\Request;
 use App\Models\InfoConsultation;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +25,52 @@ class HomeController extends Controller
 
         if (auth()->user()->hasRole('direction')) {
             
+            $exchangeRateUsdToFcfa = 433;
+            $currentMonthStart = Carbon::now()->startOfMonth();
+            $currentMonthEnd = Carbon::now()->endOfMonth();
+
+            $succursales = Succursale::with(['transactions' => function ($query) use ($currentMonthStart, $currentMonthEnd) {
+                $query->whereBetween('date', [$currentMonthStart, $currentMonthEnd]) // Filter by current month
+                    ->selectRaw('id_succursale, 
+                        SUM(CASE WHEN type = "entree" THEN montant ELSE 0 END) as total_entree, 
+                        SUM(CASE WHEN type = "sortie" THEN montant ELSE 0 END) as total_sortie')
+                    ->groupBy('id_succursale');
+            }])->get();
+
+            $total_entree_global = 0;
+            $total_sortie_global = 0;
+            $montant_en_caisse_global = 0;
+
+            $results = $succursales->map(function ($succursale) use (&$total_entree_global, &$total_sortie_global, &$montant_en_caisse_global, $exchangeRateUsdToFcfa) {
+                $total_entree = $succursale->transactions->sum('total_entree');
+                $total_sortie = $succursale->transactions->sum('total_sortie');
+                $montant_en_caisse = $total_entree - $total_sortie;
+
+                // Convert to FCFA for branches using USD
+                if (in_array($succursale->label, ['Rd Congo', 'Canada'])) {
+                    $total_entree_global += $total_entree * $exchangeRateUsdToFcfa;
+                    $total_sortie_global += $total_sortie * $exchangeRateUsdToFcfa;
+                    $montant_en_caisse_global += $montant_en_caisse * $exchangeRateUsdToFcfa;
+                } else {
+                    $total_entree_global += $total_entree;
+                    $total_sortie_global += $total_sortie;
+                    $montant_en_caisse_global += $montant_en_caisse;
+                }
+
+                return [
+                    'label' => $succursale->label,
+                    'total_entree' => $total_entree,
+                    'total_sortie' => $total_sortie,
+                    'montant_en_caisse' => $montant_en_caisse,
+                    'devis' => $succursale->devis
+                ];
+            });
             return view('dashboard', [
                 'page' => $pageTitle, 
+                'results'=> $results,
+                'total_entree_global'=> $total_entree_global,
+                'total_sortie_global'=> $total_sortie_global,
+                'montant_en_caisse_global'=> $montant_en_caisse_global,
             ]);
         }
 
@@ -78,7 +123,7 @@ class HomeController extends Controller
                 ->whereYear('date', now()->year)
                 ->sum('montant');
 
-            $depenseMensuel = Depense::where('id_utilisateur', auth()->user()->id)
+            $depenseMensuel = Depense::where('id_agent', auth()->user()->id)
                 ->whereMonth('date', now()->month)
                 ->whereYear('date', now()->year)
                 ->sum('montant');

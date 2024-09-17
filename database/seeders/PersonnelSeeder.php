@@ -2,14 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Permission;
 use App\Models\User;
 use App\Models\Succursale;
 use App\Models\PosteOccupe;
-use App\Models\Role;
-use App\Models\RoleUtilisateur;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PersonnelSeeder extends Seeder
 {
@@ -25,7 +21,6 @@ class PersonnelSeeder extends Seeder
             $succursale = Succursale::where('label', 'Cote d\'Ivoire')->first();
 
             $direction = User::create([
-                'id' => 1,
                 'name' => 'Direction',
                 'last_name' => 'Omonde Canada',
                 'email' => 'direction@gmail.com',
@@ -39,7 +34,6 @@ class PersonnelSeeder extends Seeder
             $succursale = Succursale::where('label', 'Cote d\'Ivoire')->first();
     
             $consultante = User::create([
-                'id' => 2,
                 'name' => 'Consultant(e)',
                 'last_name' => 'Omonde Canada',
                 'email' => 'consultant@gmail.com',
@@ -53,7 +47,6 @@ class PersonnelSeeder extends Seeder
             $succursale = Succursale::where('label', 'Cote d\'Ivoire')->first();
     
             $commercial = User::create([
-                'id' => 3,
                 'name' => 'Commercial(e)',
                 'last_name' => 'Omonde Canada',
                 'email' => 'commercial@gmail.com',
@@ -67,7 +60,6 @@ class PersonnelSeeder extends Seeder
             $succursale = Succursale::where('label', 'Cote d\'Ivoire')->first();
     
             $administratif = User::create([
-                'id' => 4,
                 'name' => 'Administratif',
                 'last_name' => 'Omonde Canada',
                 'email' => 'administratif@gmail.com',
@@ -81,7 +73,6 @@ class PersonnelSeeder extends Seeder
             $succursale = Succursale::where('label', 'Cote d\'Ivoire')->first();
     
             $informaticien = User::create([
-                'id' => 5,
                 'name' => 'Informaticien(e)',
                 'last_name' => 'Omonde Canada',
                 'email' => 'informaticien@gmail.com',

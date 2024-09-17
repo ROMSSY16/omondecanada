@@ -12,6 +12,7 @@ use App\Models\Document;
 use App\Models\Procedure;
 use App\Models\RendezVous;
 use App\Models\Consultante;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\InfoConsultation;
 use App\Models\FicheConsultation;
@@ -64,6 +65,20 @@ class ConsultationController extends Controller
                 'date' => now(),
                 'id_utilisateur' => Auth::user()->id,
                 'id_moyen_paiement' => 2,
+            ]);
+            $entreeCount = Entree::count();
+            $entreeCode = 'E' . Carbon::now()->format('Y') . str_pad($entreeCount + 1, 4, '0', STR_PAD_LEFT);
+            Transaction::create([
+                'code' => $entreeCode,
+                'motif'=> "Consultation",
+                'type'=> "entree",
+                'id_candidat' => $candidat->id,
+                'montant' => $montant,
+                'date' => now(),
+                'id_agent' => Auth::user()->id,
+                'id_moyen_paiement' => 2,
+                'id_type_procedure'=> $candidat->typeProcedure->id,
+                'id_succursale' => Auth::user()->succursale->id,
             ]);
         }
         return redirect()->back()->with('success', 'Consultation confirmée avec succès.');

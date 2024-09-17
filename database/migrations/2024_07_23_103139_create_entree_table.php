@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('entree', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->nullable();
             $table->string('montant')->nullable();
             $table->dateTime('date')->nullable();
             $table->integer('id_utilisateur')->nullable();
