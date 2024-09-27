@@ -17,6 +17,7 @@
         "realrashid/sweet-alert": "^7.1",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.6",
+        "intervention/image": "^2.7",
         "yajra/laravel-datatables-oracle": "^10.11"
     },
     "require-dev": {

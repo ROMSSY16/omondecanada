@@ -8,8 +8,7 @@
             <div class="col-lg-12">
                 <div class="card my-2">
                     <div class="card-header p-0 position-relative mt-n3 mx-3">
-                        <div
-                            class="bg-gradient-dark border-radius-lg pt-4 pb-2 d-flex align-items-center justify-content-between p-4">
+                        <div class="bg-gradient-dark border-radius-lg pt-4 pb-2 d-flex align-items-center justify-content-between p-4">
                             <div class="p-2 border-radius-lg w-40 bg-white">
                                 <input type="text" id="searchInput"
                                     class="form-control text-dark text-lg bg-transparent border-0 p-1"
@@ -17,12 +16,8 @@
                             </div>
 
                             <div class="dropdown">
-                                <div type="button" class="btn btn-secondary" data-bs-toggle="modal"
-                                    data-bs-target="#creerUtilisateurModal">Créer un utilisateur</div>
-                                <button class="btn btn-secondary" type="button" id="dropdownSuccursales"
-                                    data-toggle="dropdown">
-                                    Pays
-                                </button>
+                                <button type="button" class="btn bg-primary text-white circle" data-bs-toggle="modal" data-bs-target="#creerUtilisateurModal">Créer un utilisateur</button>
+                                <button class="btn bg-primary text-white circle" type="button" id="dropdownSuccursales" data-toggle="dropdown"> Pays </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownSuccursales">
                                     @foreach (\App\Models\Succursale::all() as $succursale)
                                         <div class="form-check">
@@ -96,57 +91,234 @@
                                                     Voir Dossier
 
                                                 </button>
-                                                <div class="modal fade z-index-2" id="voirDossierModal{{ $user->id }}" aria-labelledby="exampleModalLabel"
-                                                    aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">Documents de {{ $user->name }} {{ $user->last_name }}
-                                                                </h5>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                @php
-                                                                    $dossierPath = storage_path('app/public/dossierAgent/' . substr($user->name, 0, 2) . substr($user->last_name, 0, 1) . $user->id);
-                                                                    $files = glob($dossierPath . '/*');
-                                                                @endphp
-                                                                @if (!empty($files))
-                                                                    <div class="list-group">
-                                                                        @foreach ($files as $file)
-                                                                            <div class="d-flex justify-content-between align-items-center row">
-                                                                                <div class="d-flex align-items-center col-11 mb-1">
-                                                                                    <a href="{{ asset('storage/' . str_replace(storage_path('app/public'), '', $file)) }}"
-                                                                                        target="_blank"
-                                                                                        class="list-group-item list-group-item-action d-flex justify-content-between rounded align-items-center">
-                                                                                        <span>
-                                                                                            {{ basename($file) }}
-                                                                                        </span>
-                                                                                        <span class="badge bg-secondary rounded-pill">Document</span>
-                                                                                    </a>
-                                                                                </div>
-                                                                                <div class="d-flex align-items-center col-1">
-                                                                                    <!-- Icône de suppression -->
-                                                                                    <a href="#" data-url="{{ route('supprimerFichierAgent', ['userId' => $user->id, 'fileName' => basename($file)]) }}" class="text-danger ml-2 delete-document">
-                                                                                        <i class="material-icons">delete</i>
-                                                                                        </a>
-                                                                                </div>
-                                                                            </div>
-                                                                        @endforeach
-                                                                    </div>
-                                                                @else
-                                                                    <p>Aucun fichier trouvé.</p>
-                                                                @endif
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                                            </div>
+                                                
+                                            </td>
+                                            <td class="d-flex align-items-center justify-content-center">
+                                                    <div class="dropdown">
+                                                        <div class="btn btn-dark" type="button" id="dropdownMenuButton"
+                                                            data-bs-toggle="dropdown"><i
+                                                                class="material-icons">more_vert</i></div>
+                                                        <div class="dropdown-menu d-flex flex-direction-column flex-wrap"
+                                                            aria-labelledby="dropdownMenuButton">
+                                                            <a class="btn btn-danger col-12 m-1" data-bs-toggle="modal"
+                                                                data-bs-target="#ajouterFichierModal{{ $user->id }}">Ajout
+                                                                Documents</a>
+                                                            <a class="btn btn-danger col-12 m-1" data-bs-toggle="modal"
+                                                                data-bs-target="#voirDossierModal{{ $user->id }}">Voir
+                                                                Dossier</a>
+                                                            <a class="btn btn-danger col-12 m-1" data-bs-toggle="modal"
+                                                                data-bs-target="#modifierUtilisateurModal{{ $user->id }}">Modifier
+                                                                utilisateur</a>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                
-
-                                            </td>
-
+                                                </td>
                                         </tr>
+                                       
+                                        <div class="modal z-index-1 fade" id="voirDossierModal{{ $user->id }}" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Dossier de : {{ $user->name }} {{ $user->last_name }}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        @php
+                                                            $documents = \App\Models\Document::where('id_user', $user->id)->get();
+                                                        @endphp
+                                                        
+                                                        @if ($documents->isEmpty())
+                                                            <p>Aucun document disponible pour cet utilisateur.</p>
+                                                        @else
+                                                            <!-- Affichage d'un seul iframe pour naviguer -->
+                                                            <iframe id="docIframe-{{ $user->id }}" src="{{ asset($documents->first()->url) }}" width="100%" height="500px" frameborder="0"></iframe>
+                                                            
+                                                            <div class="text-center mt-3">
+                                                                <button id="prevDoc-{{ $user->id }}" class="btn btn-secondary" disabled>Précédent</button>
+                                                                <button id="nextDoc-{{ $user->id }}" class="btn btn-secondary">Suivant</button>
+                                                            </div>
+
+                                                            <!-- Stocker les URLs des documents -->
+                                                            <ul id="docUrls-{{ $user->id }}" class="d-none">
+                                                                @foreach ($documents as $document)
+                                                                    <li>{{ asset($document->url) }}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        
+                                        <div class="modal z-index-2 fade" id="modifierUtilisateurModal{{ $user->id }}" tabindex="-1" role="dialog" aria-labelledby="modifierUtilisateurModalLabel{{ $user->id }}" aria-hidden="true">
+                                            <div class="modal-dialog modal-md" role="document">
+                                                <div class="modal-content">
+                                                    
+                                                    <div class="modal-body">
+                                                    <form action="{{ route('equipes.update', $user->id) }}" method="POST" class="bg-white rounded p-4 w-100" enctype="multipart/form-data">
+                                                        @csrf
+                                                        
+                                                        <input type="hidden" name="user_id" value="{{ $user->id }}">
+
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="mb-3">
+                                                                    <label for="nom" class="form-label">Nom :</label>
+                                                                    <input type="text" id="nom" name="nom" class="form-control ps-2" value="{{ old('nom', $user->name) }}" required>
+                                                                    @error('nom')
+                                                                        <small class="text-danger">{{ $message }}</small>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-8">
+                                                                <div class="mb-3">
+                                                                    <label for="prenom" class="form-label">Prénom :</label>
+                                                                    <input type="text" id="prenom" name="prenom" class="form-control ps-2" value="{{ old('prenom', $user->last_name) }}" required>
+                                                                    @error('prenom')
+                                                                        <small class="text-danger">{{ $message }}</small>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="email" class="form-label">E-mail :</label>
+                                                                    <input type="email" id="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+                                                                    @error('email')
+                                                                        <small class="text-danger">{{ $message }}</small>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="mot_de_passe" class="form-label">Mot de passe :</label>
+                                                                    <input type="password" id="mot_de_passe" name="mot_de_passe" class="form-control ps-2">
+                                                                    @error('mot_de_passe')
+                                                                        <small class="text-danger">{{ $message }}</small>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="mb-3">
+                                                                    <label for="poste_occupe" class="form-label">Poste occupé :</label>
+                                                                    <select id="poste_occupe" name="poste_occupe" class="form-select" required>
+                                                                        @foreach (App\Models\PosteOccupe::all() as $poste)
+                                                                            <option value="{{ $poste->id }}" {{ $poste->id == old('poste_occupe', $user->id_poste_occupe) ? 'selected' : '' }}>
+                                                                                {{ $poste->label }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    @error('poste_occupe')
+                                                                        <small class="text-danger">{{ $message }}</small>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="mb-3">
+                                                                    <label for="id_role_utilisateur" class="form-label">Rôle utilisateur :</label>
+                                                                    <select id="id_role_utilisateur" name="id_role_utilisateur" class="form-select" required>
+                                                                        @foreach (App\Models\RoleUtilisateur::all() as $role)
+                                                                            <option value="{{ $role->id }}" {{ $role->id == old('id_role_utilisateur', $user->id_role_utilisateur) ? 'selected' : '' }}>
+                                                                                {{ $role->role }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    @error('id_role_utilisateur')
+                                                                        <small class="text-danger">{{ $message }}</small>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="mb-3">
+                                                                    <label for="id_succursale" class="form-label">Succursale :</label>
+                                                                    <select id="id_succursale" name="id_succursale" class="form-select" required>
+                                                                        @foreach (App\Models\Succursale::all() as $succursale)
+                                                                            <option value="{{ $succursale->id }}" {{ $succursale->id == old('id_succursale', $user->id_succursale) ? 'selected' : '' }}>
+                                                                                {{ $succursale->label }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    @error('id_succursale')
+                                                                        <small class="text-danger">{{ $message }}</small>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="update_permission-{{ $user->id }}" class="form-label text-dark">Autorisations :</label>
+                                                            <input id="update_permission-{{ $user->id }}" name="permissions" class="form-control" value="{{ old('permissions', $user->permissions->pluck('name')->implode(',')) }}" required>
+                                                            @error('permissions')
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="photo_profil" class="form-label">Photo de profil :</label>
+                                                            <input type="file" id="photo_profil" name="photo_profil" class="form-control">
+                                                            @if (!empty($user->lien_photo))
+                                                                <img src="{{ asset($user->lien_photo) }}" alt="Photo de profil" class="mt-2">
+                                                            @endif
+                                                            @error('photo_profil')
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+
+                                                        <div class="d-flex justify-content-end">
+                                                            <button type="submit" class="btn btn-success">Modifier utilisateur</button>
+                                                        </div>
+                                                    </form>
+
+
+                                                        @if (session('error'))
+                                                            <div class="alert text-sm text-danger" role="alert">
+                                                                {{ session('error') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal z-index-2 fade" id="ajouterFichierModal{{ $user->id }}" aria-labelledby="ajouterFichierModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="ajouterFichierModalLabel">Ajouter des fichiers au
+                                                            dossier de {{ $user->name }} {{ $user->last_name}}   </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                    <form action="{{ route('equipes.add_document', $user->id) }}" method="POST" enctype="multipart/form-data" novalidate>
+                                                            @csrf
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group mb-2">
+                                                                        <label for="nom" class="form-label">Titre du document</label>
+                                                                        <input type="text" name="nom" id="nom" class="form-control" value="{{ old('nom') }}" placeholder="Ex: Fiche de consultation"required>
+                                                                        <div class="invalid-feedback">
+                                                                            Veuillez entrer le titre du document .
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-12 mb-2">
+                                                                    <label for="file" class="form-label">Telecharger le fichier</label>
+                                                                    <input class="form-control" type="file" name="document_url">
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="text-center">
+                                                                <button type="submit" class="btn btn-primary">Ajouter</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -171,29 +343,38 @@
                         @csrf 
     
                         <div class="row">
-                            <!-- Champ pour le nom de l'utilisateur -->
                             <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="nom" class="form-label">Nom :</label>
-                                <input type="text" id="nom" name="nom" class="form-control ps-2"
-                            required>
-                            </div>
+                                <div class="mb-3">
+                                    <label for="nom" class="form-label">Nom :</label>
+                                    <input type="text" id="nom" name="nom" class="form-control ps-2" required>
+                                </div>
                             </div>
                             <!-- Champ pour le prénom de l'utilisateur -->
                             <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="prenom" class="form-label">Prénom :</label>
-                                <input type="text" id="prenom" name="prenom" class="form-control ps-2"
-                            required>
-                            </div>
+                                <div class="mb-3">
+                                    <label for="prenom" class="form-label">Prénom :</label>
+                                    <input type="text" id="prenom" name="prenom" class="form-control ps-2" required>
+                                </div>
                             </div>
                         </div>         
                         <!-- Champ pour l'e-mail de l'utilisateur -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">E-mail :</label>
-                            <input type="email" id="email" name="email" class="form-control ps-2"
-                                required>
-                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">E-mail :</label>
+                                    <input type="email" id="email" name="email" class="form-control ps-2"
+                                        required>
+                                </div>
+                            </div>
+                            <!-- Champ pour le prénom de l'utilisateur -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="date_naissance" class="form-label">Date naissance:</label>
+                                    <input type="date_naissance" id="date_naissance" name="date_naissance" class="form-control ps-2" required>
+                                </div>
+                            </div>
+                        </div>   
+                       
                         <div class="mb-3">
                             <label for="mot_de_passe" class="form-label">Mot de passe :</label>
                             <input type="password" id="mot_de_passe" name="mot_de_passe" class="form-control ps-2"
@@ -228,8 +409,8 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-12">
-                                <label for="permission" class="form-label text-dark">Autorisations :</label>
-                                <input id="permission" name="permissions[]" class="form-control" required>
+                                <label for="create_permission" class="form-label text-dark">Autorisations :</label>
+                                <input id="create_permission" name="permissions[]" class="form-control" required>
                             </div>
 
                         </div>
@@ -256,9 +437,25 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.9.8/tagify.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var input = document.querySelector('#permission');
-            var tagify = new Tagify(input, {
+         document.addEventListener('DOMContentLoaded', function() {
+            // Tagify for update permissions
+            var inputUpdate = document.querySelector('#update_permission-{{$user->id}}');
+            var tagifyUpdate = new Tagify(inputUpdate, {
+                whitelist: [
+                    @foreach($permissions as $permission)
+                        "{{ $permission->name }}",
+                    @endforeach
+                ],
+                dropdown: {
+                    maxItems: 20,
+                    enabled: 0,
+                    closeOnSelect: false
+                }
+            });
+
+            // Tagify for create permissions
+            var inputCreate = document.querySelector('#create_permission');
+            var tagifyCreate = new Tagify(inputCreate, {
                 whitelist: [
                     @foreach($permissions as $permission)
                         "{{ $permission->name }}",
@@ -273,14 +470,12 @@
         });
     </script>
 
-
-
     <script>
         const table = $('.dataTable').DataTable({
             "language": {
                 "lengthMenu": "",
                 "zeroRecords": "Aucun résultat trouvé",
-                "info": "", // Supprime l'information sur le nombre de pages
+                "info": "",
                 "infoEmpty": "",
                 "infoFiltered": "",
                 "paginate": {
@@ -289,34 +484,114 @@
                     "next": "Suivant",
                     "previous": "Précédent"
                 },
-                "search": "" // Supprime le texte "Search"
+                "search": "" 
             },
-            "lengthMenu": [10, 25, 50, 100], // Supprime les options "Show entries" par défaut
-            "dom": '<"top"i>rt<"bottom"flp><"clear">', // Supprime la barre de recherche et "Show entries" en haut
+            "lengthMenu": [10, 25, 50, 100], 
+            "dom": '<"top"i>rt<"bottom"flp><"clear">', 
             "columnDefs": [{
-                    "targets": [2], // Indice de la colonne sur laquelle vous souhaitez ajouter un filtre
+                    "targets": [2], 
                     "searchable": true,
                     "orderable": true
                 },
                 {
-                    "targets": [2], // Indice d'une autre colonne sur laquelle vous souhaitez ajouter un filtre
+                    "targets": [2], 
                     "searchable": true,
                     "orderable": true
                 }
-                // Ajoutez des blocs comme celui-ci pour chaque colonne que vous souhaitez filtrer
+              
             ]
         });
-        // Utilisez votre barre de recherche personnalisée pour filtrer le tableau
+        
         $('#searchInput').on('input', function() {
             table.search(this.value).draw();
         });
         $('input:checkbox').on('change', function() {
-            // Build a regex filter string with an or(|) condition
+            
             var pays = $('input:checkbox[name="pays"]:checked').map(function() {
                 return this.value;
             }).get().join('|');
-            // Filter in column 1 (index 0), with a regex, no smart filtering, case insensitive
+           
             table.column(2).search(pays, true, false, true).draw(false);
         });
     </script>
+    <script>
+       
+       document.getElementById('searchInput').addEventListener('keyup', function() {
+           let filter = this.value.toLowerCase();
+           let folderCards = document.querySelectorAll('.folder-card');
+
+           folderCards.forEach(card => {
+               let title = card.querySelector('.card-title').textContent.toLowerCase();
+               if (title.includes(filter)) {
+                   card.parentElement.style.display = '';
+               } else {
+                   card.parentElement.style.display = 'none';
+               }
+           });
+       });
+
+       function confirmDelete(documentId) {
+           Swal.fire({
+               title: 'Êtes-vous sûr?',
+               text: "Voulez-vous vraiment supprimer ce document?",
+               icon: 'warning',
+               showCancelButton: true,
+               confirmButtonColor: '#3085d6',
+               cancelButtonColor: '#d33',
+               confirmButtonText: 'Oui, supprimer!',
+               cancelButtonText: 'Annuler'
+           }).then((result) => {
+               if (result.isConfirmed) {
+                   var form = document.getElementById('delete-document');
+                   form.submit();
+               }
+           });
+       }
+
+       
+       document.addEventListener('DOMContentLoaded', function () {
+    @foreach ($users as $user)
+        let currentIndex = 0;
+        const docIframe = document.getElementById('docIframe-{{ $user->id }}');
+        const prevButton = document.getElementById('prevDoc-{{ $user->id }}');
+        const nextButton = document.getElementById('nextDoc-{{ $user->id }}');
+        const docUrls = Array.from(document.querySelectorAll('#docUrls-{{ $user->id }} li')).map(li => li.textContent);
+
+        // Initialisation de l'iframe avec le premier document
+        if (docUrls.length > 0) {
+            docIframe.src = docUrls[currentIndex];
+        }
+
+        // Fonction pour mettre à jour l'iframe
+        function updateIframe() {
+            docIframe.src = docUrls[currentIndex];
+            prevButton.disabled = (currentIndex === 0);
+            nextButton.disabled = (currentIndex === docUrls.length - 1);
+        }
+
+        // Gestion du bouton "Précédent"
+        prevButton.addEventListener('click', function () {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateIframe();
+            }
+        });
+
+        // Gestion du bouton "Suivant"
+        nextButton.addEventListener('click', function () {
+            if (currentIndex < docUrls.length - 1) {
+                currentIndex++;
+                updateIframe();
+            }
+        });
+
+        // Désactivation des boutons si un seul document
+        if (docUrls.length <= 1) {
+            prevButton.disabled = true;
+            nextButton.disabled = true;
+        }
+    @endforeach
+});
+
+   </script>
 @endsection

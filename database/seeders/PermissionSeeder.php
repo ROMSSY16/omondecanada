@@ -46,6 +46,8 @@ class PermissionSeeder extends Seeder
                 'Voir détail consultation',
                 'Supprimer consultation',
                 'Modifier consultation',
+                'Lien consultations',
+                'Ajouter lien consultation',
 
                 'Voir dossier client',
                 'Voir banque',

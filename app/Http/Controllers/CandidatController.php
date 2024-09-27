@@ -16,7 +16,8 @@ class CandidatController extends Controller
 
         $candidat = Candidat::find($id);
         $candidat->update([
-            'remarque_consultante' => $request->input('consultant_opinion'),
+            'remarque_consultante' => $request->input('remarque_consultante'),
+            'id_consultante' => Auth::user()->id,
             'status' => '1',
         ]);
         if ($candidat) {

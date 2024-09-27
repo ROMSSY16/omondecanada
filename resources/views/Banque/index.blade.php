@@ -67,47 +67,46 @@
                                     <tr @if($item->type == 'entree') style="background-color: #f7fcf9" @elseif($item->type == 'sortie') style="background-color: #f5e1ea" @endif>
                                         <td>
                                             <div class="d-flex">
-                                                <h6 class="p-2 font-weight-bold text-lg">{{ $item->code }}
+                                                <h6 class="font-weight-bold text-sm">{{ $item->code }}
                                                      @if($item->type == 'entree') <i class="material-icons opacity-10 text-success">arrow_downward</i> @elseif($item->type == 'sortie') <i class="material-icons opacity-10 text-danger">arrow_upward</i> @endif
                                                 </h6>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex px-2">
-                                                <span class="p-2 text-md text-center">{{ $item->motif }}</span>
+                                                <span class="text-sm text-center">{{ $item->motif }}</span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex px-2">
-                                                <span class="p-2 text-md text-center">{{ $item->typeProcedure->label ?? null }}</span>
+                                                <span class="text-sm text-center">{{ $item->typeProcedure->label ?? null }}</span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex px-2">
-                                                <h6 class="p-2 text-lg text-success text-center">{{ $item->type }}</h6>
+                                                <h6 class="text-sm text-success text-center">{{ $item->type }}</h6>
                                             </div>
                                         </td>
                                         <td>
-                                            <p class="text-lg font-weight-bold mb-0">{{ number_format($item->montant, 0, ' ', ' ') }}</p>
+                                            <p class="text-sm font-weight-bold mb-0">{{ number_format($item->montant, 0, ' ', ' ') }}</p>
                                         </td>
                                         <td>
-                                            <span class="text-md">{{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}</span>
+                                            <span class="text-sm">{{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}</span>
                                         </td>
 
                                         <td class="align-middle text-left">
-                                            <span class="text-md font-weight-bold">{{ $item->agent->name }} {{ $item->agent->last_name }}</span>
+                                            <span class="text-sm font-weight-bold">{{ $item->agent->name }} {{ $item->agent->last_name }}</span>
                                         </td>
                                         <td class="align-middle text-left">
                                             @if ($item->recu)
-                                            <span class="btn bg-primary text-white circle" data-bs-toggle="modal" data-bs-target="#viewRecuModal{{$item->id}}"> <i class="material-icons">remove_red_eye</i> Reçu </span>
+                                            <span style="border-radius:30px; text-align: center" class="p-1 text-white text-center circle" data-bs-toggle="modal" data-bs-target="#viewRecuModal{{$item->id}}"> <i class="material-icons text-primary fs-18">remove_red_eye</i> </span>
                                             @endif
-                                           
                                         </td>
                                         <td class="align-middle text-left">
                                             <span class="text-sm">{{ $item->note }}</span>
                                         </td>
                                         <td class="align-middle text-center">
-                                            <span class="text-md text-success">éffectué</span>
+                                            <span class="text-sm text-success">éffectué</span>
                                         </td>
                                     </tr>
 
@@ -121,7 +120,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     @if($item->recu)
-                                                        <iframe href="{{ asset($item->recu) }}" width="100%" height="500px"></iframe>
+                                                        <iframe src="{{ asset($item->recu) }}" width="100%" height="500px"></iframe>
                                                     @else
                                                         <p>Aucun reçu disponible</p>
                                                     @endif

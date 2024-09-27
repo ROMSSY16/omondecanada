@@ -627,50 +627,35 @@
                         <h3 class="mb-6 text-center">RESUME DU PROFIL</h3>
 
                         <div class="mb-6 d-flex justify-content-between align-items-center">
-                            <textarea class="form-control" id="remarques" name="remarques"  oninput="handleTextareaInput(this)"
-                                style="height: 8rem">
-                                {{ $candidat->remarque_agent ?? '' }}
-                                </textarea>
-
+                            <textarea class="form-control" id="remarque_agent" name="remarque_agent" style="height: 8rem"> {{ $candidat->remarque_agent ?? '' }} </textarea>
                         </div>
 
                         <h3 class="mb-6 text-center">QUESTION DU CANDIDAT</h3>
 
                         <div class="mb-6 d-flex justify-content-between align-items-center">
-                            <textarea class="form-control" id="reponse27" name="reponse27"  oninput="handleTextareaInput(this)"
-                                style="height: 6rem">
+                            <textarea class="form-control" id="reponse27" name="reponse27" style="height: 6rem">
                                 {{ $candidat->ficheConsultation->reponse27 ?? '' }}
                                 </textarea>
 
-                            <textarea class="form-control ms-2 mx-2 " id="reponse28" name="reponse28"  oninput="handleTextareaInput(this)"
-                                style="height: 6rem">
+                            <textarea class="form-control ms-2 mx-2 " id="reponse28" name="reponse28" style="height: 6rem">
                                 {{ $candidat->ficheConsultation->reponse28 ?? '' }}
                             </textarea>
 
-                            <textarea class="form-control " id="reponse29" name="reponse29"  oninput="handleTextareaInput(this)"
-                                style="height: 6rem">
+                            <textarea class="form-control " id="reponse29" name="reponse29" style="height: 6rem">
                                 {{ $candidat->ficheConsultation->reponse29 ?? '' }}
                             </textarea>
 
                         </div>
 
-
-
-
                         <h3 class="mb-6 text-center">CV</h3>
 
                         <div class="d-flex justify-content-between mb-2 mt-5 border rounded p-2">
-
                             <div class="form-group">
-                                <label for="cv" class="form-label"> Ajouter un CV (PDF uniquement)
-                                    :</label>
+                                <label for="cv" class="form-label"> Ajouter un CV (PDF uniquement) :</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="cv" name="cv"
-                                        accept=".pdf">
-                                    <label class="custom-file-label" for="cv">Choisir un fichier</label>
+                                    <input type="file" class="custom-file-input form-control" id="cv" name="cv" accept=".pdf">
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label for="cv" class="form-label">CV :</label>
                                 @if ($candidat->ficheConsultation && $candidat->ficheConsultation->lien_cv)
@@ -684,11 +669,7 @@
                                     <p>Aucun fichier CV téléchargé</p>
                                 @endif
                             </div>
-
-
-
                         </div>
-
                     </div>
                     <div class="text-center d-flex align-items-center justify-content-around">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>

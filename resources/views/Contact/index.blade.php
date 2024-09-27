@@ -43,7 +43,7 @@
                             <tbody>
                 
                                 @foreach ($data_candidat as $candidat)
-                                    <tr data-bs-toggle="modal" data-bs-target="#modifierContactModal{{ $candidat->id }}">
+                                    <tr @if ($candidat->status !== '1') data-bs-toggle="modal" data-bs-target="#modifierContactModal{{ $candidat->id }}" @endif >
                                         <td>
                                             <div class="d-flex px-2">
                                                 <h6 class="p-2 text-md">{{ $candidat->nom }} {{ $candidat->prenom }}</h6>

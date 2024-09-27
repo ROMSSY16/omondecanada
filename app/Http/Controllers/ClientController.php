@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Entree;
 use App\Models\Dossier;
 use App\Models\Candidat;
@@ -130,5 +131,5 @@ class ClientController extends Controller
 
         return redirect()->back()->with('success', 'Document supprimé avec succès.');
     }
-
+   
 }

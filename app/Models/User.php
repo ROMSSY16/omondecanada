@@ -12,8 +12,8 @@ use App\Models\PosteOccupe;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\HasPermissionsTrait;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
@@ -117,7 +117,7 @@ class User extends Authenticatable
 
     public function poste_occupe()
     {
-        return $this->belongsTo(PosteOccupe::class, 'id_poste_occupe');
+        return $this->belongsTo(PosteOccupe::class, 'id_poste_occupe', 'id');
     }
 
     /**

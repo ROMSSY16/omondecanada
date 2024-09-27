@@ -43,18 +43,17 @@
                                             class="col-md-1 text-uppercase text-secondary text-xxs font-weight-bolder text-left opacity-7 ps-2">
                                             DATE DE CONSULTATION
                                         </th>
-                                        @role('consultante')
+                                        @role ('direction', 'informaticien', 'admimistratif', 'commercial', 'consultante')
                                         <th
                                             class="col-md-1 text-uppercase text-secondary text-xxs font-weight-bolder text-left opacity-7 ps-2">
                                            CONSULTANTE
                                         </th>
-                                        @endrole
-                                        @role('commercial')
                                         <th
                                             class="col-md-1 text-uppercase text-secondary text-xxs font-weight-bolder text-left opacity-7 ps-2">
                                            COMMERCIAL
                                         </th>
                                         @endrole
+                                        
                                         <th
                                             class="col-md-1 text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
                                             STATUS
@@ -64,92 +63,76 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @role ('direction', 'informaticien', 'admimistratif')
+                                @role ('direction', 'informaticien', 'admimistratif', 'commercial')
                                     @foreach ($allcandidats as $candidat)
                                         <tr>
                                             <td>
                                                 <div class="d-flex px-2">
-                                                    <h6 class="p-2 text-lg">{{ $candidat->nom }} {{ $candidat->prenom }}</h6>
+                                                    <h6 class="p-2 text-md">{{ $candidat->nom }} {{ $candidat->prenom }}</h6>
                                                 </div>
                                             </td>
                                             <td>
-                                                <p class="text-lg font-weight-bold mb-0">{{ $candidat->numero_telephone }}</p>
+                                                <p class="text-md mb-0">{{ $candidat->numero_telephone }}</p>
                                             </td>
                                             <td>
-                                                <p class="text-lg font-weight-bold mb-0">{{ $candidat->email }}</p>
+                                                <p class="text-md mb-0">{{ $candidat->email }}</p>
                                             </td>
                                             <td>
-                                                <span class="text-lg font-weight-bold">{{ $candidat->profession }}</span>
+                                                <span class="text-md">{{ $candidat->profession }}</span>
                                             </td>
                     
                                             <td class="align-middle text-left">
-                                                @if ($candidat->consultation_payee && $candidat->infoConsultation)
-                                                    <span class="text-lg font-weigh-normal">{{ $candidat->dateFormatee }}</span>
-                                                @else
-                                                <span class="text-lg text-success font-weigh-normal">N / A</span>
-                                           
-                                                @endif
-                    
+                                                <span class="text-md font-weigh-normal">{{ ucwords(Carbon\Carbon::parse($candidat->updated_at)->translatedFormat('j F Y')) }}</span>
                                             </td>
-                                            @role('consultante')
+                                           
                                                 <td>
-                                                    <span class="text-lg font-weight-bold">{{ $candidat->consultante->name }} {{ $candidat->consultante->last_name }}</span>
+                                                    <span class="text-md">{{ $candidat->consultante->name ?? null}} {{ $candidat->consultante->last_name ?? null}}</span>
                                                 </td>
-                                            @endrole
-                                            @role('commercial')
                                                 <td>
-                                                    <span class="text-lg font-weight-bold">{{ $candidat->utilisateur->name }} {{ $candidat->utilisateur->last_name }}</span>
+                                                    <span class="text-md">{{ $candidat->utilisateur->name ?? null}} {{ $candidat->utilisateur->last_name ?? null}}</span>
                                                 </td>
-                                            @endrole
+                                           
+                                          
                                             <td class="align-middle text-center">
                                                 @if ($candidat->status =='1')
-                                                    <span class="text-lg font-weight-bold badge bg-gradient-success">éffectuée</span>
+                                                    <span class="text-md font-weight-bold text-success">éffectuée</span>
                                                 @endif
                                             </td>
                                            
                                         </tr>
                                     @endforeach
                                 @endrole
-                                @role ('consultante', 'commercial')
+                                @role ('direction', 'informaticien', 'admimistratif', 'consultante')
                                     @foreach ($candidats as $candidat)
                                         <tr>
                                             <td>
                                                 <div class="d-flex px-2">
-                                                    <h6 class="p-2 text-lg">{{ $candidat->nom }} {{ $candidat->prenom }}</h6>
+                                                    <h6 class="p-2 text-md">{{ $candidat->nom }} {{ $candidat->prenom }}</h6>
                                                 </div>
                                             </td>
                                             <td>
-                                                <p class="text-lg font-weight-bold mb-0">{{ $candidat->numero_telephone }}</p>
+                                                <p class="text-md mb-0">{{ $candidat->numero_telephone }}</p>
                                             </td>
                                             <td>
-                                                <p class="text-lg font-weight-bold mb-0">{{ $candidat->email }}</p>
+                                                <p class="text-md mb-0">{{ $candidat->email }}</p>
                                             </td>
                                             <td>
-                                                <span class="text-lg font-weight-bold">{{ $candidat->profession }}</span>
+                                                <span class="text-md">{{ $candidat->profession }}</span>
                                             </td>
                     
                                             <td class="align-middle text-left">
-                                                @if ($candidat->consultation_payee && $candidat->infoConsultation)
-                                                    <span class="text-lg font-weigh-normal">{{ $candidat->dateFormatee }}</span>
-                                                @else
-                                                <span class="text-lg text-success font-weigh-normal">N / A</span>
-                                           
-                                                @endif
-                    
+                                                <span class="text-md font-weigh-normal">{{ ucwords(Carbon\Carbon::parse($candidat->updated_at)->translatedFormat('j F Y')) }}</span>
                                             </td>
-                                            @role('consultante')
-                                                <td>
-                                                    <span class="text-lg font-weight-bold">{{ $candidat->consultante->name }} {{ $candidat->consultante->last_name }}</span>
-                                                </td>
-                                            @endrole
-                                            @role('commercial')
-                                                <td>
-                                                    <span class="text-lg font-weight-bold">{{ $candidat->utilisateur->name }} {{ $candidat->utilisateur->last_name }}</span>
-                                                </td>
-                                            @endrole
+                                            <td>
+                                                <span class="text-md">{{ $candidat->consultante->name ?? null }} {{ $candidat->consultante->last_name ?? null }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-md">{{ $candidat->utilisateur->name ?? null }} {{ $candidat->utilisateur->last_name ?? null }}</span>
+                                            </td>
+                                            
                                             <td class="align-middle text-center">
                                                 @if ($candidat->status =='1')
-                                                    <span class="text-lg font-weight-bold badge bg-gradient-success">éffectuée</span>
+                                                    <span class="text-md font-weight-bold text-success">éffectuée</span>
                                                 @endif
                                             </td>
                                            
@@ -179,19 +162,15 @@
             });
 
             document.addEventListener("DOMContentLoaded", function() {
-                // Sélectionnez les boutons de filtre
                 const todayButton = document.querySelector('#todayButton');
                 const thisWeekButton = document.querySelector('#thisWeekButton');
                 const thisMonthButton = document.querySelector('#thisMonthButton');
-                // Sélectionnez toutes les lignes du tableau
+
                 const rows = document.querySelectorAll('tbody tr');
-                // Fonction pour filtrer les rendez-vous en fonction de la date
                 function filterAppointments(dateFilter) {
                     const currentDate = new Date();
-                    // Définir la date de début de la semaine actuelle
                     const startOfWeek = new Date(currentDate);
                     startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
-                    // Définir la date de fin de la semaine actuelle
                     const endOfWeek = new Date(currentDate);
                     endOfWeek.setDate(startOfWeek.getDate() + 6);
                     rows.forEach(function(row) {

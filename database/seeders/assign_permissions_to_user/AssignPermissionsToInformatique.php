@@ -70,6 +70,9 @@ class AssignPermissionsToInformatique extends Seeder
             'Manage candidats',
             'Voir candidat',
             'Afficher tous les candidats',
+
+            'Lien consultations',
+            'Ajouter lien consultation',
         ];
         $informatique->roles()->sync($role->id);
         $permissionIds = Permission::whereIn('name', $permissions)->pluck('id')->toArray();

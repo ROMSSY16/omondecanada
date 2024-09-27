@@ -4,7 +4,7 @@
 
     @php
         $sections = [
-            'Resumé du profil' => [31],
+            //'Resumé du profil' => [31],
             'Identité du candidat' => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
             'Statut professionnel' => [12, 13, 14, 15, 16, 17],
             'Informations supplémentaires' => [18, 19, 20, 21, 22, 23],
@@ -55,6 +55,14 @@
 
     <div class="row">
         <div class="col-12">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <div class="bg-gradient-dark border-radius-lg pt-4 pb-3 d-flex align-items-center justify-content-between p-4">
+                    <h3 class="card-title text-white">Resumé du profil</h3>
+                </div>
+                <div class="card-body">
+                    <p class="answer text-right fs-5">{{$consultation->ficheConsultation->remarque_agent}}</p>
+                </div>
+            </div>
             @foreach ($sections as $sectionTitle => $sectionQuestions)
                 <div class="card my-4 mt-5 mb-1">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
@@ -65,8 +73,8 @@
                     <div class="card-body">
                         <div class="row">
                             @foreach ($sectionQuestions as $index => $key)
-                                @if ($index === 0 && $sectionTitle === 'Resumé du profil')
-                                    <div class="col-md-12 mb-2">
+                                @if ($index === 0 )
+                                    <div class="col-md-4 mb-2">
                                 @else
                                     <div class="col-md-4 mb-2">
                                 @endif
@@ -117,19 +125,30 @@
             @endforeach
         </div>
     </div>
-
+    <br/>
+    <br/>
     @role('consultante')
-        <div class="row pt-4">
-            <div class="col-md-12">
-                <form action="{{ route('candidat.save_remarque', ['id' => $consultation->id]) }}" method="post">
-                    @csrf
-                    <div class="input-group mb-3 p-2">
-                        <textarea class="form-control" name="consultant_opinion" id="consultant_opinion" oninput="handleTextareaInput(this)" style="height: 8rem; width: 20rem;">{{ $consultation->remarque_consultante ?? '' }}</textarea>
-                    </div>
-                    <button type="submit" class="btn btn-warning float-end">SOUMETTRE ET TERMINER</button>
-                </form>
+    <div class="card">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-gradient-dark border-radius-lg pt-4 pb-3 d-flex align-items-center justify-content-between p-4">
+                <h3 class="card-title text-white">Votre remarque</h3>
             </div>
         </div>
+        <div class="card-body">
+            <div class="row pt-4">
+                <div class="col-md-12">
+                    <form action="{{ route('candidat.save_remarque', ['id' => $consultation->id]) }}" method="post">
+                        @csrf
+                        <div class="input-group mb-3 p-2">
+                            <textarea class="form-control" name="remarque_consultante" id="remarque_consultante" style="height: 8rem; width: 20rem;">{{ $consultation->remarque_consultante ?? '' }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-warning float-end">SOUMETTRE ET TERMINER</button>
+                    </form>
+                </div>
+            </div>                                
+        </div>
+    </div>
+        
     @endrole
 
 @endsection

@@ -43,7 +43,7 @@
                             <tbody>
                 
                                 @foreach ($data_candidat as $candidat)
-                                    <tr data-bs-toggle="modal" data-bs-target="#modifierContactModal{{ $candidat->id }}">
+                                <tr @if ($candidat->status !== '1') data-bs-toggle="modal" data-bs-target="#modifierContactModal{{ $candidat->id }}" @endif >
                                         <td>
                                             <div class="d-flex px-2">
                                                 <h6 class="p-2 text-md">{{ $candidat->nom }} {{ $candidat->prenom }}</h6>
@@ -64,7 +64,7 @@
                                   
                                     {{-- modal modifier contact --}}
                                     <div class="modal z-index-1 fade" id="modifierContactModal{{ $candidat->id }}" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="exampleModalLabel">Modifier Contact</h5>

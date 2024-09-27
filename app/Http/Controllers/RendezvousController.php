@@ -13,7 +13,7 @@ class RendezvousController extends Controller
         $candidats = Candidat::where('id_utilisateur', auth()->user()->id) 
             ->whereNotNull('date_rdv')
             ->orderBy('date_rdv', 'desc')
-            ->paginate(5);
+            ->paginate(10);
         return view('rendezvous.index', [
             'candidats' => $candidats,
             'pageTitle' => $pageTitle,

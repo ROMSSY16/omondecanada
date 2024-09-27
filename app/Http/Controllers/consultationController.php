@@ -12,6 +12,7 @@ use App\Models\Document;
 use App\Models\Procedure;
 use App\Models\RendezVous;
 use App\Models\Consultante;
+use App\Models\PosteOccupe;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\InfoConsultation;
@@ -156,7 +157,6 @@ class ConsultationController extends Controller
 
     public function creerConsultation(Request $request)
     {
-        // Valider les données du formulaire
         $request->validate([
             'lien_zoom' => 'required',
             'lien_zoom_demarrer' => 'required',
@@ -174,9 +174,7 @@ class ConsultationController extends Controller
             'id_consultante' => $request->input('id_consultante')
         ]);
 
-        $this->sendNotification($consultation, 'créée');
-
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Consultation crée avec succès.');
     }
 
     public function ModifierConsultation(Request $request, $id)
@@ -283,10 +281,13 @@ class ConsultationController extends Controller
             'reponse27' => $request->input('reponse27'),
             'reponse28' => $request->input('reponse28'),
             'reponse29' => $request->input('reponse29'),
+            'remarque_consultante' => $request->input('remarque_consultante'),
+            'remarque_agent' => $request->input('remarque_agent'),
+            'id_utilisateur' => Auth::user()->id,
         ];
 
         $ficheconsultation->fill($reponses)->save();
-
+       
         $entree = Entree::where('id_candidat', $candidat->id)->where('id_utilisateur', Auth::user()->id)->first();
         if (!$entree) {
             $montant = auth()->user()->succursale->montant;
@@ -400,5 +401,15 @@ class ConsultationController extends Controller
         ]);
     }
 
-
+    public function lienConsultations(){
+        $pageTitle = 'Lien des consultations';
+        $consultations = InfoConsultation::get();
+        $poste = PosteOccupe::where('label', 'Consultante')->first();
+        $consultantes = User::where('id_poste_occupe', $poste->id)->get();
+        return view('consultation.lien', [
+            'consultations' => $consultations,
+            'consultantes' => $consultantes,
+            'page' => $pageTitle, 
+        ]);
+    }
 }

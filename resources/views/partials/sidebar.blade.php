@@ -120,6 +120,16 @@
                 </a>
             </li>
             @endcan
+            @can('lien-consultations')
+                <li class="nav-item">
+                    <a class="nav-link text-white {{ Route::currentRouteName() === 'consultation.lien' ? 'active bg-gradient-primary' : '' }}" href="{{route('consultation.lien')}}">
+                    <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">attachment</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Lien des Consultations</span>
+                    </a>
+                </li>
+            @endcan
       </ul>
     </div>
     

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('url')->nullable();
             $table->string('nom')->nullable();
-            $table->integer('id_dossier');
+            $table->integer('id_dossier')->nullable();
+            $table->integer('id_user')->nullable();
             $table->timestamps();
         });
     }

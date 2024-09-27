@@ -49,10 +49,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('index', [EquipeController::class, 'index'])->name('index');
         Route::get('create', [EquipeController::class, 'create'])->name('create');
         Route::post('store', [EquipeController::class, 'store'])->name('store');
-        Route::post('update', [EquipeController::class, 'update'])->name('update');
+        Route::post('update/{id}', [EquipeController::class, 'update'])->name('update');
         Route::get('destroy/{id}', [EquipeController::class, 'destroy'])->name('destroy');
         Route::get('show/{id}', [EquipeController::class, 'show'])->name('show');
         Route::get('edit/{id}', [EquipeController::class, 'edit'])->name('edit');
+
+        Route::post('ajouter/document/{id}', [EquipeController::class, 'addDocument'])->name('add_document');
+        Route::delete('supprimer/documents/{id}', [EquipeController::class, 'deleteDocument'])->name('document.delete');
+
+        Route::get('dossier/{id}', [EquipeController::class, 'viewDocument'])->name('dossier_detail');
     });
 
     Route::prefix('users')->name('users.')->group(function () {
@@ -112,6 +117,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('fiche_renseignement/candidat/{id_candidat}', [ConsultationController::class, 'viewFicheRenseignement'])->name('fiche_renseignement');
 
         Route::get('historique', [ConsultationController::class, 'consultationHistorique'])->name('historique');
+
+        Route::get('lien', [ConsultationController::class, 'lienConsultations'])->name('lien');
+        Route::post('creer', [ConsultationController::class, 'creerConsultation'])->name('creer');
     });
     Route::prefix('client')->name('client.')->group(function () {
         Route::get('index', [ClientController::class, 'index'])->name('index');

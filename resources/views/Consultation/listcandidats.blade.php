@@ -64,11 +64,28 @@
 
                                 <td class="text-center" style="width: 20%;">
                                     <div class="d-flex align-items-center justify-content-around">
-                                        @role('consultante')
+                                      <!--  
+                                    @role('consultante')
                                             <a href="{{ route('consultation.candidat', ['id' => $info_consultation->id, 'id_candidat' => $candidat->id]) }}" class="btn btn-primary">
                                                 <i class="material-icons">visibility</i> Faire la consultation
                                             </a>
+                                       
+                                            <span class="btn btn-primary">
+                                                <i class="material-icons">visibility</i> En attente 
+                                            </span>
                                         @endrole
+                                    
+-->
+                                        @if (auth()->user()->poste_occupe->label === 'Consultante')
+                                            <a href="{{ route('consultation.candidat', ['id' => $info_consultation->id, 'id_candidat' => $candidat->id]) }}" class="btn btn-primary">
+                                                <i class="material-icons">visibility</i> Faire la consultation
+                                            </a>
+                                        @else
+                                            <span class="btn btn-warning">
+                                                <i class="material-icons">visibility</i> En attente 
+                                            </span>
+                                        @endif
+                                      
                                     </div>
                                 </td>
                             </tr>
