@@ -17,10 +17,11 @@ use App\Http\Controllers\DossierController;
 use App\Http\Controllers\CandidatController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RendezvousController;
+use App\Http\Controllers\SuccursaleController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\ConsultationController;
-use App\Http\Controllers\InformatiqueController;
+use App\Http\Controllers\ExchangeRateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,7 @@ Route::get('connexion', [AuthController::class, 'showLoginForm'])->name('connexi
 Route::post('connexion', [AuthController::class, 'login'])->name('login');
 Route::get('sign-in', [HomeController::class, 'sign-in'])->name('sign-in');
 // web.php
+Route::put('/exchange_rates', [ExchangeRateController::class, 'update'])->name('exchange_rates.update');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
@@ -59,7 +61,15 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('dossier/{id}', [EquipeController::class, 'viewDocument'])->name('dossier_detail');
     });
-
+    Route::prefix('succursale')->name('succursale.')->group(function () {
+        Route::get('index', [SuccursaleController::class, 'index'])->name('index');
+        Route::get('create', [SuccursaleController::class, 'create'])->name('create');
+        Route::post('store', [SuccursaleController::class, 'store'])->name('store');
+        Route::put('update/{id}', [SuccursaleController::class, 'update'])->name('update');
+        Route::get('destroy/{slug}', [SuccursaleController::class, 'destroy'])->name('destroy');
+        Route::get('show/{slug}', [SuccursaleController::class, 'show'])->name('show');
+        Route::get('edit/{slug}', [SuccursaleController::class, 'edit'])->name('edit');
+    });
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('index', [UserController::class, 'index'])->name('index');
         Route::get('create', [UserController::class, 'create'])->name('create');

@@ -170,6 +170,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Ladumor\LaravelPwa\PWAServiceProvider::class,
+
     ])->toArray(),
 
     /*
@@ -186,6 +188,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
        'PDF' => Barryvdh\DomPDF\Facade::class,
+'       LaravelPwa' => \Ladumor\LaravelPwa\LaravelPwa::class,
 
     ])->toArray(),
 

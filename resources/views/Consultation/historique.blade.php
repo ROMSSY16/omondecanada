@@ -32,13 +32,8 @@
                                             NUMERO
                                         </th>
                                         <th class="col-md-1 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            EMAIL
+                                            PROCEDURE
                                         </th>
-                    
-                                        <th class="col-md-1 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            PROFFESSION
-                                        </th>
-                                        
                                         <th
                                             class="col-md-1 text-uppercase text-secondary text-xxs font-weight-bolder text-left opacity-7 ps-2">
                                             DATE DE CONSULTATION
@@ -63,8 +58,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @role ('direction', 'informaticien', 'admimistratif', 'commercial')
-                                    @foreach ($allcandidats as $candidat)
+                                @role ('commercial')
+                                    @foreach ($candidats as $candidat)
                                         <tr>
                                             <td>
                                                 <div class="d-flex px-2">
@@ -75,12 +70,9 @@
                                                 <p class="text-md mb-0">{{ $candidat->numero_telephone }}</p>
                                             </td>
                                             <td>
-                                                <p class="text-md mb-0">{{ $candidat->email }}</p>
+                                                <p class="text-md mb-0">{{ $candidat->typeProcedure->label }}</p>
                                             </td>
-                                            <td>
-                                                <span class="text-md">{{ $candidat->profession }}</span>
-                                            </td>
-                    
+                                            
                                             <td class="align-middle text-left">
                                                 <span class="text-md font-weigh-normal">{{ ucwords(Carbon\Carbon::parse($candidat->updated_at)->translatedFormat('j F Y')) }}</span>
                                             </td>
@@ -103,7 +95,7 @@
                                     @endforeach
                                 @endrole
                                 @role ('direction', 'informaticien', 'admimistratif', 'consultante')
-                                    @foreach ($candidats as $candidat)
+                                    @foreach ($allcandidats as $candidat)
                                         <tr>
                                             <td>
                                                 <div class="d-flex px-2">
@@ -114,11 +106,9 @@
                                                 <p class="text-md mb-0">{{ $candidat->numero_telephone }}</p>
                                             </td>
                                             <td>
-                                                <p class="text-md mb-0">{{ $candidat->email }}</p>
+                                                <p class="text-md mb-0">{{ $candidat->typeProcedure->label }}</p>
                                             </td>
-                                            <td>
-                                                <span class="text-md">{{ $candidat->profession }}</span>
-                                            </td>
+                                            
                     
                                             <td class="align-middle text-left">
                                                 <span class="text-md font-weigh-normal">{{ ucwords(Carbon\Carbon::parse($candidat->updated_at)->translatedFormat('j F Y')) }}</span>

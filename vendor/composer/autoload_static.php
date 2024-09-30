@@ -147,6 +147,7 @@ class ComposerStaticInit31489110fd55d0107524bb8562f488b9
             'Laravel\\Sail\\' => 13,
             'Laravel\\Prompts\\' => 16,
             'Laravel\\Breeze\\' => 15,
+            'Ladumor\\LaravelPwa\\' => 19,
         ),
         'I' => 
         array (
@@ -498,6 +499,10 @@ class ComposerStaticInit31489110fd55d0107524bb8562f488b9
         array (
             0 => __DIR__ . '/..' . '/laravel/breeze/src',
         ),
+        'Ladumor\\LaravelPwa\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ladumor/laravel-pwa/src',
+        ),
         'Intervention\\Image\\' => 
         array (
             0 => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image',
@@ -660,6 +665,7 @@ class ComposerStaticInit31489110fd55d0107524bb8562f488b9
         'App\\Http\\Controllers\\DossierController' => __DIR__ . '/../..' . '/app/Http/Controllers/DossierController.php',
         'App\\Http\\Controllers\\EntreeController' => __DIR__ . '/../..' . '/app/Http/Controllers/EntreeController.php',
         'App\\Http\\Controllers\\EquipeController' => __DIR__ . '/../..' . '/app/Http/Controllers/EquipeController.php',
+        'App\\Http\\Controllers\\ExchangeRateController' => __DIR__ . '/../..' . '/app/Http/Controllers/ExchangeRateController.php',
         'App\\Http\\Controllers\\FicheDeRenseignementController' => __DIR__ . '/../..' . '/app/Http/Controllers/FicheDeRenseignementController.php',
         'App\\Http\\Controllers\\FicheRenseignementController' => __DIR__ . '/../..' . '/app/Http/Controllers/FicheRenseignementController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
@@ -670,6 +676,7 @@ class ComposerStaticInit31489110fd55d0107524bb8562f488b9
         'App\\Http\\Controllers\\RendezvousController' => __DIR__ . '/../..' . '/app/Http/Controllers/RendezvousController.php',
         'App\\Http\\Controllers\\RoleController' => __DIR__ . '/../..' . '/app/Http/Controllers/RoleController.php',
         'App\\Http\\Controllers\\StatutController' => __DIR__ . '/../..' . '/app/Http/Controllers/StatutController.php',
+        'App\\Http\\Controllers\\SuccursaleController' => __DIR__ . '/../..' . '/app/Http/Controllers/SuccursaleController.php',
         'App\\Http\\Controllers\\TransactionController' => __DIR__ . '/../..' . '/app/Http/Controllers/TransactionController.php',
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Controllers\\UtilisateurController' => __DIR__ . '/../..' . '/app/Http/Controllers/UtilisateurController.php',
@@ -697,6 +704,7 @@ class ComposerStaticInit31489110fd55d0107524bb8562f488b9
         'App\\Models\\Document' => __DIR__ . '/../..' . '/app/Models/Document.php',
         'App\\Models\\Dossier' => __DIR__ . '/../..' . '/app/Models/Dossier.php',
         'App\\Models\\Entree' => __DIR__ . '/../..' . '/app/Models/Entree.php',
+        'App\\Models\\ExchangeRate' => __DIR__ . '/../..' . '/app/Models/ExchangeRate.php',
         'App\\Models\\FicheConsultation' => __DIR__ . '/../..' . '/app/Models/FicheConsultation.php',
         'App\\Models\\InfoConsultation' => __DIR__ . '/../..' . '/app/Models/InfoConsultation.php',
         'App\\Models\\ModePaiement' => __DIR__ . '/../..' . '/app/Models/ModePaiement.php',
@@ -874,6 +882,7 @@ class ComposerStaticInit31489110fd55d0107524bb8562f488b9
         'Database\\Factories\\UserFactory' => __DIR__ . '/../..' . '/database/factories/UserFactory.php',
         'Database\\Seeders\\CategorySeeder' => __DIR__ . '/../..' . '/database/seeders/CategorySeeder.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
+        'Database\\Seeders\\ExchangeRateSeeder' => __DIR__ . '/../..' . '/database/seeders/ExchangeRateSeeder.php',
         'Database\\Seeders\\InfoConsultationSeeder' => __DIR__ . '/../..' . '/database/seeders/InfoConsultationSeeder.php',
         'Database\\Seeders\\MoyenPaiementSeeder' => __DIR__ . '/../..' . '/database/seeders/MoyenPaiementSeeder.php',
         'Database\\Seeders\\PermissionSeeder' => __DIR__ . '/../..' . '/database/seeders/PermissionSeeder.php',
@@ -3591,6 +3600,9 @@ class ComposerStaticInit31489110fd55d0107524bb8562f488b9
         'Intervention\\Image\\Point' => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image/Point.php',
         'Intervention\\Image\\Response' => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image/Response.php',
         'Intervention\\Image\\Size' => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image/Size.php',
+        'Ladumor\\LaravelPwa\\LaravelPwa' => __DIR__ . '/..' . '/ladumor/laravel-pwa/src/LaravelPwa.php',
+        'Ladumor\\LaravelPwa\\PWAServiceProvider' => __DIR__ . '/..' . '/ladumor/laravel-pwa/src/PWAServiceProvider.php',
+        'Ladumor\\LaravelPwa\\commands\\PublishPWA' => __DIR__ . '/..' . '/ladumor/laravel-pwa/src/commands/PublishPWA.php',
         'Laravel\\Breeze\\BreezeServiceProvider' => __DIR__ . '/..' . '/laravel/breeze/src/BreezeServiceProvider.php',
         'Laravel\\Breeze\\Console\\InstallCommand' => __DIR__ . '/..' . '/laravel/breeze/src/Console/InstallCommand.php',
         'Laravel\\Breeze\\Console\\InstallsApiStack' => __DIR__ . '/..' . '/laravel/breeze/src/Console/InstallsApiStack.php',

@@ -6,7 +6,7 @@
     <!-- Avatar de l'utilisateur -->
     <div class="rounded-circle overflow-hidden d-inline-block" style="width: 40px; height: 40px;">
         @isset(auth()->user()->lien_photo)
-            <img src="{{ asset('storage/' . auth()->user()->lien_photo) }}" alt="Avatar" class="w-100 h-100 object-cover">
+            <img src="{{ asset(auth()->user()->lien_photo) }}" alt="Avatar" class="w-100 h-100 object-cover">
         @else
             <img src="{{ asset('assets/img/logos/logo-icon.png') }}" alt="Avatar par défaut" class="w-100 h-100 object-cover">
         @endisset

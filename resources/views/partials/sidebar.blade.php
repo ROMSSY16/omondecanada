@@ -130,6 +130,16 @@
                     </a>
                 </li>
             @endcan
+            @can('afficher-succursales')
+                <li class="nav-item">
+                    <a class="nav-link text-white {{ Route::currentRouteName() === 'succursale.index' ? 'active bg-gradient-primary' : '' }}" href="{{route('succursale.index')}}">
+                    <div class="text-white text-left me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">flag</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Les succursales</span>
+                    </a>
+                </li>
+            @endcan
       </ul>
     </div>
     

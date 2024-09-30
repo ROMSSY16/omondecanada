@@ -8,7 +8,7 @@
                         class="icon icon-md icon-shape bg-gradient-primary shadow-dark text-center border-radius-xl mt-n4">
                         <i class="material-icons opacity-10">account_balance_wallet</i>
                     </div>
-                    <p class="text-xl text-bold mb-0 text-capitalize">Caisse </p>
+                    <h3 class="text-xl text-bold mb-0 text-capitalize">CAISSE </h3>
 
                 </div>
                 <div class="card-body">
@@ -34,9 +34,9 @@
                 <div class="card-header1 p-3 pt-2 d-flex justify-content-between">
                     <div
                         class="icon icon-md icon-shape bg-gradient-primary shadow-dark text-center border-radius-xl mt-n4">
-                        <i class="material-icons opacity-10">arrow_upward</i>
+                        <i class="material-icons opacity-10">arrow_downward</i>
                     </div>
-                    <p class="text-xl text-bold mb-0 text-capitalize">Entree - PAYS</p>
+                    <h3 class="text-xl text-bold mb-0 text-capitalize">ENTRÉE</h3>
                 </div>
                 <div class="card-body">
                     <div class="text-end">
@@ -58,9 +58,9 @@
                 <div class="card-header1 p-3 pt-2 d-flex justify-content-between">
                     <div
                         class="icon icon-md icon-shape bg-gradient-primary shadow-dark text-center border-radius-xl mt-n4">
-                        <i class="material-icons opacity-10">arrow_downward</i>
+                        <i class="material-icons opacity-10">arrow_upward</i>
                     </div>
-                    <p class="text-xl text-bold mb-0 text-capitalize">Depenses - Pays</p>
+                    <h3 class="text-xl text-bold mb-0 text-capitalize">SORTIES</h3>
 
                 </div>
                 <div class="card-body">
@@ -156,7 +156,7 @@
     const transactionsChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: {!! json_encode($results->pluck('label')) !!}, // Noms des succursales
+            labels: {!! json_encode($results->pluck('label')) !!}, 
             datasets: [
                 {
                     label: 'Entrées',
@@ -184,13 +184,13 @@
                 x: {
                     beginAtZero: true,
                     ticks: {
-                        color: '#ffffff' // Couleur des labels sur l'axe X
+                        color: '#ffffff' 
                     }
                 },
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        color: '#ffffff' // Couleur des montants sur l'axe Y
+                        color: '#ffffff' 
                     }
                 }
             }

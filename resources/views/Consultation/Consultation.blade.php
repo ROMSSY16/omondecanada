@@ -71,7 +71,7 @@
                                 </td>
                                 <td>
                                     @if ($consultation->candidats->isNotEmpty())
-                                        <a href="Consultation/{{ $consultation->id }}">
+                                        <a href="{{ route('consultation.listcandidats',$consultation->id) }}">
                                             <button class="btn bg-gradient-dark">
                                                 Voir les candidat(s)
                                             </button>

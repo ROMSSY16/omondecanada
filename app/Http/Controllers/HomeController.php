@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Entree;
 use App\Models\Depense;
 use App\Models\Candidat;
 use App\Models\RendezVous;
 use App\Models\Succursale;
+use App\Models\ExchangeRate;
 use Illuminate\Http\Request;
 use App\Models\InfoConsultation;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +26,7 @@ class HomeController extends Controller
         $role = $user->roles;
 
         if (auth()->user()->hasRole('direction')) {
-            
-            $exchangeRateUsdToFcfa = 433;
+            $exchangeRateUsdToFcfa = ExchangeRate::select('rate_fcfa')->first()->rate_fcfa;
             $currentMonthStart = Carbon::now()->startOfMonth();
             $currentMonthEnd = Carbon::now()->endOfMonth();
 
@@ -71,13 +72,47 @@ class HomeController extends Controller
                 'total_entree_global'=> $total_entree_global,
                 'total_sortie_global'=> $total_sortie_global,
                 'montant_en_caisse_global'=> $montant_en_caisse_global,
+                'exchangeRateUsdToFcfa' => $exchangeRateUsdToFcfa,
             ]);
         }
 
         if (auth()->user()->hasRole('consultante')) {
+            Carbon::setLocale('fr');
+            $prospectsData = [];
+            $consultationsData = [];
+            $daysInMonth = Carbon::now()->daysInMonth;
 
+            $consultationsCount = Candidat::where('id_consultante', Auth::id())
+                ->where('status', '1')
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->whereYear('created_at', Carbon::now()->year)
+                ->count();
+            
+
+            for ($day = 1; $day <= $daysInMonth; $day++) {
+                $date = Carbon::now()->startOfMonth()->addDays($day - 1)->format('Y-m-d');
+
+            
+                $consultationsCount = Candidat::where('id_consultante', Auth::id())
+                    ->where('consultation_effectuee', '1')
+                    ->whereDate('date_rdv', $date)
+                    ->count();
+            
+                $consultationsData[] = $consultationsCount;
+            }
+            
+            $days = range(1, $daysInMonth); 
+
+            $consultations = InfoConsultation::with(['consultante', 'candidats'])
+                ->where('id_consultante',  Auth::id())
+                ->orderBy('date_heure', 'desc')
+                ->get();
             return view('dashboard', [
-                'page' => $pageTitle, 
+                'page' => $pageTitle,
+                'consultations' => $consultations,
+                'consultationsCount' => $consultationsCount, 
+                'consultationsData' => $consultationsData,
+                'days' => $days,
             ]);
         }
         if (auth()->user()->hasRole('commercial')) {
@@ -87,32 +122,60 @@ class HomeController extends Controller
             $moisActuel = Carbon::now()->monthName;
             $anneeActuelle = Carbon::now()->year;
 
-            $utilisateurConnecte = auth()->user();
+            $prospectsData = [];
+            $consultationsData = [];
+            $daysInMonth = Carbon::now()->daysInMonth;
   
-            $totalAppelDeCeJour = RendezVous::whereDate('date_enregistrement_appel', Carbon::now())
-                ->where('commercial_id' , $utilisateurConnecte->id )
+            $candidatesCount = Candidat::where('id_utilisateur', Auth::id())
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->whereYear('created_at', Carbon::now()->year)
                 ->count();
-            $totalVisiteAujourdhui = RendezVous::whereDate('date_enregistrement_appel', Carbon::now())
-                ->where('commercial_id' , $utilisateurConnecte->id )
+            $rendezvousCount = Candidat::where('id_utilisateur', Auth::id())
                 ->whereNotNull('date_rdv')
+                ->where('consultation_effectuee', '1') 
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->whereYear('created_at', Carbon::now()->year)
                 ->count();
-            $totalConsultationsDeCeMois = RendezVous::where('consultation_payee', true)
-                ->whereMonth('date_rdv', $moisActuel)
-                ->whereYear('date_rdv', $anneeActuelle)
-                ->where('commercial_id', $utilisateurConnecte->id)
+            $consultationsCount = Candidat::where('id_utilisateur', Auth::id())
+                ->whereNotNull('id_consultante')
+                ->where('status', '1')
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->whereYear('created_at', Carbon::now()->year)
                 ->count();
-            $rendezVous = Candidat::where('id_utilisateur', $utilisateurConnecte->id)
+            
+            $rendezVous = Candidat::where('id_utilisateur', auth()->user()->id)
                 ->whereDate('date_rdv', Carbon::today())
-                ->orderBy('date_enregistrement', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->get();
 
+            for ($day = 1; $day <= $daysInMonth; $day++) {
+                $date = Carbon::now()->startOfMonth()->addDays($day - 1)->format('Y-m-d');
+
+                $prospectsCount = Candidat::where('id_utilisateur', Auth::id())
+                    ->whereDate('created_at', $date)
+                    ->count();
+            
+                $consultationsCount = Candidat::where('id_utilisateur', Auth::id())
+                    ->where('consultation_effectuee', '1')
+                    ->whereDate('date_rdv', $date)
+                    ->count();
+            
+                $prospectsData[] = $prospectsCount;
+                $consultationsData[] = $consultationsCount;
+            }
+            
+            $days = range(1, $daysInMonth); 
+                
             return view('dashboard', [
-                'totalAppelDeCeJour' => $totalAppelDeCeJour, 
-                'totalVisiteAujourdhui' => $totalVisiteAujourdhui,
-                'totalConsultationsDeCeMois' => $totalConsultationsDeCeMois, 
+                'candidatesCount' => $candidatesCount, 
+                'rendezvousCount' => $rendezvousCount,
+                'consultationsCount' => $consultationsCount, 
                 'jourActuel' => $jourActuel, 
                 'moisActuel' => $moisActuel, 
                 'rendezVous' => $rendezVous,
+                'days' => $days,
+                'prospectsData' => $prospectsData,
+                'consultationsData' => $consultationsData,
                 'page' => $pageTitle, 
             ]);
         }

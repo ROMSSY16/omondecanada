@@ -11,6 +11,8 @@ use Database\Seeders\PersonnelSeeder;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\SuccursaleSeeder;
 use Database\Seeders\PosteOccupeSeeder;
+use Database\Seeders\ExchangeRateSeeder;
+use Database\Seeders\MoyenPaiementSeeder;
 use Database\Seeders\TypeProcedureSeeder;
 use Database\Seeders\RoleUtilisateurSeeder;
 use Database\Seeders\InfoConsultationSeeder;
@@ -39,5 +41,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MoyenPaiementSeeder::class);
         $this->call(InfoConsultationSeeder::class);
         $this->call(TypeProcedureSeeder::class);
+        $this->call(ExchangeRateSeeder::class);
     }
 }

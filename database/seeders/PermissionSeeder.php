@@ -58,6 +58,7 @@ class PermissionSeeder extends Seeder
                 'Voir candidats',
                 'Afficher tous les candidats',
 
+                'Afficher succursales',
             ];
 
             foreach ($permissionsData as $permissionName) {

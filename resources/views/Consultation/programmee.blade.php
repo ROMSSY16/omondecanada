@@ -140,7 +140,7 @@
                             @foreach ($consultations as $consultation)
                                 <div class="document dark">
                                     <a href="{{ route('consultation.listcandidats',$consultation->id) }}" class="btn btn-primary m-1 w-100">
-                                        <i class="material-icons">visibility</i> Voir les Candidat(s)
+                                        <i class="material-icons">arrow_forward </i> Faire la consultation
                                     </a>
                                     <div class="document-body">
                                         <i class="fa fa-file-video-o text-dark"></i>

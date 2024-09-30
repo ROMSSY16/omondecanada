@@ -71,20 +71,7 @@
                                             <td>
                                                 <div class="d-flex align-items-center justify-content-around">
                                                     @if ($candidat->consultation_effectuee == '0')
-                                                        <!--
-                                                        <button type="button" onclick="confirmAction('confirm-rdv', '{{ $candidat->id }}')" class="btn btn-primary">
-                                                            <i class="material-icons text-bolder icon-large toggle-consultation" style="font-size: 2rem;">check</i>
-                                                        </button>
-                                                        <form id="confirm-rdv" action="{{ route('rendezvous.confirm', $candidat->id) }}" method="POST" class="d-none">
-                                                            @csrf
-                                                        </form>
-                                                        <button type="button" onclick="confirmAction('cancel-rdv', '{{ $candidat->id }}')" class="btn btn-primary">
-                                                            <i class="material-icons text-bolder icon-large toggle-consultation" style="font-size: 2rem;">close</i>
-                                                        </button>
-                                                        <form id="cancel-rdv" action="{{ route('rendezvous.cancel', $candidat->id) }}" method="POST" class="d-none">
-                                                            @csrf
-                                                        </form>
-                                                        -->
+                                                       
                                                         <!-- Bouton pour confirmer que la consultation a été effectuée -->
                                                         <button type="button" onclick="confirmAction('confirm-rdv-{{ $candidat->id }}')" class="btn btn-primary">
                                                             <i class="material-icons text-bolder icon-large" style="font-size: 2rem;">check</i>
@@ -139,7 +126,7 @@
                                             
                                             <td>
                                                 @if ($candidat->status == '1')
-                                                    <span class="text-md text-success">Consultation éffectuée</span>
+                                                    <i class="material-icons text-primary icon-large" style="font-size: 2rem;">check_circle</i>
                                                 @else
                                                     <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modifierContactModal{{ $candidat->id }}"> <i class="material-icons text-xl" style="font-size: 1rem;">edit</i>
                                                 @endif

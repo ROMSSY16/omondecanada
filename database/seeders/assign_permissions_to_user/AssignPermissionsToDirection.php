@@ -37,6 +37,8 @@ class AssignPermissionsToDirection extends Seeder
            
             'Voir personnels',
             'Afficher tous les candidats',
+            
+            'Afficher succursales',
         ];
         $direction->roles()->sync($role->id);
         $permissionIds = Permission::whereIn('name', $permissions)->pluck('id')->toArray();
