@@ -33,7 +33,12 @@ class TypeProcedureSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-            
+            [
+                'label' => 'Résident Permanent',
+                'montant' => 5000000,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
         ]);
     }
 }

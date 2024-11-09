@@ -4127,7 +4127,6 @@ class ComposerStaticInit31489110fd55d0107524bb8562f488b9
         'Livewire\\Features\\SupportConsoleCommands\\Commands\\CpCommand' => __DIR__ . '/..' . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/CpCommand.php',
         'Livewire\\Features\\SupportConsoleCommands\\Commands\\DeleteCommand' => __DIR__ . '/..' . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/DeleteCommand.php',
         'Livewire\\Features\\SupportConsoleCommands\\Commands\\FileManipulationCommand' => __DIR__ . '/..' . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/FileManipulationCommand.php',
-        'Livewire\\Features\\SupportConsoleCommands\\Commands\\FluxInstallCommand' => __DIR__ . '/..' . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/FluxInstallCommand.php',
         'Livewire\\Features\\SupportConsoleCommands\\Commands\\FormCommand' => __DIR__ . '/..' . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/FormCommand.php',
         'Livewire\\Features\\SupportConsoleCommands\\Commands\\LayoutCommand' => __DIR__ . '/..' . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/LayoutCommand.php',
         'Livewire\\Features\\SupportConsoleCommands\\Commands\\MakeCommand' => __DIR__ . '/..' . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/MakeCommand.php',

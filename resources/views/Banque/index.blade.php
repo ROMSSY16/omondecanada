@@ -15,7 +15,8 @@
                             <input type="text" id="searchInput" class="form-control text-dark text-lg bg-transparent border-0 p-1" placeholder="Recherche...">
                         </div>
                         <div class="d-flex align-items-center justify-content-around w-50">
-                            <button class="btn bg-primary text-white circle" data-bs-toggle="modal" data-bs-target="#addVersement"> <i class="material-icons">add</i> Faire un versement </button>
+                            <button class="btn bg-primary text-white circle" data-bs-toggle="modal" data-bs-target="#lastVersement"> <i class="material-icons">add</i> Ancien versement </button>
+                            <button class="btn bg-primary text-white circle" data-bs-toggle="modal" data-bs-target="#newVersement"> <i class="material-icons">add</i> Nouveau versement </button>
                             <button class="btn bg-primary text-white circle" data-bs-toggle="modal" data-bs-target="#addDepense"> <i class="material-icons">add</i> Enregistrer une dépense </button>
                         </div>
                     </div>
@@ -140,8 +141,8 @@
             </div>
         </div>
     </div>
-        {{-- modal add document --}}
-        <div class="modal z-index-1 fade" id="addVersement" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        {{-- modal mew versement --}}
+        <div class="modal z-index-1 fade" id="newVersement" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-top">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -149,7 +150,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{route('banque.entree.store')}}" method="POST" enctype="multipart/form-data" novalidate>
+                        <form action="{{route('banque.entree.store.new')}}" method="POST" enctype="multipart/form-data" novalidate>
                             @csrf
                             <div class="row">
                                 <div class="col-md-4 p-2">
@@ -232,6 +233,94 @@
                 </div>
             </div>
         </div>
+
+         {{-- modal last versement --}}
+         <div class="modal z-index-1 fade" id="lastVersement" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-top">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title align-items-center" id="exampleModalLabel">Enregistrer un versement</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{route('banque.entree.store.last')}}" method="POST" enctype="multipart/form-data" novalidate>
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-8 p-2">
+                                    <div class="form-group mb-3">
+                                        <label for="client" class="form-label">Nom & Prénom(s) du Client</label>
+                                        <input type="text" name="client" id="client" class="form-control" value="{{ old('client') }}" required>
+                                        <div class="invalid-feedback">
+                                            Veuillez sélectionner un client.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 p-2">
+                                    <div class="form-group mb-3">
+                                        <label for="type_versement" class="form-label">Type de versement</label>
+                                        <select name="type_versement" id="type_versement" class="form-control" required>
+                                            <option value="">Sélectionner un type</option>
+                                            <option value="1er Versement" {{ old('type_versement') == '1er Versement' ? 'selected' : '' }}>1er Versement</option>
+                                            <option value="2e Versement" {{ old('type_versement') == '2e Versement' ? 'selected' : '' }}>2e Versement</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Veuillez sélectionner un type de versement.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4 mb-3 p-2">
+                                    <label for="moyen_paiement" class="form-label">Mode de paiement :</label>
+                                    <select name="moyen_paiement" id="moyen_paiement" class="form-control" required>
+                                        <option value="" disabled {{ old('moyen_paiement') ? '' : 'selected' }}>Choisissez un moyen de paiement</option>
+                                        @foreach($moyen_paiements as $item)
+                                            <option value="{{ $item->id }}" {{ old('moyen_paiement') == $item->id ? 'selected' : '' }}>
+                                                {{ $item->label }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Montant -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label for="montant" class="form-label">Montant</label>
+                                        <input type="number" name="montant" id="montant" class="form-control" value="{{ old('montant') }}" placeholder="Ex: 1000" required>
+                                        <div class="invalid-feedback">
+                                            Veuillez entrer un montant.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Fichier reçu -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label for="recu" class="form-label">Télécharger le reçu</label>
+                                        <input class="form-control" type="file" name="recu" id="recu" required>
+                                        <div class="invalid-feedback">
+                                            Veuillez télécharger un fichier.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Note -->
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="note" class="form-label">Note</label>
+                                        <textarea name="note" id="note" class="form-control" rows="5" placeholder="Ajouter une note optionnelle">{{ old('note') }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">VALIDER</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="modal z-index-1 fade" id="addDepense" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-top">

@@ -45,8 +45,8 @@ return new class extends Migration
             $table->string('reponse27')->nullable();
             $table->string('reponse28')->nullable();
             $table->string('reponse29')->nullable();
-            $table->string('remarque_agent')->nullable();
-            $table->string('remarque_consultante')->nullable();
+            $table->text('remarque_agent')->nullable();
+            $table->text('remarque_consultante')->nullable();
             $table->string('id_utilisateur')->nullable();
             $table->timestamps();
         });

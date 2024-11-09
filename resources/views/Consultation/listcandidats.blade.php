@@ -74,8 +74,11 @@
                                                 <i class="material-icons">visibility</i> En attente 
                                             </span>
                                         @endrole
-                                    
--->
+                                       
+                                        -->
+                                        <a href="{{ route('consultation.candidat', ['id' => $info_consultation->id, 'id_candidat' => $candidat->id]) }}" class="btn btn-primary">
+                                                <i class="material-icons">play_circle_outline</i>Profil candidat
+                                            </a>
                                         @if (auth()->user()->poste_occupe->label === 'Consultante')
                                             <a href="{{ route('consultation.candidat', ['id' => $info_consultation->id, 'id_candidat' => $candidat->id]) }}" class="btn btn-primary">
                                                 <i class="material-icons">play_circle_outline</i> Démarer la consultation

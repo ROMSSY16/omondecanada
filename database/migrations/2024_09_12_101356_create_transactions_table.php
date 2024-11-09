@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code')->nullable();
             $table->string('motif')->nullable();
+            $table->string('versement')->nullable();
             $table->enum('type', ['entree','sortie']);
             $table->integer('id_procedure')->nullable();
             $table->integer('id_moyen_paiement')->nullable();
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->integer('id_agent')->nullable();
             $table->string('recu')->nullable();
             $table->integer('id_candidat')->nullable();
+            $table->string('client')->nullable();
             $table->integer('id_type_procedure')->nullable();
             $table->integer('id_succursale')->nullable();
             $table->text('note')->nullable();

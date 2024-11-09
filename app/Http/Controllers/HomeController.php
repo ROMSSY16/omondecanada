@@ -82,7 +82,7 @@ class HomeController extends Controller
             $consultationsData = [];
             $daysInMonth = Carbon::now()->daysInMonth;
 
-            $consultationsCount = Candidat::where('id_consultante', Auth::id())
+            $consultationsCountConsultante = Candidat::where('id_consultante', Auth::id())
                 ->where('status', '1')
                 ->whereMonth('created_at', Carbon::now()->month)
                 ->whereYear('created_at', Carbon::now()->year)
@@ -107,10 +107,11 @@ class HomeController extends Controller
                 ->where('id_consultante',  Auth::id())
                 ->orderBy('date_heure', 'desc')
                 ->get();
+               
             return view('dashboard', [
                 'page' => $pageTitle,
                 'consultations' => $consultations,
-                'consultationsCount' => $consultationsCount, 
+                'consultationsCountConsultante' => $consultationsCountConsultante, 
                 'consultationsData' => $consultationsData,
                 'days' => $days,
             ]);

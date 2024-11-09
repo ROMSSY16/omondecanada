@@ -60,7 +60,7 @@
                     <h3 class="card-title text-white">Resumé du profil</h3>
                 </div>
                 <div class="card-body">
-                    <p class="answer text-right fs-5">{{$consultation->ficheConsultation->remarque_agent}}</p>
+                    <h5 class="answer text-right fs-5 fw-bold">{{$consultation->ficheConsultation->remarque_agent}}</h5>
                 </div>
             </div>
             @foreach ($sections as $sectionTitle => $sectionQuestions)

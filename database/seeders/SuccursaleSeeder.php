@@ -46,7 +46,7 @@ class SuccursaleSeeder extends Seeder
                 ],
                 [
                     'label' => 'Rd Congo',
-                    'montant' => '100',
+                    'montant' => '90',
                     'devis' => '$',
                     'created_at' => now(),
                     'updated_at' => now(),

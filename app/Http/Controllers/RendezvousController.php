@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Candidat;
 use App\Models\RendezVous;
 use Illuminate\Http\Request;
+use App\Models\TypeProcedure;
 
 class RendezvousController extends Controller
 {
@@ -14,9 +15,11 @@ class RendezvousController extends Controller
             ->whereNotNull('date_rdv')
             ->orderBy('date_rdv', 'desc')
             ->paginate(10);
+        $type_procedures = TypeProcedure::get();
         return view('rendezvous.index', [
             'candidats' => $candidats,
             'pageTitle' => $pageTitle,
+            'type_procedures'=> $type_procedures
         ]);
     }
     public function confirmRendezVous($id){

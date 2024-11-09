@@ -33,4 +33,8 @@ class Transaction extends Model
     {
         return $this->belongsTo(Succursale::class, 'id_succursale', 'id');
     }
+    public function candidat(): BelongsTo
+    {
+        return $this->belongsTo(Candidat::class, 'id_candidat', 'id');
+    }
 }

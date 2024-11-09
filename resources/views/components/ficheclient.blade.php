@@ -1,6 +1,6 @@
 <div class="modal z-index-1 fade" id="ModifierFicheModal{{ $candidat->id }}" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header text-ceter">
                 <h4 class="modal-title " id="exampleModalLabel">Créer Fiche de Consultation</h4>

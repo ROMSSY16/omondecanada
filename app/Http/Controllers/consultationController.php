@@ -39,8 +39,14 @@ class ConsultationController extends Controller
         ]);
     }
 
-    public function confirmConsultation($id){
+    public function confirmConsultation(Request $request, $id){
         $candidat = Candidat::findOrFail($id);
+        $user = Auth::user();
+        $request->validate([
+            'mode_paiement' => 'required|exists:moyen_de_paiement,id',
+            'code_agent' => 'required|in:' . $user->code, 
+        ]);
+      
         $candidat->update([
             'consultation_payee' => '1',
         ]);
@@ -65,11 +71,11 @@ class ConsultationController extends Controller
                 'montant' => $montant,
                 'date' => now(),
                 'id_utilisateur' => Auth::user()->id,
-                'id_moyen_paiement' => 2,
+                'id_moyen_paiement' => $request->mode_paiement,
             ]);
             $entreeCount = Entree::count();
             $entreeCode = 'E' . Carbon::now()->format('Y') . str_pad($entreeCount + 1, 4, '0', STR_PAD_LEFT);
-            Transaction::create([
+            $transaction = Transaction::create([
                 'code' => $entreeCode,
                 'motif'=> "Consultation",
                 'type'=> "entree",
@@ -77,10 +83,18 @@ class ConsultationController extends Controller
                 'montant' => $montant,
                 'date' => now(),
                 'id_agent' => Auth::user()->id,
-                'id_moyen_paiement' => 2,
+                'id_moyen_paiement' => $request->mode_paiement,
                 'id_type_procedure'=> $candidat->typeProcedure->id,
                 'id_succursale' => Auth::user()->succursale->id,
             ]);
+            
+            Mail::send('emails.paiement', [
+                'transaction' => $transaction,
+            ], function ($message) use ($candidat) {
+                $message->to($candidat->email); 
+                $message->subject('Confirmation de paiement');
+            });
+           
         }
         return redirect()->back()->with('success', 'Consultation confirmée avec succès.');
     }

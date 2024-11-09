@@ -3494,7 +3494,6 @@ return array(
     'Livewire\\Features\\SupportConsoleCommands\\Commands\\CpCommand' => $vendorDir . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/CpCommand.php',
     'Livewire\\Features\\SupportConsoleCommands\\Commands\\DeleteCommand' => $vendorDir . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/DeleteCommand.php',
     'Livewire\\Features\\SupportConsoleCommands\\Commands\\FileManipulationCommand' => $vendorDir . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/FileManipulationCommand.php',
-    'Livewire\\Features\\SupportConsoleCommands\\Commands\\FluxInstallCommand' => $vendorDir . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/FluxInstallCommand.php',
     'Livewire\\Features\\SupportConsoleCommands\\Commands\\FormCommand' => $vendorDir . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/FormCommand.php',
     'Livewire\\Features\\SupportConsoleCommands\\Commands\\LayoutCommand' => $vendorDir . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/LayoutCommand.php',
     'Livewire\\Features\\SupportConsoleCommands\\Commands\\MakeCommand' => $vendorDir . '/livewire/livewire/src/Features/SupportConsoleCommands/Commands/MakeCommand.php',

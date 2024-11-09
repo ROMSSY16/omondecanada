@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Tags;
+use App\Models\Candidat;
+use App\Models\Versement;
+use App\Models\TypeProcedure;
+use App\Models\StatutProcedure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;

@@ -32,6 +32,7 @@
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- CSS Files -->
+
     <style>
         /* Styles pour le formulaire d'ajout de prospect */
     
@@ -211,6 +212,9 @@
 <script src="{{ asset('assets/js/script/homePage.js') }}"></script>
 <script src="{{ asset('assets/js/script/DashboardCommercial.js') }}"></script>
 <script src="{{ asset('assets/js/validate.min.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('/sw.js') }}"></script>
 <script>

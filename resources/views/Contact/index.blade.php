@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
 <div class="row">
     <div class="col-12">
         <div class="card my-4">
@@ -12,8 +11,7 @@
                             class="form-control text-dark text-md bg-transparent border-0 p-1"
                             placeholder="Rechercher...">
                     </div>
-                    <button class="btn bg-primary text-white circle" data-bs-toggle="modal"
-                        data-bs-target="#addContactModal">
+                    <button class="btn bg-primary text-white circle" data-bs-toggle="modal" data-bs-target="#addContactModal">
                         <i class="material-icons">add</i> Ajouter un prospect
                     </button>
                     <a href="{{route('contact.succursale')}}">
@@ -75,17 +73,15 @@
                                                     <form action="{{ route('contact.update', $candidat->id) }}" method="POST" class="text-start" enctype="multipart/form-data">
                                                         @csrf
                                                         @method('PUT')
-                                                        <!-- Champs Nom et Prénoms sur la même ligne -->
                                                         <div class="row">
-                                                        <div class="col-md-8 mb-3">
+                                                            <div class="col-md-8 mb-3">
                                                                 <label for="prenoms" class="form-label">Prénoms</label>
                                                                 <input type="text" name="prenoms" id="prenoms" class="form-control"
                                                                     value="{{ $candidat->prenom }}" required>
                                                             </div>
                                                             <div class="col-md-4 mb-3">
                                                                 <label for="nom" class="form-label">Nom</label>
-                                                                <input type="text" name="nom" id="nom" class="form-control"
-                                                                        value="{{ $candidat->nom }}" required>
+                                                                <input type="text" name="nom" id="nom" class="form-control" value="{{ $candidat->nom }}" required>
                                                             
                                                             </div>
                                                             
@@ -101,14 +97,13 @@
                                     
                                                             <!-- Champ Ville -->
                                                             <div class="col-md-4 mb-3">
-                                                                <label for="ville" class="form-label">Ville</label>
+                                                                <label for="ville" class="form-label">Ville/Commune/Quartier</label>
                                                                 <input type="text" name="ville" id="ville" class="form-control"
                                                                     value="{{ $candidat->ville }}" required>
                                                             </div>
                                                             <div class="col-md-4 mb-3">
                                                                 <label for="numero_telephone" class="form-label">Téléphone</label>
-                                                                <input type="tel" name="numero_telephone" id="numero_telephone" class="form-control"
-                                                                    value="{{ $candidat->numero_telephone }}" required>
+                                                                <input type="tel" name="numero_telephone" id="numero_telephone" class="form-control" value="{{ $candidat->numero_telephone }}" required>
                                                             </div>
                                                         </div>
                                     
@@ -248,7 +243,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="form-group">
-                                <label for="ville" class="form-label">Ville</label>
+                                <label for="ville" class="form-label">Ville/Commune/Quartier</label>
                                 <input type="text" name="ville" id="ville" class="form-control" value="{{old('ville')}}" required>
                                 <div class="invalid-feedback">
                                     Veuillez entrer la ville.
@@ -258,7 +253,7 @@
                         <div class="col-md-4 mb-3">
                             <div class="form-group">
                                 <label for="numero_telephone" class="form-label">Téléphone</label>
-                                <input type="tel" name="numero_telephone" id="numero_telephone" class="form-control" value="{{old('numero_telephone')}}" maxlength="10" pattern="\d{10}" required>
+                                <input type="tel" name="numero_telephone" id="telephone" class="form-control" value="{{old('numero_telephone')}}" maxlength="15" pattern="\d{10}" required>
                                 <div class="invalid-feedback">
                                     Veuillez entrer un numéro de téléphone valide.
                                 </div>
@@ -331,6 +326,5 @@
         });
     });
 </script>
-
 
 @endsection

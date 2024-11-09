@@ -100,7 +100,7 @@
                                     
                                                             <!-- Champ Ville -->
                                                             <div class="col-md-4 mb-3">
-                                                                <label for="ville" class="form-label">Ville</label>
+                                                                <label for="ville" class="form-label">Ville/Commune/Quartier</label>
                                                                 <input type="text" name="ville" id="ville" class="form-control"
                                                                     value="{{ $candidat->ville }}" required>
                                                             </div>
@@ -247,7 +247,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="form-group">
-                                <label for="ville" class="form-label">Ville</label>
+                                <label for="ville" class="form-label">Ville/Commune/Quartier</label>
                                 <input type="text" name="ville" id="ville" class="form-control" value="{{old('ville')}}" required>
                                 <div class="invalid-feedback">
                                     Veuillez entrer la ville.

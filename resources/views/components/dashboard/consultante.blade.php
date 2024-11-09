@@ -12,72 +12,72 @@
             </div>
             <div class="card-body">
                 <div class="text-end">
-                    <h3 class="mb-0 pt-2">{{  $consultationsCount ?? '0' }}</h3>
+                    <h3 class="mb-0 pt-2">{{  $consultationsCountConsultante ?? '0' }}</h3>
                 </div>
             </div>
             <hr class="dark horizontal my-0">
             <div class="card-footer p-3">
                 <div class="progress mt-2">
-                    <div class="progress-bar progress-bar bg-dark" role="progressbar" style="width: {{ ($consultationsCount / 25) * 100 }}%; height:100%;" aria-valuenow="{{$consultationsCount }}" aria-valuemin="0" aria-valuemax="25"></div>
+                    <div class="progress-bar progress-bar bg-dark" role="progressbar" style="width: {{ ($consultationsCountConsultante / 25) * 100 }}%; height:100%;" aria-valuenow="{{$consultationsCountConsultante }}" aria-valuemin="0" aria-valuemax="25"></div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-xl-9 col-sm-6 mb-xl-0 mb-4">
-    <div class="card my-4">
-                    <div class="table-responsive p-0" style="max-height: 700px; overflow-y: auto;">
-                        <table class="table align-items-center justify-content-center mb-0" id="consultationTable">
-                            <thead class="bg-dark">
-                                <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">DEMARRER</th>
-                                    <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">LABEL</th>
-                                    <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">DATE ET HEURE</th>
-                                    <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">NOMBRE DE PARTICIPANTS</th>
-                                    <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">PARTICIPANTS</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($consultations as $consultation)
-                                    <tr data-candidat-id="{{ $consultation->id }}" class="{{  Carbon\Carbon::parse($consultation->date_heure)->isPast() ? 'table-danger' : '' }}" data-date="{{ Carbon\Carbon::parse($consultation->date_heure)->format('Y-m-d') }}">
-                                        <td>
-                                            <h6 class="p-4 text-md">
-                                                <a href="{{ $consultation->lien_zoom }}" target="_blank">
-                                                    <i class="material-icons">videocam</i>
-                                                </a>
-                                            </h6>
-                                        </td>
-                                        <td>
-                                            <h6 class="p-2 text-center text-md">{{ $consultation->label }}</h6>
-                                        </td>
-                                        <td>
-                                            <p class="text-xl text-bold text-center mb-0">{{ ucwords(Carbon\Carbon::parse($consultation->date_heure)->translatedFormat('j F Y / H:i')) }}</p>
-                                        </td>
-                                        <td>
-                                            <p class="text-xl text-bold text-center mb-0">{{ $consultation->candidats->count() }} / {{ $consultation->nombre_candidats }}</p>
-                                        </td>
-                                        <td class="text-center">
-                                            @if ($consultation->candidats->isNotEmpty())
-                                                <a href="{{ route('consultation.listcandidats',$consultation->id) }}">
-                                                    <button class="btn btn-dark text-white">Voir les candidat(s)</button>
-                                                </a>
-                                            @else
-                                                <a href="#">
-                                                    <button class="btn btn-dark text-white">Voir les candidat(s)</button>
-                                                </a>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <div class="card my-4">
+            <div class="table-responsive p-0" style="max-height: 700px; overflow-y: auto;">
+                <table class="table align-items-center justify-content-center mb-0" id="consultationTable">
+                    <thead class="bg-dark">
+                        <tr>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">DEMARRER</th>
+                            <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">LABEL</th>
+                            <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">DATE ET HEURE</th>
+                            <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">NOMBRE DE PARTICIPANTS</th>
+                            <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7 ps-2">PARTICIPANTS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($consultations as $consultation)
+                            <tr data-candidat-id="{{ $consultation->id }}" class="{{  Carbon\Carbon::parse($consultation->date_heure)->isPast() ? 'table-danger' : '' }}" data-date="{{ Carbon\Carbon::parse($consultation->date_heure)->format('Y-m-d') }}">
+                                <td>
+                                    <h6 class="p-4 text-md">
+                                        <a href="{{ $consultation->lien_zoom }}" target="_blank">
+                                            <i class="material-icons">videocam</i>
+                                        </a>
+                                    </h6>
+                                </td>
+                                <td>
+                                    <h6 class="p-2 text-center text-md">{{ $consultation->label }}</h6>
+                                </td>
+                                <td>
+                                    <p class="text-xl text-bold text-center mb-0">{{ ucwords(Carbon\Carbon::parse($consultation->date_heure)->translatedFormat('j F Y / H:i')) }}</p>
+                                </td>
+                                <td>
+                                    <p class="text-xl text-bold text-center mb-0">{{ $consultation->candidats->count() }} / {{ $consultation->nombre_candidats }}</p>
+                                </td>
+                                <td class="text-center">
+                                    @if ($consultation->candidats->isNotEmpty())
+                                        <a href="{{ route('consultation.listcandidats',$consultation->id) }}">
+                                            <button class="btn btn-dark text-white">Voir les candidat(s)</button>
+                                        </a>
+                                    @else
+                                        <a href="#">
+                                            <button class="btn btn-dark text-white">Voir les candidat(s)</button>
+                                        </a>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     
 </div>
 
 <div class="row mt-4 d-flex justify-content-around">
-    <div class="col-lg-8 col-md-8 mt-4 mb-4">
+    <div class="col-lg-6 col-md-6 mt-4 mb-4">
         <div class="card z-index-2">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
                 <div class="bg-dark shadow-success border-radius-lg py-3 pe-1">
@@ -89,6 +89,11 @@
             <div class="card-body">
                 <h6 class="mb-0">Consultations Conclues du mois</h6>
             </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 mt-4 mb-4">
+        <div class="card z-index-2">
+            
         </div>
     </div>
 </div>
